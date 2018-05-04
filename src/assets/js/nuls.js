@@ -4,7 +4,6 @@ import { m,n } from "./request";
 export function getTxByHash(param, callback) {
   return n(nuls_api.getTxByHash,callback,param);
 }
-
 export function getTxList(param, callback) {
   return m(nuls_api.getTxList,callback,param);
 }
@@ -41,8 +40,8 @@ export function getConsensusAgentListAll(param,callback){
 export function getBlockListAddressAll(param,callback){
   return m(nuls_api.getBlockListAddress,callback,param);
 }
-export function getTxhistoryList(callback){
-  return m(nuls_api.getTxhistory,callback);
+export function getTxHistoryList(callback){
+  return m(nuls_api.getTxHistory,callback);
 }
 export function getTxSpentHashDetail(param,callback){
   return m(nuls_api.getTxSpentHash,callback,param);

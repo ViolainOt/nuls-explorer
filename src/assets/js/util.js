@@ -1,31 +1,3 @@
-export function formatTxStatus(status){
-  switch (status){
-    case 1:
-      return "共识奖励";
-    case 2:
-      return "转账交易";
-    case 3:
-      return "锁仓交易";
-    case 4:
-      return "解锁交易";
-    case 5:
-      return "零钱换整";
-    case 11:
-      return "设置别名";
-    case 90:
-      return "注册共识";
-    case 91:
-      return "加入共识";
-    case 92:
-      return "退出共识";
-    case 93:
-      return "黄牌惩罚";
-    case 94:
-      return "红牌惩罚";
-    default:
-      return "未知";
-  }
-};
 export function formatTxClass(status){
   switch (status){
     case 1:
@@ -51,93 +23,72 @@ export function formatTxClass(status){
     case 94:
       return "red-card";
     default:
-      return "未知";
+      return "consensus-reward";
   }
 };
-export function formatConsensusStatus(status){
-  switch (status){
-    case 0:
-      return "未参与共识";
-    case 1:
-      return "等待共识";
-    case 2:
-      return "共识中";
-    default:
-      return "未知";
+/*save temp data to explorer*/
+export function saveDataToTemp(name,value){
+  if (window.localStorage) {
+    localStorage.setItem(name, value);
+  } else {
+    Cookie.write(name, value);
   }
 }
-export function formatUTXOStatus(status){
-  switch (status){
-    case 0:
-      return "Unspent";
-    case 1:
-      return "Locked";
-    case 2:
-      return "Locked";
-    case 3:
-      return "Spent";
-    default:
-      return "Unknown";
-  }
-}
-export function formatUTXOClass(status){
-  return status==3?"pointer baseColor":"enableColor";
-}
-export function formatTxtatus(status){
-  switch (status){
-    case 0:
-      return "待确认";
-    case 1:
-      return "已确认";
-    default:
-      return "未知";
-  }
+/*get temp data from explorer*/
+export function getDataToTemp(name){
+  return window.localStorage? localStorage.getItem(name)||1: Cookie.read(name)||1;
 }
 export function formatString(str){
   return str.substring(0,4)+"...."+str.substring(str.length-4,str.length);
 };
 export function getInfactCoin(count){
-  var m=0,s1=count.toString(),s2="0.00000001";
-  try{m+=s1.split(".")[1].length}catch(e){}
-  try{m+=s2.split(".")[1].length}catch(e){}
-  var total = (Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)).toString();
-  return total.split('.')[1]?total.split('.')[1].length==1? total+"0":total:total+".00";
-};
-export function getTransactionResultAmount(txlist){
-  var outputlist = txlist.outputs,inputlist = txlist.inputs,amout = 0,inplength = inputlist.length,outlength = outputlist.length;
-  if(inplength > outlength){
-    for(var i=0;i < outlength;i++){
-      amout+= outputlist[i].value;
-    }
-    for(var j=0;j < inplength;j++){
-      var inputObject = inputlist[j];
-      for(var i=0;i < outlength;i++){
-        var outputObject = outputlist[i];
-        if(inputObject.address == outputObject.address){
-          amout-= outputObject.value;
-          break;
+  count = count.toString();
+  if(count){
+    var l = count.length,s=9,d=count/100000000,f=d.toString().split('.');
+    if(l>s){
+      if(!f[1]){
+        d+=".00";
+      }
+      return d;
+    }else if(l===s){
+      return d+".00";
+    }else{
+      if(count === "0"){
+        return "0.00";
+      }else{
+        var k = s-l,r="0.";
+        for(var i = 0; i < k; i++){
+          r+=0;
         }
+        count = count.replace(/0/g,'');
+        return r+count;
       }
     }
-  }else{
-    for(var i=0;i < outlength;i++){
-      var txout = outputlist[i];
-      amout+= txout.value;
-      for(var j=0;j < inplength;j++){
-        var txin = inputlist[j];
-        if(txin.address == txout.address){
-          amout-= txout.value;
-          break;
-        }
+  }
+  return 0;
+  /*var m=0,s1=count.toString(),s2="0.00000001";
+  try{m+=s1.split(".")[1].length}catch(e){}
+  try{m+=s2.split(".")[1].length}catch(e){}
+  var total = Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)+"";
+  return new Number(total);*/
+  //return total.split('.')[1]?total.split('.')[1].length==1? total+"0":total:total+".00";
+};
+export function getTransactionResultAmount(txlist){
+  var outputlist = txlist.outputs,
+    inputlist = txlist.inputs,
+    amout = 0;
+  for(var i=0,outputObj;outputObj=outputlist[i++];){
+    amout+= outputObj.value;
+    for(var j=0,inputObj;inputObj=inputlist[j++];){
+      if(outputObj.address==inputObj.address){
+        amout -= outputObj.value;
+        break;
       }
     }
   }
   return amout;
 }
 export function formatDate(date, fmt) {
-  if(!date){
-    return "";
-  }
   if(!fmt){
     fmt = "yyyy-MM-dd hh:mm:ss";
   }

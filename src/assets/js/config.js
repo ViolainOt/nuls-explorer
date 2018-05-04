@@ -1,8 +1,10 @@
 export let nuls_server={
   nodeList:[
+    {host:"http://data.nuls.io"},
     {host:"http://192.168.1.233:8765"},
-    {host:"http://192.168.1.201:8765"},
-    {host:"http://192.168.1.203:8765"}
+    {host:"http://39.108.121.242:8005"},
+    {host:"http://127.0.0.1:8765"},
+    {host:"http://192.168.1.201:8765"}
   ],
   requestMain: "/nuls"
 };
@@ -10,28 +12,29 @@ export let nuls_defaultType={
   showError: false
 };
 
+/*api request url list*/
 export let nuls_api= {
-  getbalance: "/report/balance",
   getTxByHash: "/tx/hash",
   getTxSpentHash: "/tx/hash/spent",
   getTxList: "/tx/list",
   getBlockByHash: "/block/hash",
   getBlockByHeight: "/block/height",
-  getBlockBesthash: "/block/newest",
-  getBlockList: "/block/list",
   getBlockHeaderByHash: "/block/header/hash",
   getBlockHeaderByHeight: "/block/header/height",
+  getBlockBesthash: "/block/newest",
   getBlockListAddress: "/block/list/address",
+  getBlockList: "/block/list",
   getAccount: "/account",
-  getAllConsensus: "/consensus",
+  getConsensusAgentList: "/consensus/agent/list",
+  getConsensusAgent: "/consensus/agent",
+  getConsensusAgentStatus: "/consensus/agent/status",
+  getSearchData: "/search",
+  getTxHistory: "/txhistory",
   getBalanceListRank: "/address/balancelist",
   getAddressMinedlist : "/address/minedlist",
-  getAddressConsensuslist: "/address/consensuslist",
-  getaddress: "/report/addresslist",
-  getConsensusAgent: "/consensus/agent",
-  getConsensusAgentList: "/consensus/agent/list",
-  getTxhistory: "/txhistory",
-  getSearchData: "/search",
-  postBlockTest: "/block/test"
+  getAccountUtxo: "account/utxo",
+  postTxTransaction: "tx/transaction",
+  getAllConsensus: "/consensus",
+  getMyConsensusRecord: "consensus/deposit/address/",
+  getBalance: "/report/balance",
 };
-

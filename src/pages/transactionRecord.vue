@@ -17,7 +17,7 @@
     <p>{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</p>
 
     <p><span><router-link :to="{path:'/transactionHash',query:{hash:txlist.hash}}">{{txlist.hash}}</router-link></span><span>{{txlist.time | formatDate}}</span></p>
-    <p><span>{{$t("second.block")}}：<router-link :to="{path:'/blockDetail',query:{height:txlist.blockHeight}}">{{txlist.blockHeight}}</router-link></span><span>{{$t("second.enter")}}/{{$t("second.outPut")}}：&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span><span>{{$t("second.fee")}}：{{txlist.fee|getInfactCoin}} NULS</span></p>
+    <p><span>{{$t("second.block")}}{{$t("other.semicolon")}}<router-link :to="{path:'/blockDetail',query:{height:txlist.blockHeight}}">{{txlist.blockHeight}}</router-link></span><span>{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
     <template v-if="txlist.inputs[0] || txlist.outputs[0]">
       <div class="w100" :class="showScroll==key?'scrollHeight':'hideHeight'">
         <div class="w25 float_left">
@@ -37,7 +37,9 @@
       </div>
     </template>
     <div class="clear"></div>
-    <p><span>{{$t("second.amount")}}{{txlist | formatTxAmount}} NULS</span></p>
+    <template v-if="txlist.type <= 2">
+      <p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
+    </template>
     <div v-if="txlist.inputs[5] || txlist.outputs[5]" class="list-foot"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
     </li>
     </ul>
@@ -48,10 +50,11 @@
       :prev-text="$t('page.previous')"
       :next-text="$t('page.next')"
       layout="total,prev, pager, next,jumper"
-      @current-change="nulstxlist"
-      :page-size=this.pageSize
-      :total=this.totalDataNumber>
-      </el-pagination>
+    @current-change="nulstxlist"
+    :page-size=this.pageSize
+    :current-page=this.currentPage
+    :total=this.totalDataNumber>
+    </el-pagination>
     </div>
 
   </div>
@@ -67,12 +70,13 @@
         showScroll: -1,
         totalDataNumber: 0,
         pageSize: 20,
+        currentPage: 1,
         transList: [{
           showClass: 1,
           hash: '',
           type: '',
           index: '',
-          time: '',
+          time: '2018-01-01',
           blockHeight: '',
           fee: '',
           value: '',
@@ -115,14 +119,26 @@
       }
     },
     created:function(){
-      this.nulstxlist();
+      this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
+      this.nulstxlist(this.currentPage);
+    },
+    /*
+    * 监听route，处理地址栏参数变化
+    * Listen for route, handle address bar parameter changes
+    */
+    watch: {
+      '$route'(to, from) {
+        var _self = this;
+        _self.currentPage = parseInt(to.query.currentPage,10);
+        _self.nulstxlist(_self.currentPage);
+      }
     },
     methods: {
       formatTxClass:function(status){
         return formatTxClass(status);
       },
       showmore: function(v){
-        this.showScroll =this.showScroll=== -1?v:-1;
+        this.showScroll =this.showScroll===v?-1:v;
       },
       /**
        * 加载交易记录列表
@@ -130,11 +146,22 @@
        */
       nulstxlist:function(pageNumber){
         var _self = this;
-        getTxList({"pageNumber":pageNumber,"pageSize":_self.pageSize,"type":1},function(res){
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.5)'
+        });
+        _self.currentPage = pageNumber;
+        history.pushState({},"","/transactionRecord?currentPage="+pageNumber);
+        getTxList({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
+          loading.close();
           if(res.success){
             if(res.data.list){
               _self.transList=res.data.list;
               _self.totalDataNumber = res.data.total;
+              /*返回网页顶部  Back to top of page*/
+              document.getElementById("nuls-outter").scrollTop = 0;
             }else{
               _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
             }

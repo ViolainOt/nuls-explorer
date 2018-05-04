@@ -25,7 +25,7 @@
       <li><span class="float_left">{{$t("blockDetail.blockHash")}}</span><span class="float_right">{{blockheader.hash}}</span></li>
       <li><span class="float_left">{{$t("blockDetail.confirmCount")}}</span><span  class="float_right">{{blockheader.confirmCount}}</span></li>
       <li><span class="float_left">{{$t("blockDetail.transactionCount")}}</span><span class="float_right">{{blockheader.txCount}}</span></li>
-      <li><span class="float_left">{{$t("blockDetail.transactionFee")}}</span><span class="float_right">{{blockheader.fee}} NULS</span></li>
+      <li><span class="float_left">{{$t("blockDetail.transactionFee")}}</span><span class="float_right">{{blockheader.fee|getInfactCoin}} NULS</span></li>
       <li><span class="float_left">{{$t("blockDetail.blockNodeName")}}</span><span class="float_right"><router-link :to="{path:'/consensusNode',query:{address:blockheader.packingAddress,type:2}}">{{blockheader.packingAddress}}</router-link></span></li>
       <li><span class="float_left">{{$t("blockList.blockReward")}}</span><span class="float_right">{{blockheader.reward | getInfactCoin}} NULS</span></li>
       <li><span class="float_left">{{$t("blockList.time")}}</span><span class="float_right">{{blockheader.time | formatDate}}</span></li>
@@ -46,9 +46,9 @@
         <span>{{txlist.time | formatDate}}</span>
       </p>
       <p>
-        <span>{{$t("second.block")}}：{{txlist.blockHeight}}</span>
-        <span>{{$t("second.enter")}}/{{$t("second.outPut")}}：&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span>
-        <span>{{$t("second.fee")}}：{{txlist.fee|getInfactCoin}} NULS</span>
+        <span>{{$t("second.block")}}{{$t("other.semicolon")}}{{txlist.blockHeight}}</span>
+        <span>{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span>
+        <span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span>
       </p>
       <template v-if="txlist.inputs[0] || txlist.outputs[0]">
         <div class="w100" :class="showScroll==key?'scrollHeight':'hideHeight'">
@@ -70,7 +70,9 @@
         </div>
       </template>
       <div class="clear"></div>
-      <p><span>{{$t("second.amount")}}{{txlist | formatTxAmount}} NULS</span></p>
+      <template v-if="txlist.type <= 2">
+        <p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
+      </template>
       <div v-if="txlist.inputs[5] || txlist.outputs[5]" class="list-foot">
         <a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a>
       </div>
@@ -80,16 +82,17 @@
 
     <!--pagination start-->
     <div class="text-align-right" v-show="showTransHeader">
-      <el-pagination
+    <el-pagination
       background
       :prev-text="$t('page.previous')"
       :next-text="$t('page.next')"
       layout="total,prev, pager, next,jumper"
-      @current-change="nulstxlist"
-      :page-size=this.pageSize
-      :total=this.totalDataNumber>
-      </el-pagination>
-  <!--pagination end-->
+    @current-change="nulstxlist"
+    :page-size=this.pageSize
+    :current-page=this.currentPage
+    :total=this.totalDataNumber>
+    </el-pagination>
+    <!--pagination end-->
     </div>
   </div>
 </template>
@@ -104,6 +107,7 @@ export default {
       prevBlockUsed: true,
       nextBlockUsed: true,
       showTransHeader: true,
+      currentPage: 1,
       showScroll: -1,
       blockheader: {
         confirmCount: 0,
@@ -165,13 +169,22 @@ export default {
     _self.nulstxlist();
     _self.nulsBlockDetail();
   },
+  /*
+  * 监听route，处理地址栏参数变化
+  * Listen for route, handle address bar parameter changes
+  */
   watch: {
-    /*height:{
-      handler:(val,oldVal)=>{
-        console.log(val);
-        console.log(oldVal);
+    '$route'(to, from) {
+      var _self = this;
+      _self.currentPage = isNaN(to.query.currentPage)?1:parseInt(to.query.currentPage,10);
+      if(to.query.height){
+        _self.height = parseInt(to.query.height,10);
+      }else if(to.query.hash){
+        _self.hash = to.query.hash;
       }
-    }*/
+      _self.nulsBlockDetail();
+      _self.nulstxlist(_self.currentPage);
+    }
   },
   methods: {
     formatTxClass: function (status) {
@@ -196,7 +209,7 @@ export default {
     *显示更多
     */
     showmore: function(v){
-      this.showScroll =this.showScroll=== -1?v:-1;
+      this.showScroll =this.showScroll===v?-1:v;
     },
     /*
     *load prevBlock, If the previous block is less than 0, clicks are prohibited
@@ -280,7 +293,15 @@ export default {
     */
     nulstxlist: function (pageNumber) {
       var _self = this;
+      var loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.5)'
+      });
+      _self.currentPage = pageNumber;
       getTxList({"pageNumber": pageNumber, "pageSize": _self.pageSize, "blockHeight": _self.height}, function (res) {
+        loading.close();
         if (res.success) {
           if(res.data.list[0]){
             _self.transList = res.data.list;

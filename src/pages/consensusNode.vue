@@ -17,7 +17,7 @@
       </li>
       <li><span class="float_left">{{$t("consensusNode.blockAddress")}}</span><span  class="float_right">{{consensusDetail.packingAddress}}</span></li>
       <li><span class="float_left">{{$t("consensusNode.nodeName")}}</span><span  class="float_right">{{consensusDetail.agentName}}</span></li>
-      <li><span class="float_left">{{$t("consensusNode.consensusStatus")}}</span><span class="float_right">{{consensusDetail.status|formatConsensusStatus}}</span></li>
+      <li><span class="float_left">{{$t("consensusNode.consensusStatus")}}</span><span class="float_right">{{$t("consensus.i"+consensusDetail.status)}}</span></li>
       <li><span class="float_left">{{$t("consensusNode.blockCount")}}</span><span class="float_right">{{consensusDetail.packedCount}} blocks</span></li>
       <li><span class="float_left">{{$t("consensusNode.transactionCount")}}</span><span class="float_right">{{consensusDetail.txCount}} txns</span></li>
       <li><span class="float_left">{{$t("consensusNode.margin")}}</span><span class="float_right">{{consensusDetail.owndeposit|getInfactCoin}} NULS</span></li>
@@ -54,16 +54,17 @@
       </li>
       <li class="foot">
         <span>
-            <el-pagination
-              background
-              :prev-text="$t('page.previous')"
-              :next-text="$t('page.next')"
-              layout="total,prev, pager, next,jumper"
+          <el-pagination
+            background
+            :prev-text="$t('page.previous')"
+            :next-text="$t('page.next')"
+            layout="total,prev, pager, next,jumper"
               @current-change="nulsGetBlockList"
               :page-size=this.pageSize
+              :current-page=this.currentPage
               :total=this.totalDataNumber>
             </el-pagination>
-          </span>
+        </span>
       </li>
     </ul>
     <!--consensusNode block list end-->
@@ -71,15 +72,16 @@
 </template>
 <script>
 import {getBlockListAddressAll,getConsensusAgentDetail} from "../assets/js/nuls.js";
-import {formatDate,formatString,formatConsensusStatus,getInfactCoin} from '../assets/js/util.js';
+import {formatDate,formatString,getInfactCoin} from '../assets/js/util.js';
 export default {
   name: "blockDetail",
   data () {
     return {
       showDetail: false,
       consensusDetail: {agentId:'',agentAddress:'',agentName:'',status:'',packingAddress:'',packedCount:'',totalDeposit:'',owndeposit:''},
-      blockList: [{height:0,time:'',packingAddress:'',txCount:0,reward:0,size:0}],
+      blockList: [{height:0,time:'2018-01-01',packingAddress:'',txCount:0,reward:0,size:0}],
       totalDataNumber: 0,
+      currentPage: 1,
       pageSize: 20,
       address: '',
       type: 1
@@ -93,9 +95,6 @@ export default {
     formatString(str){
       return formatString(str);
     },
-    formatConsensusStatus(status){
-      return formatConsensusStatus(status);
-    },
     getInfactCoin(count){
       return getInfactCoin(count);
     }
@@ -103,8 +102,20 @@ export default {
   created:function(){
     this.address = this.$route.query.address;
     this.type = this.$route.query.type;
-    this.nulsGetBlockList();
+    this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
+    this.nulsGetBlockList(this.currentPage);
     this.nulsGetConsensusDetail();
+  },
+  /*
+    * 监听route，处理地址栏参数变化
+    * Listen for route, handle address bar parameter changes
+    */
+  watch: {
+    '$route'(to, from) {
+      var _self = this;
+      _self.currentPage = isNaN(to.query.currentPage)?1:parseInt(to.query.currentPage,10);
+      _self.nulsGetBlockList(_self.currentPage);
+    }
   },
   methods: {
     /**
@@ -113,11 +124,26 @@ export default {
      */
     nulsGetBlockList(pageNumber){
       var _self = this;
+      var loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.5)'
+      });
+      _self.currentPage = pageNumber;
+      /*
+      *Modify history to prevent users from refreshing pages incorrectly
+      *修改历史记录，防止用户刷新页面不正确
+      */
+      history.pushState({},"","/consensusNode?currentPage="+pageNumber+"&address="+_self.address+"&type="+_self.type);
       getBlockListAddressAll({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address,"type":_self.type},function(res){
+        loading.close();
         if(res.success){
           if(res.data.list){
             _self.blockList = res.data.list;
             _self.totalDataNumber = res.data.total;
+            /*返回网页顶部  Back to top of page*/
+            document.getElementById("nuls-outter").scrollTop = 0;
           }else{
             _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.consensusDetail"),type: 'warning'});
           }

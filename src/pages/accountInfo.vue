@@ -35,9 +35,9 @@
           <span>{{txlist.time | formatDate}}</span>
         </p>
         <p>
-          <span>{{$t("second.block")}}：<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span>
-          <span>{{$t("second.enter")}}/{{$t("second.outPut")}}：&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span>
-          <span>{{$t("second.fee")}}：{{txlist.fee|getInfactCoin}} NULS</span>
+          <span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span>
+          <span>{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span>
+          <span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span>
         </p>
         <template v-if="txlist.inputs[0] || txlist.outputs[0]">
           <div class="w100" :class="showScroll==key?'scrollHeight':'hideHeight'">
@@ -59,9 +59,9 @@
           </div>
         </template>
         <div class="clear"></div>
-        <p>
-          <span>{{$t("second.amount")}}{{txlist | formatTxAmount}} NULS</span>
-        </p>
+        <template v-if="txlist.type <= 2">
+        <p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
+        </template>
         <div v-if="txlist.inputs[5] || txlist.outputs[5]" class="list-foot">
           <a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a>
         </div>
@@ -72,14 +72,16 @@
     <!--pagination start-->
     <div class="text-align-right">
     <el-pagination
-    background
-    :prev-text="$t('page.previous')"
-    :next-text="$t('page.next')"
-    layout="total,prev, pager, next,jumper"
+      background
+      :prev-text="$t('page.previous')"
+      :next-text="$t('page.next')"
+      layout="total,prev, pager, next,jumper"
     @current-change="nulstxlist"
     :page-size=this.pageSize
+    :current-page=this.currentPage
     :total=this.totalDataNumber>
     </el-pagination>
+
     </div>
     <!--pagination end-->
 
@@ -97,6 +99,7 @@ import {brotherComponents} from '../assets/js/public.js';
           address: '',
           txCount: 0,
           totalDataNumber: 0,
+          currentPage: 1,
           pageSize: 20,
           showScroll: -1,
           accountInfo: {balance: 0, usable: 0, locked: 0},
@@ -156,17 +159,27 @@ import {brotherComponents} from '../assets/js/public.js';
         }
       },
       created: function () {
-        var _self = this;
-        _self.address = _self.$route.query.address;
-        _self.nulstxlist();
-        _self.nulsloadDetail();
+        this.address = this.$route.query.address;
+        this.nulstxlist(this.currentPage);
+        this.nulsloadDetail();
+      },
+      /*
+      * 监听route，处理地址栏参数变化
+      * Listen for route, handle address bar parameter changes
+      */
+      watch: {
+        '$route'(to, from) {
+          var _self = this;
+          _self.currentPage = isNaN(to.query.currentPage)?1:parseInt(to.query.currentPage,10);
+          _self.nulstxlist(_self.currentPage);
+        }
       },
       methods: {
         formatTxClass:function(status){
           return formatTxClass(status);
         },
         showmore: function(v){
-          this.showScroll =this.showScroll=== -1?v:-1;
+          this.showScroll =this.showScroll===v?-1:v;
         },
         /*
         *reload address detail,then back to top of page
@@ -174,10 +187,8 @@ import {brotherComponents} from '../assets/js/public.js';
         */
         reloadAccount: function(address){
           this.address = address;
-          this.nulstxlist();
+          this.nulstxlist(this.currentPage);
           this.nulsloadDetail();
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
         },
         /*
         *跳转块详情
@@ -203,7 +214,22 @@ import {brotherComponents} from '../assets/js/public.js';
         },
         nulstxlist: function (pageNumber) {
           var _self = this;
+          var loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.5)'
+          });
+          _self.currentPage = pageNumber;
+          /*
+          *Modify history to prevent users from refreshing pages incorrectly
+          *修改历史记录，防止用户刷新页面不正确
+          */
+          history.pushState({},"","/accountInfo?currentPage="+pageNumber+"&address="+_self.address);
           getTxList({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address},function(res){
+            loading.close();
+            /*返回网页顶部  Back to top of page*/
+            document.getElementById("nuls-outter").scrollTop = 0;
             if(res.success){
               _self.transList=res.data.list;
               _self.totalDataNumber = res.data.total;

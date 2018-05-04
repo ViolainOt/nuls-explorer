@@ -16,7 +16,7 @@
               <li>
                 <span >{{$t("currencyAccount.number")}}</span>
                 <span >{{$t("currencyAccount.address")}}</span>
-                <span>{{$t("currencyAccount.balance")}}</span>
+                <span class="text-align-left text-padding-7">{{$t("currencyAccount.balance")}}</span>
                 <span >{{$t("currencyAccount.transactionCount")}}</span>
               </li>
             </ul>
@@ -26,9 +26,9 @@
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="(block,key) in blockList">
-                <span>{{key+1}}</span>
-                <span><router-link :to="{path:'/accountInfo',query:{address:block.address}}">{{block.address|formatString}}</router-link></span>
-                <span class="text-align-left text-padding-7">{{block.balance | getInfactCoin}}</span>
+                <span>{{((currentPage-1)*pageSize)+key+1}}</span>
+                <span><router-link :to="{path:'/accountInfo',query:{address:block.address}}">{{block.address}}</router-link></span>
+                <span class="text-align-left text-padding-5">{{block.balance | getInfactCoin}}</span>
                 <span>{{block.txCount}}</span>
               </li>
             </ul>
@@ -43,6 +43,7 @@
             layout="total,prev, pager, next,jumper"
           @current-change="nulsGetBalanceListRank"
           :page-size=this.pageSize
+          :current-page=this.currentPage
           :total=this.totalDataNumber>
         </el-pagination>
           </span>
@@ -61,6 +62,7 @@
       return {
         blockList: [{id:0,address:'',balance:'',txCount:0,createTime:''}],
         totalDataNumber: 0,
+        currentPage: 1,
         pageSize: 20,
       }
     },
@@ -77,7 +79,19 @@
       }
     },
     created:function(){
-      this.nulsGetBalanceListRank();
+      this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
+      this.nulsGetBalanceListRank(this.currentPage);
+    },
+    /*
+    * 监听route，处理地址栏参数变化
+    * Listen for route, handle address bar parameter changes
+    */
+    watch: {
+      '$route'(to, from) {
+        var _self = this;
+        _self.currentPage = isNaN(to.query.currentPage)?1:parseInt(to.query.currentPage,10);
+        _self.nulsGetBalanceListRank(_self.currentPage);
+      }
     },
     methods: {
       /*
@@ -85,12 +99,27 @@
       * 加载持币列表，分页加载
       */
       nulsGetBalanceListRank(pageNumber){
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.5)'
+        });
         var _self = this;
+        _self.currentPage = pageNumber;
+        /*
+        *Modify history to prevent users from refreshing pages incorrectly
+        *修改历史记录，防止用户刷新页面不正确
+        */
+        history.pushState({},"","/cashAccount?currentPage="+pageNumber);
         getBalanceListRank({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
+          loading.close();
           if(res.success){
             if(res.data.list){
               _self.blockList = res.data.list;
               _self.totalDataNumber = res.data.total;
+              /*返回网页顶部  Back to top of page*/
+              document.getElementById("nuls-outter").scrollTop = 0;
             }else{
               _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
             }

@@ -4,10 +4,12 @@ import router from './router'
 import 'babel-polyfill'
 import ElementUI from 'element-ui'
 import VueI18n from 'vue-i18n'
+/*import pagination from "./components/pagination/pagination";*/
 
 Vue.config.productionTip = false;
 
 Vue.use(VueI18n);
+/*Vue.component('pagination', pagination)*/
 const i18n = new VueI18n({
   locale:"zh",
   messages:{

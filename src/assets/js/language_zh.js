@@ -6,25 +6,26 @@ module.exports = {
     currencyAccount: '持币账户',
     outPieceAccount: '出块账户',
     tool: '工具',
+    toolHit: '暂无',
     wallet: '钱包',
     clientDownloads: '客户端下载',
     webWallet: '网页轻钱包'
   },
   second: {
-    index_NULS: 'NULS 全网信息',
+    index_NULS: 'NULS 测试网信息',
     block: '区块',
     more: '更多',
-    history: '14天NULS交易历史(K)',
+    history: '14天NULS交易历史',
     transaction: '交易',
     transactions: '笔交易',
     consensusReward: '共识奖励',
     enter: '输入',
     outPut: '输出',
     fee: '手续费',
-    amount: '金额：',
-    totalMortgage: '总抵押',
-    consensusNodeAccount: '共识节点数量',
-    consensusPeople: '共识参与人数',
+    amount: '金额',
+    totalMortgage: '总委托',
+    consensusNodeAccount: '当前节点数量',
+    consensusPeople: '当前参与人数',
     tokenCirculation: '代币发行量',
     dailyConsensusNodeReward: '24小时共识奖励',
     transList: '交易列表'
@@ -51,6 +52,19 @@ module.exports = {
     reward: '收益',
     lastRewardBlock: '最后收获的区块 ',
     consensusStatus: '当前共识状态'
+  },
+  consensus:{
+    i0: "未参与共识",
+    i1: "等待共识",
+    i2: "共识中",
+    inull: "未知",
+  },
+  utxoStatus:{
+    i0:"未花费",
+    i1:"已锁定",
+    i2:"已锁定",
+    i3:"已花费",
+    inull: "未知",
   },
   consensusNode:{
     consensusNode: '共识节点',
@@ -100,7 +114,8 @@ module.exports = {
       i92: "退出共识",
       i93: "黄牌惩罚",
       i94: "红牌惩罚",
-      i95: "停止节点"
+      i95: "停止节点",
+      inull: "未知",
     },
   },
   page:{
@@ -122,12 +137,14 @@ module.exports = {
     notice: '提示',
     determine: '确定',
     noMessage: '暂无数据',
+    not: '无',
     noBlockMessage: '暂无区块数据',
     noTransMessage: '暂无交易数据',
     searchFailed: '没有搜索到任何信息',
     searchNull: '请先输入搜索内容',
     consensusDetail: '共识节点详细数据获取失败',
-    transCount: '交易量',
+    transCount: '交易笔数',
+    numberError: '请输入正确的数字',
     transDate: '日期'
   },
   el: {
@@ -143,5 +160,8 @@ module.exports = {
       cancel: '取消',
       error: '输入的数据不合法!'
     },
+  },
+  other: {
+    semicolon: '：'
   }
 }

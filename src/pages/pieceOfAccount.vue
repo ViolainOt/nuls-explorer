@@ -31,7 +31,7 @@
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="(block,key) in blockList">
-                <span>{{key+1}}</span>
+                <span>{{((currentPage-1)*pageSize)+key+1}}</span>
                 <span><router-link :to="{path:'/consensusNode',query:{address:block.agentAddress,type:1}}">{{block.agentAddress | formatString}}</router-link></span>
                 <span>{{block.minedCount}}</span>
                 <span>{{block.reward | getInfactCoin}}</span>
@@ -50,6 +50,7 @@
             layout="total,prev, pager, next,jumper"
           @current-change="nulsGetMinedlist"
           :page-size=this.pageSize
+          :current-page=this.currentPage
           :total=this.totalDataNumber>
         </el-pagination>
           </span>
@@ -62,20 +63,18 @@
 
 <script>
   import {getAddressMinedlist} from "../assets/js/nuls.js";
-  import {formatConsensusStatus,getInfactCoin,formatString} from '../assets/js/util.js';
+  import {getInfactCoin,formatString} from '../assets/js/util.js';
   export default {
     name: "pieceOfAccount",
     data () {
       return {
         blockList: [{id:0,consensusAddress:'',minedCount:'',reward:0,lastHeight:0,consensusStatus:0,createTime:'',agentAddress:''}],
         totalDataNumber: 0,
+        currentPage: 1,
         pageSize: 20
       }
     },
     filters: {
-      formatConsensusStatus(status) {
-        return formatConsensusStatus(status);
-      },
       getInfactCoin(count) {
         return getInfactCoin(count);
       },
@@ -84,7 +83,8 @@
       }
     },
     created:function(){
-      this.nulsGetMinedlist();
+      this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
+      this.nulsGetMinedlist(this.currentPage);
     },
     methods: {
       /**
@@ -92,12 +92,27 @@
        * Load all out of block account list, page load
        */
       nulsGetMinedlist(pageNumber){
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.5)'
+        });
         var _self = this;
+        _self.currentPage = pageNumber;
+        /*
+        *Modify history to prevent users from refreshing pages incorrectly
+        *修改历史记录，防止用户刷新页面不正确
+        */
+        history.pushState({},"","/pieceOfAccount?currentPage="+pageNumber);
         getAddressMinedlist({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
+          loading.close();
           if(res.success){
             if(res.data.list){
               _self.blockList = res.data.list;
               _self.totalDataNumber = res.data.total;
+              /*返回网页顶部  Back to top of page*/
+              document.getElementById("nuls-outter").scrollTop = 0;
             }else{
               _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
             }

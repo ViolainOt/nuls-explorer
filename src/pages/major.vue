@@ -1,7 +1,7 @@
 <template>
     <!--Main start-->
     <div class="nuls_parent_content">
-      <div class="nuls_child_content">
+      <div class="nuls_child_content" id="nuls-outter">
         <div class="nuls-warper">
         <Head/>
         <router-view></router-view>
@@ -16,7 +16,15 @@
   import Foot from "../components/Foot";
   export default {
     name: "major",
-    data() {return {};},
-    components: {Foot, Head}
+    data() {
+      return {};
+    },
+    components: {Foot, Head},
+    /*beforeRouteUpdate (to, from, next) {
+      // react to route changes...
+      // don't forget to call next()
+      console.log(to);
+      next();
+    },*/
   }
 </script>

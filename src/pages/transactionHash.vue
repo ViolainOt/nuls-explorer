@@ -30,12 +30,12 @@
         <div class="tx_head">{{$t("second.enter")}}</div>
         <ul class="tx_description" :class="showAllInputs==1?'scrollHeight':'hideHeight_trans'">
           <li v-if="!txdetail.inputs[0]">
-            <span class="float_left">{{$t("notice.noMessage")}}</span>
+            <span class="float_left">{{$t("notice.not")}}</span>
             <span class="float_right">&nbsp;</span>
           </li>
           <li v-for="inplist in txdetail.inputs">
             <router-link :to="{path:'/accountInfo',query:{address:inplist.address}}">{{inplist.address|formatString}}</router-link>
-            <span class="float_right">（{{inplist.value | getInfactCoin}}&nbsp;-&nbsp;<span @click="hashDetail(inplist.fromHash)" class="baseColor pointer">Output</span>）</span>
+            <span class="float_right">（{{inplist.value | getInfactCoin}}&nbsp;-&nbsp;<span @click="hashDetail(inplist.fromHash)" class="baseColor pointer">{{$t("utxoStatus.i3")}}</span>）</span>
           </li>
         </ul>
         <div v-if="txdetail.inputs[5]" class="tx_description center">
@@ -46,12 +46,12 @@
         <div class="tx_head">{{$t("second.outPut")}}</div>
         <ul class="tx_description" :class="showAllOutputs==1?'scrollHeight':'hideHeight_trans'">
           <li v-if="!txdetail.outputs[0]">
-            <span class="float_left">{{$t("notice.noMessage")}}</span>
+            <span class="float_left">{{$t("notice.not")}}</span>
             <span class="float_right">&nbsp;</span>
           </li>
           <li v-for="outlist in txdetail.outputs">
             <router-link :to="{path:'/accountInfo',query:{address:outlist.address}}">{{outlist.address|formatString}}</router-link>
-            <span class="float_right">（{{outlist.value | getInfactCoin}}&nbsp;-&nbsp;<span @click="toSpentByHash(outlist.status,outlist.index,outlist.txHash)" v-bind:class="formatUTXOClass(outlist.status)">{{outlist.status|formatUTXOStatus}}</span>）</span>
+            <span class="float_right">（{{outlist.value | getInfactCoin}}&nbsp;-&nbsp;<span @click="toSpentByHash(outlist.status,outlist.index,outlist.txHash)" :class="outlist.status==3?'pointer baseColor':'enableColor'">{{$t("utxoStatus.i"+outlist.status)}}</span>）</span>
           </li>
         </ul>
         <div v-if="txdetail.outputs[5]" class="tx_description center">
@@ -66,7 +66,7 @@
 
 <script>
 import {getTxList,getTxByHash,getTxSpentHashDetail} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,formatUTXOStatus,formatUTXOClass,formatString} from '../assets/js/util.js';
+import {formatDate,getInfactCoin,formatString} from '../assets/js/util.js';
 import {brotherComponents} from '../assets/js/public.js';
     export default {
       name: "transactionHash",
@@ -115,12 +115,9 @@ import {brotherComponents} from '../assets/js/public.js';
         getInfactCoin(count) {
           return getInfactCoin(count);
         },
-        formatUTXOStatus(status){
-          return formatUTXOStatus(status);
-        },
         getArrayAmout(arraydata){
           var amount = 0,len=arraydata.length;
-          for(var i = 0;i<len;i++){
+          for(var i = 0;i < len;i++){
             amount += arraydata[i].value;
           }
           return getInfactCoin(amount);
@@ -134,9 +131,6 @@ import {brotherComponents} from '../assets/js/public.js';
       methods: {
         getInfactCoin(count){
           return getInfactCoin(count);
-        },
-        formatUTXOClass(status){
-          return formatUTXOClass(status);
         },
         /**
          * 根据交易index和hash查询已花费的hash，并获取该hash的详情

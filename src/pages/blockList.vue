@@ -35,7 +35,8 @@
                 <span>{{block.time | formatDate}}</span>
                 <span>{{block.txCount}}</span>
                 <span>
-                  <router-link :to="{path:'/consensusNode',query:{address:block.packingAddress,type:2}}">{{block.packingAddress | formatString}}</router-link>
+                  <!--<router-link :to="{path:'/consensusNode',query:{address:block.packingAddress,type:2}}">{{block.packingAddress | formatString}}</router-link>-->
+                  {{block.packingAddress | formatString}}
                 </span>
                 <span>{{block.size}}</span>
                 <span>{{block.reward|getInfactCoin}} NULS</span>
@@ -45,15 +46,16 @@
         </li>
         <li class="foot">
           <span>
-          <el-pagination
-            background
-            :prev-text="$t('page.previous')"
-            :next-text="$t('page.next')"
-            layout="total,prev, pager, next,jumper"
-            @current-change="nulsGetBlockList"
-            :page-size=this.pageSize
-            :total=this.totalDataNumber>
-          </el-pagination>
+            <el-pagination
+              background
+              :prev-text="$t('page.previous')"
+              :next-text="$t('page.next')"
+              layout="total,prev, pager, next,jumper"
+              @current-change="nulsGetBlockList"
+              :page-size=this.pageSize
+              :current-page=this.currentPage
+              :total=this.totalDataNumber>
+            </el-pagination>
           </span>
         </li>
       </ul>
@@ -70,9 +72,10 @@
     name: "blockList",
     data () {
       return {
-        blockList: [{height:0,time:'',packingAddress:' ',txCount:0,reward:0,size:0}],
+        blockList: [{height:0,time:'2018-01-01',packingAddress:' ',txCount:0,reward:0,size:0}],
         totalDataNumber: 0,
-        pageSize: 20
+        pageSize: 20,
+        currentPage: 1,
       }
     },
     filters: {
@@ -88,7 +91,19 @@
       }
     },
     created:function(){
-      this.nulsGetBlockList();
+      this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
+      this.nulsGetBlockList(this.currentPage);
+    },
+    /*
+    * 监听route，处理地址栏参数变化
+    * Listen for route, handle address bar parameter changes
+    */
+    watch: {
+      '$route'(to, from) {
+        var _self = this;
+        _self.currentPage = isNaN(to.query.currentPage)?1:parseInt(to.query.currentPage,10);
+        _self.nulsGetBlockList(_self.currentPage);
+      }
     },
     methods: {
       /*
@@ -96,8 +111,23 @@
       *加载区块列表，分页加载
       */
       nulsGetBlockList(pageNumber){
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.5)'
+        });
         var _self = this;
+        _self.currentPage = pageNumber;
+        /*
+        *Modify history to prevent users from refreshing pages incorrectly
+        *修改历史记录，防止用户刷新页面不正确
+        */
+        history.pushState({},"","/blockList?currentPage="+pageNumber);
         getBlockList({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
+          loading.close();
+          /*返回网页顶部  Back to top of page*/
+          document.getElementById("nuls-outter").scrollTop = 0;
           if(res.success){
             if(res.data.list){
               _self.blockList = res.data.list;

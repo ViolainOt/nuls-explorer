@@ -1,6 +1,7 @@
 <template>
   <!--Vuejs2.X g2 Chart components-->
   <!--npm install --save-dev g2-->
+  <!--https://antv.alipay.com/zh-cn/g2/3.x/tutorial-->
   <div :id="id"></div>
 </template>
 <script>
@@ -37,7 +38,8 @@
         this.chart = new G2.Chart({
           id: this.id,
           height: 245,
-          forceFit: true,
+          width: 525,
+          //forceFit: true,
           background: {
             fill: "#17202e",
             fillOpacity: 1,
@@ -47,7 +49,6 @@
             lineWidth: 1,
             radius: 0
           }
-          , padding: [ 90, 20, 95, 80 ]
         });
         this.chart.source(data, {
 
@@ -62,7 +63,7 @@
             formatter: val => {
               if(val){
                 var valueDate=new Date(val);
-                return ((parseInt(valueDate.getMonth())+1)+"-"+valueDate.getDate());
+                return ((parseInt(valueDate.getMonth(),10)+1)+"-"+valueDate.getDate());
               }
               return "";
             },
