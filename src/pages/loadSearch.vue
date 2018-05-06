@@ -5,7 +5,6 @@
 </template>
 <script>
 
-import {getSearchDataDetail} from "../assets/js/nuls.js";
 export default {
   name: "loadSearch",
   data () {

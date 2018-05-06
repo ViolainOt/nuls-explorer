@@ -17,7 +17,6 @@
                 <span >{{$t("currencyAccount.number")}}</span>
                 <span >{{$t("currencyAccount.address")}}</span>
                 <span class="text-align-left text-padding-7">{{$t("currencyAccount.balance")}}</span>
-                <span >{{$t("currencyAccount.transactionCount")}}</span>
               </li>
             </ul>
           </span>
@@ -29,7 +28,6 @@
                 <span>{{((currentPage-1)*pageSize)+key+1}}</span>
                 <span><router-link :to="{path:'/accountInfo',query:{address:block.address}}">{{block.address}}</router-link></span>
                 <span class="text-align-left text-padding-5">{{block.balance | getInfactCoin}}</span>
-                <span>{{block.txCount}}</span>
               </li>
             </ul>
           </span>

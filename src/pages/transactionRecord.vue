@@ -56,12 +56,10 @@
     :total=this.totalDataNumber>
     </el-pagination>
     </div>
-
   </div>
-
 </template>
 <script>
-  import {getTxList,getTxByHash,getBlockList,getAllConsensus} from "../assets/js/nuls.js";
+  import {getTxList,getTxByHash,getBlockList} from "../assets/js/nuls.js";
   import {formatDate,formatTxClass,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
   export default {
     name: "transactionRecord",
