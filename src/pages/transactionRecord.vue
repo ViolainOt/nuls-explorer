@@ -40,7 +40,7 @@
     <template v-if="txlist.type <= 2">
       <p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
     </template>
-    <div v-if="txlist.inputs[5] || txlist.outputs[5]" class="list-foot"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+    <div v-if="txlist.inputs[4] || txlist.outputs[4]" class="list-foot"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
     </li>
     </ul>
     <!-- transaction list end -->

@@ -46,7 +46,11 @@ export function getInfactCoin(count){
   if(count){
     var l = count.length,s=9,d=count/100000000,f=d.toString().split('.');
     if(l>=s){
-      if(!f[1]){
+      if(f[1]){
+        if(f[1].toString().length===1){
+          d+="0";
+        }
+      }else{
         d+=".00";
       }
       return d;
