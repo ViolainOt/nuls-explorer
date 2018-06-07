@@ -1,74 +1,58 @@
 <template>
 <header class="head">
-<div class="nuls-head-content clearfix">
-<div class="nuls-logo-content clearfix">
-<router-link to="/"></router-link>
-</div>
-<ul class="nuls-navigation-box clearfix">
-<li>
-<router-link to="/">{{$t("nav.index")}}</router-link>
-</li>
-<li>
-<span>
-<router-link to="">{{$t("nav.rank")}}</router-link>
-<i class="el-icon-arrow-down"></i>
-</span>
-<ul class="nuls-dropdown-list">
-<li>
-<router-link to="/cashAccount">{{$t("nav.currencyAccount")}}</router-link>
-</li>
-<li>
-<router-link to="/pieceOfAccount">{{$t("nav.outPieceAccount")}}</router-link>
-</li>
-</ul>
-</li>
-<li>
-<span class="whiteColor" :title="$t('nav.toolHit')" to="">{{$t("nav.tool")}}</span>
-</li>
-<li>
-  <span>
-  <router-link to="" class="nuls-dropdown">{{$t("nav.wallet")}}</router-link>
-  <i class="el-icon-arrow-down"></i>
-  </span>
-  <ul class="nuls-dropdown-list">
-    <li>
-    <a class="pointer" @click="linkToDown">{{$t("nav.clientDownloads")}}</a>
-    </li>
-    <li>
-    <router-link to="">{{$t("nav.webWallet")}}</router-link>
-    </li>
-  </ul>
-</li>
-
-</ul>
-
-<!--language change start-->
-<div class="nuls-language-box">
-<!--<select @change="change($event)">
-<option value="zh">中文</option>
-<option value="en">English</option>
-</select>-->
-<span>
-  <router-link to="" class="nuls-dropdown">{{langText}}</router-link>
-  <i class="el-icon-arrow-down"></i>
-</span>
-<ul class="nuls-dropdown-list">
-<li>
-<a class="pointer" @click="change('zh')">中文</a>
-</li>
-<li>
-<a class="pointer" @click="change('en')">English</a>
-</li>
-</ul>
-</div>
-<!--language change end-->
-
-<!--search start-->
-<div class="nuls-search-box">
-<input placeholder="Address / Txhash / Block" class="pointer" ref="search" @keyup.enter="search" value="" type="text"/>
-<i class="el-icon-search pointer" @click="search"></i>
-</div>
-<!--search end-->
+<div class="nuls-head-content">
+    <div class="menu flex">
+        <div class="nuls-logo-content"></div>
+        <ul>
+            <li><router-link to="/">{{$t("nav.index")}}</router-link></li>
+            <li>
+                <a>{{$t("nav.rank")}}</a>
+                <i class="el-icon-arrow-down"></i>
+                <div class="more left">
+                    <div>
+                        <router-link to="/cashAccount">{{$t("nav.currencyAccount")}}</router-link>
+                    </div>
+                    <div>
+                        <router-link to="/pieceOfAccount">{{$t("nav.outPieceAccount")}}</router-link>
+                    </div>
+                </div>
+            </li>
+            <li><router-link to="" :title="$t('nav.toolHit')">{{$t("nav.tool")}}</router-link></li>
+            <li>
+                <a class="nuls-dropdown">{{$t("nav.wallet")}}</a>
+                <i class="el-icon-arrow-down"></i>
+                <div class="more right">
+                  <div>
+                    <a class="pointer" @click="linkToDown">{{$t("nav.clientDownloads")}}</a>
+                  </div>
+                  <div>
+                    <router-link to="">{{$t("nav.webWallet")}}</router-link>
+                  </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="menu flex menu-border">
+        <div class="nuls-search-box">
+            <input placeholder="Address / Txhash / Block" class="pointer" ref="search" @keyup.enter="search" value="" type="text" />
+            <i class="el-icon-search pointer" @click="search"></i>
+        </div>
+        <div class="nuls-language-box">
+            <div class="language-outter">
+                <router-link to="" class="whiteColor">{{langText}}</router-link>
+                <i class="el-icon-arrow-down"></i>
+            </div>
+            <div class="language_list">
+                <div>
+                    <a class="pointer" @click="change('zh')">中文</a>
+                </div>
+                <div>
+                    <a class="pointer" @click="change('en')">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
 </div>
 </header>
 </template>
@@ -98,10 +82,6 @@ change: function(lang){
 
 
 },
-/*change: function(event){
-  this.$i18n.locale = event.target.value;
-  brotherComponents.$emit('redrawChart');
-},*/
 linkToDown: function(){
   //
   if(this.$i18n.locale == "zh"){

@@ -1,7 +1,7 @@
 <template>
   <div class="nuls-warper">
     <Head/>
-    <div class="nuls-content center notfond">
+    <div class="nuls-home-content center notfond">
       <p>SORRY,YOU GET LOST</p>
       <p>对不起，您的网页已被火星人劫持</p>
       <div>

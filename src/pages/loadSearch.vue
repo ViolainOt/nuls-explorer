@@ -1,5 +1,5 @@
 <template>
-  <div class="nuls-content">
+  <div class="nuls-home-content">
 
   </div>
 </template>

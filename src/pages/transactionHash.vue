@@ -1,5 +1,7 @@
 <template>
-  <div class="nuls-content">
+    <div class="nuls-home-content">
+        <!--nav start-->
+        <div class="nuls-second-type">
     <nav>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{$t("nav.index")}}</el-breadcrumb-item>
@@ -8,25 +10,53 @@
       </el-breadcrumb>
     </nav>
 
-    <div class="nuls-title">
+    <div class="nuls-title text-align-center">
       {{$t("transDetail.transDetail")}}
     </div>
+        </div>
     <!-- transaction detail start -->
-    <ul class="tx_description tx_border tx_background">
-      <li><span class="float_left">{{$t("transDetail.transType")}}</span><span class="float_right">{{$t("transDetail.transTypeDetail.i"+txdetail.type)}}</span></li>
-      <li><span class="float_left">{{$t("transDetail.transHash")}}</span><span  class="float_right">{{hash}}</span></li>
-      <li><span class="float_left">{{$t("transDetail.transHeight")}}</span><span class="float_right"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.blockHeight}}</router-link></span></li>
-      <li><span class="float_left">{{$t("transDetail.transConfirmCount")}}</span><span class="float_right">{{txdetail.confirmCount}}</span></li>
-      <li><span class="float_left">{{$t("transDetail.transTime")}}</span><span class="float_right">{{txdetail.time | formatDate}}</span></li>
-      <li><span class="float_left">{{$t("transDetail.transInput")}}</span><span class="float_right">{{txdetail.inputs|getArrayAmout}} NULS</span></li>
-      <li><span class="float_left">{{$t("transDetail.transOutput")}}</span><span class="float_right">{{txdetail.outputs|getArrayAmout}} NULS</span></li>
-      <li><span class="float_left">{{$t("transDetail.transFee")}}</span><span class="float_right">{{txdetail.fee|getInfactCoin}} NULS</span></li>
-    </ul>
+<div class="nuls-home-content-top nuls-home-content-accountinfo tx_background tx_border">
+  <div class="nuls-message-list">
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transType")}}</div>
+          <div class="nuls-flex-cell-flex text-hidden">{{$t("transDetail.transTypeDetail.i"+txdetail.type)}}</div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transHash")}}</div>
+          <div class="nuls-flex-cell-flex text-hidden">{{hash}}</div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transHeight")}}</div>
+          <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.blockHeight}}</router-link></div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmCount")}}</div>
+          <div class="nuls-flex-cell-flex">{{txdetail.confirmCount}}</div>
+      </div>
+
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transTime")}}</div>
+          <div class="nuls-flex-cell-flex text-hidden">{{txdetail.time | formatDate}}</div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transInput")}}</div>
+          <div class="nuls-flex-cell-flex">{{txdetail.inputs|getArrayAmout}} NULS</div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transOutput")}}</div>
+          <div class="nuls-flex-cell-flex">{{txdetail.outputs|getArrayAmout}} NULS</div>
+      </div>
+      <div class="nuls-flex-cell flex">
+          <div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>
+          <div class="nuls-flex-cell-flex">{{txdetail.fee|getInfactCoin}} NULS</div>
+      </div>
+  </div>
+</div>
     <!-- transaction detail end -->
 
     <!-- transaction list start -->
     <div class="tx_list">
-      <div class="w49 float_left tx_background">
+      <div class="float_left tx_background tx_input_content">
         <div class="tx_head">{{$t("second.enter")}}</div>
         <ul class="tx_description" :class="showAllInputs==1?'scrollHeight':'hideHeight_trans'">
           <li v-if="!txdetail.inputs[0]">
@@ -42,7 +72,7 @@
           <i @click="showMore(-1)" class="nuls-img-icon nuls-img-three-point pointer"></i>
         </div>
       </div>
-      <div class="w49 float_right tx_background">
+      <div class="float_right tx_background tx_output_content">
         <div class="tx_head">{{$t("second.outPut")}}</div>
         <ul class="tx_description" :class="showAllOutputs==1?'scrollHeight':'hideHeight_trans'">
           <li v-if="!txdetail.outputs[0]">

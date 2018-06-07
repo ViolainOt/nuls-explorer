@@ -1,23 +1,23 @@
 <template>
     <!--Main start-->
     <div class="nuls_parent_content">
-      <div class="nuls_child_content" id="nuls-outter">
-        <div class="nuls-warper">
-        <Head/>
-        <router-view></router-view>
-        <Foot/>
+        <div class="nuls_child_content" id="nuls-outter">
+            <div class="nuls-warper">
+                <Head/>
+                <router-view></router-view>
+                <Foot/>
+            </div>
         </div>
-      </div>
     </div>
     <!--Main end-->
 </template>
 <script>
-  import Head from "../components/Head";
-  import Foot from "../components/Foot";
-  export default {
+import Head from "../components/Head";
+import Foot from "../components/Foot";
+export default {
     name: "major",
     data() {
-      return {};
+        return {};
     },
     components: {Foot, Head},
     /*beforeRouteUpdate (to, from, next) {
@@ -26,5 +26,5 @@
       console.log(to);
       next();
     },*/
-  }
+}
 </script>
