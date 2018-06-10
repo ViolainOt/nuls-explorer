@@ -589,6 +589,9 @@ footer .nuls-footer a.gitter i {
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-title{
     width: 120px;
 }
+.nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-title.wflex{
+    width: 180px;
+}
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-flex{
     flex: 1;
     text-align: right;

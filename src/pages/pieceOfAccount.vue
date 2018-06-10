@@ -23,7 +23,7 @@
                 <span>{{$t("outPieceAccount.blockReward")}}</span>
                 <span>{{$t("outPieceAccount.reward")}}</span>
                 <span>{{$t("outPieceAccount.lastRewardBlock")}}</span>
-                <span>{{$t("outPieceAccount.consensusStatus")}}</span>
+                <!--<span>{{$t("outPieceAccount.consensusStatus")}}</span>-->
               </li>
             </ul>
           </span>
@@ -34,11 +34,11 @@
             <ul class="nuls-ul-sub-table">
               <li v-for="(block,key) in blockList">
                 <span>{{((currentPage-1)*pageSize)+key+1}}</span>
-                <span><router-link :to="{path:'/consensusNode',query:{address:block.packingAddress,type:1}}">{{block.packingAddress | formatString}}</router-link></span>
+                <span><router-link :to="{path:'/consensusNode',query:{address:block.packingAddress,type:1}}">{{block.packingAddress}}</router-link></span>
                 <span>{{block.totalPackingCount}}</span>
                 <span>{{block.totalReward | getInfactCoin}}</span>
                 <span>{{block.lastRewardHeight}}</span>
-                <span>{{$t("consensusNode.consensusFormatter.i"+block.status)}}</span>
+                <!--<span>{{$t("consensusNode.consensusFormatter.i"+block.status)}}</span>-->
               </li>
             </ul>
           </span>

@@ -49,31 +49,31 @@
                     <div class="hash flex-auto text-hidden">
                         <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
                     </div>
-                    <div class="time text-align-right">{{txlist.time | formatDate}}</div>
+                    <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                 </div>
                 <div class="tx_auto_flex block_split">
                     <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
-                    <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
+                    <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
                     <div class="fee text-align-right"><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></div>
                 </div>
                 <div class="clear"></div>
-                <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputs[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
+                <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputList[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
                     <div class="input_div text-hidden">
                         <p v-if="!txlist.inputs[0]">&nbsp;</p>
                         <p v-for="inputlist in txlist.inputs" class="baseColor pointer text-hidden" @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
                     </div>
                     <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
                     <div class="output_div text-align-right text-hidden">
-                        <p v-for="outputlist in txlist.outputs" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
+                        <p v-for="outputlist in txlist.outputList" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
                     </div>
                     <div class="tx_amount text-align-right">
-                        <p class="text-hidden" v-for="outputlist in txlist.outputs">{{outputlist.value|getInfactCoin}} NULS</p>
+                        <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
                     </div>
                 </div>
                 <template v-if="txlist.type <= 2">
                     <p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
                 </template>
-                <div v-if="txlist.inputs[4] || txlist.outputs[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+                <div v-if="txlist.inputs[4] || txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
             </li>
         </ul>
         <div class="clear"></div>
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import {getAccountByAddress,getTxList} from "../assets/js/nuls.js";
+import {getAccountByAddress,getTxListByAddress} from "../assets/js/nuls.js";
 import {formatDate,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
 import {brotherComponents} from '../assets/js/public.js';
 export default {
@@ -114,39 +114,18 @@ export default {
             showScroll: -1,
             accountInfo: {balance: 0, usable: 0, locked: 0},
             transList: [{
-                hash: '',
-                type: '',
-                index: '',
-                time: '',
-                blockHeight: '',
-                fee: '',
-                value: '',
-                inputs: [{
-                    txHash: '',
-                    index: '',
-                    address: '',
-                    value: '',
-                    createTime: '',
-                    lockTime: '',
-                    type: '',
-                    status: ''
-                }],
-                outputs: [{
-                    txHash: '',
-                    index: '',
-                    address: '',
-                    value: '',
-                    createTime: '',
-                    lockTime: '',
-                    type: '',
-                    status: ''
-                }],
-                transferType: '',
-                remark: '',
+                showClass: 1,
+                hash: ' ',
+                type: '1',
+                txIndex: '',
+                createTime: '',
+                blockHeight: 0,
+                fee: 0,
+                inputs: [{txHash: '', address: '', value: 0}],
+                outputList: [{txHash: '', address: '', value: 0}],
                 status: 0,
-                confirmCount: '',
-                size: ''
-            }]
+                size: 110
+            }],
         }
     },
     filters: {
@@ -185,9 +164,6 @@ export default {
         }
     },
     methods: {
-        formatTxClass:function(status){
-            return formatTxClass(status);
-        },
         showmore: function(v){
             this.showScroll =this.showScroll===v?-1:v;
         },
@@ -218,6 +194,7 @@ export default {
             var _self = this;
             getAccountByAddress({"address":_self.address},function(res){
                 if (res.success) {
+                    console.log(res.data);
                     _self.accountInfo = res.data;
                 }
             });
@@ -236,7 +213,7 @@ export default {
             *修改历史记录，防止用户刷新页面不正确
             */
             history.pushState({},"","/accountInfo?currentPage="+pageNumber+"&address="+_self.address);
-            getTxList({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address},function(res){
+            getTxListByAddress({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address},function(res){
                 loading.close();
                 /*返回网页顶部  Back to top of page*/
                 document.getElementById("nuls-outter").scrollTop = 0;

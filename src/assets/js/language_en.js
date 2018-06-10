@@ -108,7 +108,7 @@ module.exports = {
             i3: "Lock transaction",
             i4: "Unlock transaction",
             i5: "Change",
-            i11: "Set up a name",
+            i51: "Set up a name",
             i90: "Registration consensus",
             i91: "Join consensus",
             i92: "Withdraw from the consensus",

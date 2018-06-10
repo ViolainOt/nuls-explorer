@@ -25,7 +25,7 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("consensusNode.nodeName")}}</div>
-                    <div class="nuls-flex-cell-flex text-hidden">{{consensusDetail.txHash}}</div>
+                    <div class="nuls-flex-cell-flex text-hidden">{{consensusDetail.txHash|formatName}}</div>
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("consensusNode.consensusStatus")}}</div>
@@ -138,6 +138,13 @@ export default {
         },
         getInfactCoin(count){
             return getInfactCoin(count);
+        },
+        formatName(str){
+            if(str && str.length > 8){
+                return str.substring(str.length -8,str.length);
+            }else{
+                return str;
+            }
         }
     },
     created:function(){

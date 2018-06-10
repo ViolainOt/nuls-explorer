@@ -21,11 +21,11 @@
                             <div class="nuls-flex-cell-flex">{{newestBlock.consensusAccountNumber}}</div>
                         </div>
                         <div class="nuls-flex-cell flex">
-                            <div class="nuls-flex-cell-title">{{$t("second.tokenCirculation")}}</div>
+                            <div class="nuls-flex-cell-title wflex">{{$t("second.tokenCirculation")}}</div>
                             <div class="nuls-flex-cell-flex">100,000,000</div>
                         </div>
                         <div class="nuls-flex-cell flex">
-                            <div class="nuls-flex-cell-title">{{$t("second.dailyConsensusNodeReward")}}</div>
+                            <div class="nuls-flex-cell-title wflex">{{$t("second.dailyConsensusNodeReward")}}</div>
                             <div class="nuls-flex-cell-flex">{{newestBlock.rewardOfDay | getInfactCoin}}</div>
                         </div>
                     </div>
