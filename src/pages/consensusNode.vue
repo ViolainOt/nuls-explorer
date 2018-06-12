@@ -183,7 +183,9 @@ export default {
             *Modify history to prevent users from refreshing pages incorrectly
             *修改历史记录，防止用户刷新页面不正确
             */
-            history.pushState({},"","/consensusNode?currentPage="+pageNumber+"&address="+_self.address+"&type="+_self.type);
+            if(pageNumber !== 1) {
+                history.pushState({}, "", "/consensusNode?currentPage=" + pageNumber + "&address=" + _self.address + "&type=" + _self.type);
+            }
             getBlockList({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address,"type":_self.type},function(res){
                 loading.close();
                 console.log(res);
@@ -193,9 +195,9 @@ export default {
                         _self.totalDataNumber = res.data.total;
                         /*返回网页顶部  Back to top of page*/
                         document.getElementById("nuls-outter").scrollTop = 0;
-                    }else{
+                    }/*else{
                         _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.consensusDetail"),type: 'warning'});
-                    }
+                    }*/
                 }
             });
         },

@@ -25,7 +25,7 @@
                     <div>
                         <a class="pointer" @click="linkToDown">{{$t("nav.clientDownloads")}}</a>
                 </div>
-                <div>
+                <div @click="loadingWebwallet">
                     <router-link to="">{{$t("nav.webWallet")}}</router-link>
                 </div>
             </div>
@@ -43,11 +43,11 @@
     <i class="el-icon-arrow-down"></i>
 </div>
 <div class="language_list">
-    <div>
-        <a class="pointer" @click="change('zh')">中文</a>
+    <div class="pointer"  @click="change('zh')">
+        <a>中文</a>
 </div>
-<div>
-    <a class="pointer" @click="change('en')">English</a>
+<div class="pointer" @click="change('en')">
+    <a>English</a>
 </div>
     </div>
     </div>
@@ -59,13 +59,23 @@
 
 <script>
 import {getSearchDataDetail} from "../assets/js/nuls.js";
+import {saveDataToTemp,getDataToTemp} from "../assets/js/util.js";
 import {brotherComponents} from '../assets/js/public.js';
 
 export default {
     name: "Head",
     data() {
         return {
-            langText:"中文"
+            langText:"中文",
+            changeType: "changeType",
+        }
+    },
+    created:function(){
+        var lang = getDataToTemp(this.changeType);
+        if(lang === "zh" || lang === "en"){
+            this.reloadLanguage(lang);
+        }else{
+            this.reloadLanguage("en");
         }
     },
     methods: {
@@ -74,13 +84,19 @@ export default {
          * 语言切换事件，切换同时触发首页的交易历史重绘
          */
         change: function(lang){
+            this.reloadLanguage(lang);
+            saveDataToTemp(this.changeType,lang);
+        },
+        reloadLanguage: function(lang){
             if(this.$i18n.locale !== lang){
                 this.langText = lang === "zh"?"中文":"English";
                 this.$i18n.locale = lang;
                 brotherComponents.$emit('redrawChart');
             }
-
-
+        },
+        loadingWebwallet: function(){
+            var _self = this;
+            _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.underDevelopment"),type: 'warning'});
         },
         linkToDown: function(){
             //
@@ -94,7 +110,7 @@ export default {
             /*show loading*/
             var
                 _self = this,
-                serchVal = _self.$refs.search.value;
+                serchVal = _self.$refs.search.value.replace(/(^\s*)|(\s*$)/g, "");;
             if(serchVal && serchVal.length>0){
                 var loading = this.$loading({
                     lock: true,

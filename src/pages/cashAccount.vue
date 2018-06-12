@@ -10,6 +10,7 @@
             </nav>
             <div class="nuls-title text-align-center">{{$t("nav.currencyAccount")}}</div>
         </div>
+        <h3 class="nuls-hit">{{$t("outPieceAccount.pieceMessage")}}</h3>
         <div class="mobile-auto-fix">
             <!--cash list start-->
             <ul class="nuls-ul-table">
@@ -112,7 +113,9 @@ export default {
             *Modify history to prevent users from refreshing pages incorrectly
             *修改历史记录，防止用户刷新页面不正确
             */
-            history.pushState({},"","/cashAccount?currentPage="+pageNumber);
+            if(pageNumber !== 1){
+                history.pushState({},"","/cashAccount?currentPage="+pageNumber);
+            }
             getBalanceListRank({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
                 loading.close();
                 if(res.success){
@@ -124,9 +127,9 @@ export default {
                     }else{
                         _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
                     }
-                }else{
+                }/*else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }
+                }*/
             })
         }
     }

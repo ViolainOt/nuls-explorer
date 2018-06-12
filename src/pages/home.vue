@@ -39,7 +39,7 @@
                 <div class="nuls-home-content-head-right-head">
                     <div class="nuls-title flex">
                         <div class="nuls-title-logo"><i class="nuls-img-icon nuls-img-block"></i></div>
-                        <div class="nuls-title-text">{{$t("second.block")}}<router-link class="float_right" :to="{path:'/blockList'}">{{$t("second.more")}}</router-link></div>
+                        <div class="nuls-title-text">{{$t("second.block")}}<router-link class="float_right" :to="{path:'/blockList',query:{currentPage:1}}">{{$t("second.more")}}</router-link></div>
                     </div>
                     <div class="nuls-home-content-head-right-content">
                         <div class="nuls-head-block-list" v-for="block in blockList">

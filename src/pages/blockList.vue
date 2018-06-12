@@ -124,7 +124,9 @@ export default {
             *Modify history to prevent users from refreshing pages incorrectly
             *修改历史记录，防止用户刷新页面不正确
             */
-            history.pushState({},"","/blockList?currentPage="+pageNumber);
+            if(pageNumber !== 1){
+                history.pushState({},"","/blockList?currentPage="+pageNumber);
+            }
             getBlockList({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
                 loading.close();
                 /*返回网页顶部  Back to top of page*/
@@ -136,9 +138,9 @@ export default {
                     }else{
                         _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
                     }
-                }else{
+                }/*else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }
+                }*/
             })
         }
     }

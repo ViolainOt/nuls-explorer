@@ -14,7 +14,6 @@ export function formatString(str){
     return str.substring(0,4)+"...."+str.substring(str.length-4,str.length);
 };
 export function getInfactCoin(count){
-
     if(count){
         count = count.toString();
         var l = count.length,s=9,d=count/100000000,f=d.toString().split('.');
@@ -32,10 +31,10 @@ export function getInfactCoin(count){
                 return "0.00";
             }else{
                 var k = s-l,r="0.";
-                for(var i = 0; i < k; i++){
+                for(var i = 1; i < k; i++){
                     r+=0;
                 }
-                count = count.replace(/0/g,'');
+                count = parseInt(count.replace(/(0+)\b/gi,""));
                 return r+count;
             }
         }
@@ -88,6 +87,9 @@ export function formatDate(date, fmt) {
 
 function padLeftZero(str) {
     return ('00' + str).substr(str.length);
+}
+function trimLast(str){
+
 }
 
 

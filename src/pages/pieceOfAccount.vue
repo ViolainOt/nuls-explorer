@@ -11,6 +11,7 @@
                 {{$t("nav.outPieceAccount")}}
             </div>
         </div>
+        <h3 class="nuls-hit">{{$t("outPieceAccount.pieceMessage")}}</h3>
         <div class="mobile-auto-fix">
             <!--list start-->
             <ul class="nuls-ul-table" ref="contentInfo">
@@ -106,7 +107,9 @@ export default {
             *Modify history to prevent users from refreshing pages incorrectly
             *修改历史记录，防止用户刷新页面不正确
             */
-            history.pushState({},"","/pieceOfAccount?currentPage="+pageNumber);
+            if(pageNumber !== 1) {
+                history.pushState({}, "", "/pieceOfAccount?currentPage=" + pageNumber);
+            }
             getAddressMinedlist({"pageNumber":pageNumber,"pageSize":_self.pageSize},function(res){
                 loading.close();
                 if(res.success){
@@ -119,9 +122,9 @@ export default {
                         _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
                     }
                     return;
-                }else{
+                }/*else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }
+                }*/
             })
         }
     }

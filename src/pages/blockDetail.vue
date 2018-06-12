@@ -292,9 +292,9 @@ export default {
                         _self.hash = _self.blockheader.hash;
                         _self.confirmCount = res.data.confirmCount;
                         _self.prevBlockUsed = parseInt(_self.height)-1 < 0? false: true;
-                    }else{
+                    }/*else{
                         _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                    }
+                    }*/
                 });
                 return false;
             }else{
@@ -304,9 +304,9 @@ export default {
                         _self.height = _self.blockheader.height;
                         _self.confirmCount = res.data.confirmCount;
                         _self.prevBlockUsed = parseInt(_self.height)-1 < 0? false: true;
-                    }else{
+                    }/*else{
                         _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                    }
+                    }*/
                 });
                 return false;
             }

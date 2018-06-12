@@ -51,7 +51,8 @@ module.exports = {
         blockReward: '出块数量',
         reward: '收益',
         lastRewardBlock: '最后收获的区块 ',
-        consensusStatus: '当前共识状态'
+        consensusStatus: '当前共识状态',
+        pieceMessage: '注：该信息每小时统计一次',
     },
     consensus:{
         i0: "待共识",
@@ -114,7 +115,7 @@ module.exports = {
             i92: "退出共识",
             i93: "黄牌惩罚",
             i94: "红牌惩罚",
-            i95: "停止节点",
+            i95: "注销节点",
             inull: "未知",
         },
     },
@@ -145,7 +146,8 @@ module.exports = {
         consensusDetail: '共识节点详细数据获取失败',
         transCount: '交易笔数',
         numberError: '请输入正确的数字',
-        transDate: '日期'
+        transDate: '日期',
+        underDevelopment: '正在开发中',
     },
     el: {
         pagination:{

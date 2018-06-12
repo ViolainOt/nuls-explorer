@@ -159,7 +159,7 @@ ul.nuls-ul-table li.foot > span {
 
 /*public*/
 .hideHeight{
-    max-height: 120px;
+    max-height: 118px;
     overflow: hidden;
 }
 .hideHeight_trans{
@@ -728,6 +728,10 @@ footer .nuls-footer a.gitter i {
 .nuls-transaction-list li > div.list-foot > a {
     width: 100%;
     display: inline-block;
+}
+.nuls-hit{
+    color: #fff;
+    font-size: 14px;
 }
 /*transaction end*/
 

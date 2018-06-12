@@ -51,7 +51,8 @@ module.exports = {
         blockReward: 'Block reward',
         reward: 'Reward',
         lastRewardBlock: 'Last reward block ',
-        consensusStatus: 'Consensus status'
+        consensusStatus: 'Consensus status',
+        pieceMessage: 'Note: this information is counted every hour',
     },
     consensus:{
         i0: "Wait",
@@ -109,12 +110,12 @@ module.exports = {
             i4: "Unlock transaction",
             i5: "Change",
             i51: "Set up a name",
-            i90: "Registration consensus",
+            i90: "Create",
             i91: "Join consensus",
             i92: "Withdraw from the consensus",
             i93: "Yellow card penalty",
             i94: "Red card penalty",
-            i95: "Delete consensus",
+            i95: "Unregister",
             inull: "unknown",
         },
     },
@@ -145,7 +146,8 @@ module.exports = {
         consensusDetail: 'Failed to read Consensus node details data',
         transCount: 'Transactions',
         numberError: 'Please enter a correct number',
-        transDate: 'Date'
+        transDate: 'Date',
+        underDevelopment: 'Under Development'
     },
     el: {
         pagination: {

@@ -23,7 +23,7 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("accountInfo.canUseBalance")}}</div>
-                    <div class="nuls-flex-cell-flex">{{accountInfo.balance|getInfactCoin}} NULS</div>
+                    <div class="nuls-flex-cell-flex">{{accountInfo.usable|getInfactCoin}} NULS</div>
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("accountInfo.freezeBalance")}}</div>
@@ -194,7 +194,6 @@ export default {
             var _self = this;
             getAccountByAddress({"address":_self.address},function(res){
                 if (res.success) {
-                    console.log(res.data);
                     _self.accountInfo = res.data;
                 }
             });
@@ -212,7 +211,9 @@ export default {
             *Modify history to prevent users from refreshing pages incorrectly
             *修改历史记录，防止用户刷新页面不正确
             */
-            history.pushState({},"","/accountInfo?currentPage="+pageNumber+"&address="+_self.address);
+            if(pageNumber !== 1) {
+                history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
+            }
             getTxListByAddress({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address},function(res){
                 loading.close();
                 /*返回网页顶部  Back to top of page*/
@@ -221,9 +222,9 @@ export default {
                     _self.transList=res.data.list;
                     _self.totalDataNumber = res.data.total;
                     _self.txCount = _self.totalDataNumber;
-                }else{
+                }/*else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }
+                }*/
             });
         }
     }
