@@ -53,8 +53,8 @@
                             </div>
                         </div>
                         <div class="w100 block_split">
-                            <div class="float_left w49 address">{{$t("blockDetail.blockNodeName")}}&nbsp;{{block.consensusAddress | formatString}}</div>
-                            <div class="transactions">{{block.txCount}}{{$t("second.transactions")}}</div>
+                            <div class="float_left w45 address">{{$t("blockDetail.blockNodeName")}}&nbsp;{{block.consensusAddress | formatString}}</div>
+                            <div class="transactions">{{block.txCount}}&nbsp;{{$t("second.transactions")}}</div>
                             <div class="float_right coin">{{block.reward|getInfactCoin}}NULS</div>
                         </div>
                         <div class="clear"></div>
@@ -215,7 +215,8 @@ export default {
         * to transaction detail
         */
         toTransactionHash: function(hash){
-            this.$router.push({path:'/transactionHash',query:{hash:hash}});
+            closeWebPage();
+            //this.$router.push({path:'/transactionHash',query:{hash:hash}});
         },
         /*
         *跳转节点详情
@@ -235,7 +236,7 @@ export default {
                     var arrayData=res.data,len=arrayData.length,myChart=[];
                     for(var i=0;i<len;i++){
                         var chartData = arrayData[i].split("-");
-                        myChart.push({day:new Date(parseInt(chartData[0])),value:chartData[1]});
+                        myChart.push({day:new Date(parseInt(chartData[0])),value:parseInt(chartData[1])});
                     }
                     _self.txHistory=myChart;
                 }

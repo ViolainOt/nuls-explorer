@@ -652,19 +652,19 @@ footer .nuls-footer a.gitter i {
 .transactions_i5{
     border-left-color: #5d56e0;
 }
-.transactions_i11{
+.transactions_i6{
     border-left-color: #8348d3;
 }
-.transactions_i90{
+.transactions_i7{
     border-left-color: #82bd39;
 }
-.transactions_i91{
+.transactions_i8{
     border-left-color: #4aca80;
 }
-.transactions_i92{
+.transactions_i9{
     border-left-color: #f6693e;
 }
-.transactions_i93{
+/*.transactions_inull{
     border-left-color: #f5c757;
 }
 .transactions_i94{
@@ -672,7 +672,7 @@ footer .nuls-footer a.gitter i {
 }
 .transactions_i95{
     border-left-color: #f6693e;
-}
+}*/
 .transactions_inull{
     border-left-color: #1db7ea;
 }
@@ -908,7 +908,7 @@ footer .nuls-footer a.gitter i {
         overflow: hidden;
     }
     .nuls-home-content .nuls-home-content-top .nuls-home-content-top-right .nuls-home-content-head-right-content .nuls-head-block-list .transactions{
-        width: 20%;
+        width: 24%;
         float: left;
     }
     .nuls-transaction-list li .tx_auto_flex{
