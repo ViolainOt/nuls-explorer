@@ -66,7 +66,7 @@
     <!--transaction list start-->
 <div class="nuls-home-content-next clear" v-show="showTransHeader">
 <div class="segmentation" v-show="showTransHeader">
-    <i class="nuls-img-icon nuls-img-transaction"></i><span>{{blockheader.txCount}}{{$t("second.transactions")}}</span>
+    <i class="nuls-img-icon nuls-img-transaction"></i><span>{{blockheader.txCount}}&nbsp;{{$t("second.transactions")}}</span>
 </div>
 <ul class="nuls-transaction-list">
 <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
