@@ -45,7 +45,7 @@
                         <div class="nuls-head-block-list" v-for="block in blockList">
                             <div class="flex block_split w100">
                                 <div class="w49">
-                                    <span>{{$t("second.block")}}</span>
+                                    <span>{{$t("second.block")}}{{$t("other.semicolon")}}</span>
                                     <span class="pointer baseColor" @click="toBlockDetail(block.height)">{{block.height}}</span>
                             </div>
                             <div class="flex-auto text-align-right">
@@ -55,7 +55,7 @@
                         <div class="w100 block_split">
                             <div class="float_left w45 address">{{$t("blockDetail.blockNodeName")}}&nbsp;{{block.consensusAddress | formatString}}</div>
                             <div class="transactions">{{block.txCount}}&nbsp;{{$t("second.transactions")}}</div>
-                            <div class="float_right coin">{{block.reward|getInfactCoin}}NULS</div>
+                            <div class="float_right coin">{{block.reward|getInfactCoin}}&nbsp;NULS</div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -80,7 +80,11 @@
     <div class="tx_auto_flex block_split">
         <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
     <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
-<div class="fee text-align-right"><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></div>
+<div class="fee text-align-right"><span>
+    <template v-if="txlist.type <= 2">
+    {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
+    </template>
+</span></div>
     </div>
 <div class="clear"></div>
 <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputList[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
@@ -96,9 +100,7 @@
 <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
 </div>
     </div>
-<template v-if="txlist.type <= 2">
-<p><span>{{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS</span></p>
-</template>
+<p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
 <div v-if="txlist.inputs[4] || txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
     </li>
     </ul>
@@ -215,8 +217,8 @@ export default {
         * to transaction detail
         */
         toTransactionHash: function(hash){
-            closeWebPage();
-            //this.$router.push({path:'/transactionHash',query:{hash:hash}});
+            //closeWebPage();
+            this.$router.push({path:'/transactionHash',query:{hash:hash}});
         },
         /*
         *跳转节点详情

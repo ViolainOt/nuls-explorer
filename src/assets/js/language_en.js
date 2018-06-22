@@ -34,7 +34,7 @@ module.exports = {
         blockList: 'Block List',
         height: 'Height',
         time: 'Time',
-        blockNodeName: 'Block name',
+        blockNodeName: 'producer',
         transactionCount: 'Transactions',
         size: 'Size',
         blockReward: 'Block reward',
@@ -68,7 +68,7 @@ module.exports = {
     },
     consensusNode:{
         consensusNode: 'Consensus node',
-        accountInfo: 'AccountInfo',
+        accountInfo: 'Account information',
         blockAddress: 'Block address',
         nodeName: 'Node name',
         consensusStatus: 'Consensus status',
@@ -105,7 +105,7 @@ module.exports = {
         transFee: "Fee",
         transTypeDetail:{
             i1: "Consensus reward",
-            i2: "Transfer transactions",
+            i2: "Transfer transaction",
             i3: "Set up a name",
             i4: "Create",
             i5: "Join consensus",
@@ -124,7 +124,7 @@ module.exports = {
         page: 'Page',
     },
     accountInfo: {
-        accountInfo: 'AccountInfo',
+        accountInfo: 'Account information',
         address: 'address',
         canUseBalance: 'Available',
         freezeBalance: 'Freeze',
@@ -161,6 +161,6 @@ module.exports = {
         },
     },
     other: {
-        semicolon: ':'
+        semicolon: ' : '
     }
 }

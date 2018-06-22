@@ -62,6 +62,11 @@ export function getTransactionResultAmount(txlist){
     }
     return amout;
 }
+var weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var monTh = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
+export function formatDateEn(date){
+    return weekDay[date.getDay()]+" "+date.getDate()+" "+monTh[date.getMonth()]+" "+date.getFullYear();
+}
 export function formatDate(date, fmt) {
     if(!fmt){
         fmt = "yyyy-MM-dd hh:mm:ss";

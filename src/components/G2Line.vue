@@ -6,6 +6,7 @@
 </template>
 <script>
 import G2 from 'g2';
+import {formatDateEn} from '../assets/js/util.js';
 G2.Global.setTheme('dark');
 export default {
     data() {return {};},
@@ -60,9 +61,10 @@ export default {
                     range: [0, 1],
                     alias: _self.$t("notice.transDate"),
                     formatter: val => {
+                        //console.log(_self.$i18n.locale);
                         if(val){
                             var valueDate=new Date(val);
-                            return ((parseInt(valueDate.getMonth(),10)+1)+"-"+valueDate.getDate());
+                            return _self.$i18n.locale==="zh"?((parseInt(valueDate.getMonth(),10)+1)+"-"+valueDate.getDate()):formatDateEn(valueDate);
                         }
                         return "";
                     },
