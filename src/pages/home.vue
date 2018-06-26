@@ -265,7 +265,9 @@ export default {
                     if(res.data.list&&res.data.list.length > 0){
                         _self.blockList = res.data.list;
                     }else{
-                        _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noBlockMessage"),type: 'warning'});
+                        if(_self.autoLoad===1) {
+                            _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noBlockMessage"),type: 'warning'});
+                        }
                     }
 
                 }
@@ -291,7 +293,9 @@ export default {
                     if(res.data.list&&res.data.list.length > 0){
                         _self.transList=res.data.list;
                     }else{
-                        _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noTransMessage"),type: 'warning'});
+                        if(_self.autoLoad===1) {
+                            _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noTransMessage"),type: 'warning'});
+                        }
                     }
                     return;
                 }

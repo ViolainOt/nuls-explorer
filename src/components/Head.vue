@@ -92,6 +92,7 @@ export default {
                 this.langText = lang === "zh"?"中文":"English";
                 this.$i18n.locale = lang;
                 brotherComponents.$emit('redrawChart');
+                brotherComponents.$emit('reloadClass');
             }
         },
         loadingWebwallet: function(){
