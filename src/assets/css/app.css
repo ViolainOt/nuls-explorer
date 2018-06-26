@@ -638,44 +638,44 @@ footer .nuls-footer a.gitter i {
     text-decoration: none;
 }
 .transactions_i1{
-    border-left-color: #1db7ea;
+    border-left-color: #1cc1bf;
 }
 .transactions_i2{
-    border-left-color: #c351c2;
-}
-.transactions_i3{
-    border-left-color: #f63ec0;
-}
-.transactions_i4{
-    border-left-color: #34dfcd;
-}
-.transactions_i5{
     border-left-color: #5d56e0;
 }
-.transactions_i6{
+.transactions_i3{
     border-left-color: #8348d3;
 }
-.transactions_i7{
+.transactions_i4{
     border-left-color: #82bd39;
 }
-.transactions_i8{
+.transactions_i5{
     border-left-color: #4aca80;
+}
+.transactions_i6{
+    border-left-color: #f6a63e;
+}
+.transactions_i7{
+    border-left-color: #f5c757;
+}
+.transactions_i8{
+    border-left-color: #f64b3e;
 }
 .transactions_i9{
     border-left-color: #f6693e;
 }
-/*.transactions_inull{
+.transactions_inull{
     border-left-color: #f5c757;
 }
-.transactions_i94{
+/*.transactions_i94{
     border-left-color: #f64b3e;
 }
 .transactions_i95{
     border-left-color: #f6693e;
-}*/
+}
 .transactions_inull{
     border-left-color: #1db7ea;
-}
+}*/
 .nuls-transaction-list li{
     width: 94%;
     list-style: none;
