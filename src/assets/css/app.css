@@ -596,6 +596,9 @@ footer .nuls-footer a.gitter i {
     flex: 1;
     text-align: right;
 }
+.nuls-home-content .nuls-home-content-top .nuls-flex-cell .text-align-left{
+    text-align: left;
+}
 .nuls-home-content .nuls-home-content-top .nuls-message-list .nuls-history-title{
     text-align: center;
     margin-top: 1em;

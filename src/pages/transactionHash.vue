@@ -31,7 +31,7 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmCount")}}</div>
-                    <div class="nuls-flex-cell-flex">{{confirmCount}}</div>
+                    <div class="nuls-flex-cell-flex">{{txdetail.confirmCount}}</div>
                 </div>
 
                 <div class="nuls-flex-cell flex">
@@ -50,6 +50,15 @@
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>
                     <div class="nuls-flex-cell-flex">{{txdetail.fee|getInfactCoin}} NULS</div>
                 </div>
+                <template v-if="txdetail.remark != null">
+
+                <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-cell-title">{{$t("transDetail.mark")}}{{$t("other.semicolon")}}</div>
+                </div>
+                <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-cell-flex text-align-left">{{txdetail.remark}}</div>
+                </div>
+                </template>
             </div>
         </div>
         <!-- transaction detail end -->
@@ -79,9 +88,10 @@
                 <span class="float_left">{{$t("notice.not")}}</span>
                 <span class="float_right">&nbsp;</span>
             </li>
+
             <li v-for="outlist in txdetail.outputs">
                 <router-link :to="{path:'/accountInfo',query:{address:outlist.address}}">{{outlist.address|formatString}}</router-link>
-                <span class="float_right">（{{outlist.amount | getInfactCoin}}&nbsp;-&nbsp;<span @click="toSpentByHash(outlist.spendTxHash)" :class="outlist.spendTxHash!=null?'pointer baseColor':'enableColor'"><template v-if="outlist.spendTxHash!=null">{{$t("utxoStatus.i3")}}</template><template v-else>{{$t("utxoStatus.i0")}}</template></span>）</span>
+                <span class="float_right">（{{outlist.amount | getInfactCoin}}&nbsp;-&nbsp;<span @click="toSpentByHash(outlist.spendTxHash)" :class="outlist.spendTxHash!=null?'pointer baseColor':'enableColor'"><template v-if="outlist.address == 'Nse5FeeiYk1opxdc5RqYpEWkiUDGNuLs'">{{$t("utxoStatus.iburned")}}</template><template v-else-if="outlist.spendTxHash!=null">{{$t("utxoStatus.i3")}}</template><template v-else>{{$t("utxoStatus.i0")}}</template></span>）</span>
         </li>
     </ul>
     <div v-if="txdetail.outputs[5]" class="tx_description center">
@@ -105,12 +115,12 @@ export default {
             hash: '',
             showAllInputs: 0,
             showAllOutputs: 0,
-            confirmCount: 0,
             txdetail: {
                 type: 0,
                 txIndex: '',
                 createTime: '',
                 blockHeight: 0,
+                confirmCount: 0,
                 remark: '',
                 fee: '',
                 size: '',
@@ -187,8 +197,8 @@ export default {
             var _self = this;
             getTxByHash({"hash":_self.hash},function(res){
                 if (res.success) {
-                    _self.txdetail = res.data.transaction;
-                    _self.confirmCount = res.data.confirmCount;
+                    _self.txdetail = res.data;
+                    //_self.confirmCount = res.data.confirmCount;
                 }else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                 }

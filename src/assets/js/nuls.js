@@ -7,11 +7,17 @@ export function getTxByHash(param, callback) {
 export function getTxList(param, callback) {
   return m(nuls_api.getTxList,callback,param);
 }
+export function getTxListIndex(param, callback) {
+  return m(nuls_api.getTxListIndex,callback,param);
+}
 export function getTxListByAddress(param, callback) {
   return m(nuls_api.getTxListByAddress,callback,param);
 }
 export function getBlockList(param, callback) {
   return m(nuls_api.getBlockList,callback,param);
+}
+export function getBlockListIndex(param, callback) {
+  return m(nuls_api.getBlockListIndex,callback,param);
 }
 export function getAllConsensus(callback) {
   return m(nuls_api.getAllConsensus,callback);

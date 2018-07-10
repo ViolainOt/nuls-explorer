@@ -188,7 +188,6 @@ export default {
             }
             getBlockList({"pageNumber":pageNumber,"pageSize":_self.pageSize,"address":_self.address,"type":_self.type},function(res){
                 loading.close();
-                console.log(res);
                 if(res.success){
                     if(res.data.list){
                         _self.blockList = res.data.list;

@@ -12,7 +12,7 @@ module.exports = {
         webWallet: 'Web'
     },
     second: {
-        index_NULS: 'NULS Testnet',
+        index_NULS: 'NULS Mainnet',
         block: 'Block',
         more: 'More',
         history: '14 days trading history',
@@ -26,7 +26,7 @@ module.exports = {
         totalMortgage: 'Deposit',
         consensusNodeAccount: 'All nodes',
         consensusPeople: 'Consensus nodes',
-        tokenCirculation: 'Token distribution',
+        tokenCirculation: 'Initial issue quantity',
         dailyConsensusNodeReward: 'Daily consensus reward',
         transList: 'Transactions',
     },
@@ -64,6 +64,7 @@ module.exports = {
         i1:"Locked",
         i2:"Locked",
         i3:"Spent",
+        iburned:"Burned",
         inull: "unknown",
     },
     consensusNode:{
@@ -103,6 +104,7 @@ module.exports = {
         transInput: "Inputs",
         transOutput: "Outputs",
         transFee: "Fee",
+        mark: "Remark",
         transTypeDetail:{
             i1: "Consensus reward",
             i2: "Transfer transaction",

@@ -1,8 +1,8 @@
 export let nuls_server={
     nodeList:[
-        {host:"http://data.nuls.io"},
-        {host:"http://127.0.0.1:8765"},
+        {host:"http://192.168.1.109:8765"},
         {host:"http://192.168.1.233:8765"},
+        {host:"http://data.nuls.io"},
         {host:"http://192.168.1.109:8765"},
         {host:"http://39.108.121.242:8005"}
     ],
@@ -15,8 +15,10 @@ export let nuls_defaultType={
 export let nuls_api= {
     getTxByHash: "/tx/hash",
     getTxList: "/tx/list",
+    getTxListIndex: "/tx/index",
     getTxListByAddress: "/tx/list/address",
     getBlockList: "/block/list",
+    getBlockListIndex: "/block/index",
     getAllConsensus: "/consensus",
     getBalanceListRank: "/statistics/balancelist",
     getAddressMinedlist : "/statistics/minedlist",

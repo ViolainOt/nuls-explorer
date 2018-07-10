@@ -12,7 +12,7 @@ module.exports = {
         webWallet: '网页轻钱包'
     },
     second: {
-        index_NULS: 'NULS 测试网信息',
+        index_NULS: 'NULS 主网信息',
         block: '区块',
         more: '更多',
         history: '14天NULS交易历史',
@@ -26,7 +26,7 @@ module.exports = {
         totalMortgage: '总委托',
         consensusNodeAccount: '全部节点数量',
         consensusPeople: '共识节点数量',
-        tokenCirculation: '代币发行量',
+        tokenCirculation: '初始数量',
         dailyConsensusNodeReward: '24小时共识奖励',
         transList: '交易列表'
     },
@@ -64,6 +64,7 @@ module.exports = {
         i1:"已锁定",
         i2:"已锁定",
         i3:"已花费",
+        iburned: "已销毁",
         inull: "未知",
     },
     consensusNode:{
@@ -103,6 +104,7 @@ module.exports = {
         transInput: "总输入",
         transOutput: "总输出",
         transFee: "手续费",
+        mark: "备注",
         transTypeDetail:{
             i1: "共识奖励",
             i2: "转账交易",

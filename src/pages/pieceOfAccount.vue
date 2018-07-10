@@ -36,7 +36,7 @@
               <li v-for="(block,key) in blockList">
                 <span>{{((currentPage-1)*pageSize)+key+1}}</span>
                 <span><router-link :to="{path:'/consensusNode',query:{address:block.packingAddress,type:1}}">{{block.packingAddress}}</router-link></span>
-                <span>{{block.totalPackingCount}}</span>
+                <span>{{block.sumTotalPackingCount}}</span>
                 <span>{{block.totalReward | getInfactCoin}}</span>
                 <span>{{block.lastRewardHeight}}</span>
                 <!--<span>{{$t("consensusNode.consensusFormatter.i"+block.status)}}</span>-->
@@ -71,7 +71,7 @@ export default {
     name: "pieceOfAccount",
     data () {
         return {
-            blockList: [{id:0,agentAddress:'',packingAddress:'',totalPackingCount:'',totalReward:0,lastRewardHeight:0,status:0,createTime:''}],
+            blockList: [{id:0,agentAddress:'',packingAddress:'',sumTotalPackingCount:'',totalReward:0,lastRewardHeight:0,status:0,createTime:''}],
             totalDataNumber: 0,
             currentPage: 1,
             pageSize: 20

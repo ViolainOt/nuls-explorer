@@ -111,7 +111,7 @@
 
 <script>
 import G2Line from '@/components/G2Line.vue';
-import {getTxList,getTxByHash,getBlockList,getAllConsensus,getTxHistoryList} from "../assets/js/nuls.js";
+import {getTxListIndex,getTxByHash,getBlockListIndex,getAllConsensus,getTxHistoryList} from "../assets/js/nuls.js";
 import {formatDate,formatString,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
 import {brotherComponents} from '../assets/js/public.js';
 export default {
@@ -260,10 +260,10 @@ export default {
             *获取块列表
             * get block list
             */
-            getBlockList({"pageNumber":1,"pageSize":6},function(res){
+            getBlockListIndex({"pageNumber":1,"pageSize":6},function(res){
                 if(res.success){
-                    if(res.data.list&&res.data.list.length > 0){
-                        _self.blockList = res.data.list;
+                    if(res.data&&res.data.length > 0){
+                        _self.blockList = res.data;
                     }else{
                         if(_self.autoLoad===1) {
                             _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noBlockMessage"),type: 'warning'});
@@ -285,13 +285,13 @@ export default {
             *获取交易列表
             * get transaction list
             */
-            getTxList({"pageNumber":1,"pageSize":5},function(res){
+            getTxListIndex({"pageNumber":1,"pageSize":5},function(res){
                 if(loading){
                     loading.close();
                 }
                 if(res.success){
-                    if(res.data.list&&res.data.list.length > 0){
-                        _self.transList=res.data.list;
+                    if(res.data&&res.data.length > 0){
+                        _self.transList=res.data;
                     }else{
                         if(_self.autoLoad===1) {
                             _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noTransMessage"),type: 'warning'});

@@ -289,8 +289,7 @@ export default {
             if(_self.height!=undefined && _self.height>=0){
                 getBlockHeaderDetailByHeight({"height":_self.height},function(res){
                     if (res.success) {
-                        console.log(res);
-                        _self.blockheader = res.data.blockHeader;
+                        _self.blockheader = res.data;
                         _self.hash = _self.blockheader.hash;
                         _self.confirmCount = res.data.confirmCount;
                         _self.prevBlockUsed = parseInt(_self.height)-1 < 0? false: true;
@@ -329,7 +328,7 @@ export default {
             getTxList({"pageNumber": pageNumber, "pageSize": _self.pageSize, "height": _self.height}, function (res) {
                 loading.close();
                 if (res.success) {
-                    if(res.data.list[0]){
+                    if(res.data.list){
                         _self.transList = res.data.list;
                         _self.totalDataNumber = res.data.total;
                         _self.showTransHeader = true;
