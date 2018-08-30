@@ -85,7 +85,7 @@
     {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
     </template>
 </span></div>
-    </div>
+</div>
 <div class="clear"></div>
 <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputList[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
 <div class="input_div text-hidden">
@@ -189,8 +189,9 @@ export default {
         var _self = this;
         _self.height = _self.$route.query.height;
         _self.hash = _self.$route.query.hash;
-        _self.nulstxlist();
         _self.nulsBlockDetail();
+        //_self.nulstxlist();
+
     },
     /*
     * 监听route，处理地址栏参数变化
@@ -206,7 +207,7 @@ export default {
                 _self.hash = to.query.hash;
             }
             _self.nulsBlockDetail();
-            _self.nulstxlist(_self.currentPage);
+
         }
     },
     methods: {
@@ -250,7 +251,7 @@ export default {
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 history.pushState(null,"","/blockDetail?height="+newHeight);
-                this.nulstxlist();
+                //this.nulstxlist();
                 this.nulsBlockDetail();
             }
         },
@@ -270,7 +271,7 @@ export default {
                         *修改历史记录，防止用户刷新页面不正确
                         */
                         history.pushState(null,"","/blockDetail?height="+newHeight);
-                        _this.nulstxlist();
+                        //_this.nulstxlist();
                         _this.nulsBlockDetail();
                         _this.nextBlockUsed = true;
                     }else{
@@ -293,21 +294,19 @@ export default {
                         _self.hash = _self.blockheader.hash;
                         _self.confirmCount = res.data.confirmCount;
                         _self.prevBlockUsed = parseInt(_self.height)-1 < 0? false: true;
-                    }/*else{
-                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                    }*/
+                        _self.nulstxlist(_self.currentPage);
+                    }
                 });
                 return false;
             }else{
                 getBlockHeaderDetailByHash({"hash":_self.hash},function(res){
                     if (res.success) {
-                        _self.blockheader = res.data.blockHeader;
+                        _self.blockheader = res.data;
                         _self.height = _self.blockheader.height;
                         _self.confirmCount = res.data.confirmCount;
                         _self.prevBlockUsed = parseInt(_self.height)-1 < 0? false: true;
-                    }/*else{
-                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                    }*/
+                        _self.nulstxlist(_self.currentPage);
+                    }
                 });
                 return false;
             }

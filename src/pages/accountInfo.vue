@@ -1,11 +1,11 @@
 <template>
-  <div class="nuls-home-content">
-    <!--nav start-->
+    <div class="nuls-home-content">
+        <!--nav start-->
         <div class="nuls-second-type">
             <nav>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">{{$t("nav.index")}}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{$t("accountInfo.accountInfo")}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/' }">{{$t("nav.index")}}</el-breadcrumb-item>
+                    <el-breadcrumb-item>{{$t("accountInfo.accountInfo")}}</el-breadcrumb-item>
                 </el-breadcrumb>
             </nav>
             <!--nav end-->
@@ -14,7 +14,7 @@
                 {{$t("accountInfo.accountInfo")}}
             </div>
         </div>
-      <!--address detail start-->
+        <!--address detail start-->
         <div class="nuls-home-content-top nuls-home-content-accountinfo tx_background tx_border">
             <div class="nuls-message-list">
                 <div class="nuls-flex-cell flex">
@@ -36,58 +36,62 @@
             </div>
         </div>
 
-    <!--address detail end-->
+        <!--address detail end-->
 
-    <div class="segmentation">
-      <i class="nuls-img-icon nuls-img-transaction"></i><span>{{txCount}}&nbsp;{{$t("second.transactions")}}</span>
-    </div>
-    <div class="nuls-home-content-next clear">
-        <ul class="nuls-transaction-list">
-            <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
-                <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
-                <div class="flex block_split">
-                    <div class="hash flex-auto text-hidden">
-                        <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+        <div class="segmentation">
+            <i class="nuls-img-icon nuls-img-transaction"></i><span>{{txCount}}&nbsp;{{$t("second.transactions")}}</span>
+        </div>
+        <div class="nuls-home-content-next clear" v-show="txCount > 0">
+            <ul class="nuls-transaction-list">
+                <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
+                    <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
+                    <div class="flex block_split">
+                        <div class="hash flex-auto text-hidden">
+                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+                        </div>
+                        <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                     </div>
-                    <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
-                </div>
-                <div class="tx_auto_flex block_split">
-                    <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
-                    <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
-    <div class="fee text-align-right"><span>
-    <template v-if="txlist.type <= 2">
-    {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
-    </template>
-</span></div>
-                </div>
-                <div class="clear"></div>
-                <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputList[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
-                    <div class="input_div text-hidden">
-                        <p v-if="!txlist.inputs[0]">&nbsp;</p>
-                        <p v-for="inputlist in txlist.inputs" class="baseColor pointer text-hidden" @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
+                    <div class="tx_auto_flex block_split">
+                        <div class="block">
+                            <span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span>
+                        </div>
+                        <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
+                        <div class="fee text-align-right">
+                            <span>
+                            <template v-if="txlist.type <= 2">
+                            {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist.amount | getInfactCoin}} NULS
+                            </template>
+                            </span>
+                        </div>
                     </div>
-                    <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
-                    <div class="output_div text-align-right text-hidden">
-                        <p v-for="outputlist in txlist.outputList" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
+                    <div class="clear"></div>
+                    <div class="flex flex-top block_split" v-if="txlist.inputs!=null||txlist.outputList!=null" :class="showScroll==key?'scrollHeight':'hideHeight'">
+                        <div class="input_div text-hidden">
+                            <p v-if="txlist.inputs==null">&nbsp;</p>
+                            <p v-else v-for="inputlist in txlist.inputs" class="baseColor pointer text-hidden" @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
+                        </div>
+                        <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
+                        <div class="output_div text-align-right text-hidden">
+                            <p v-for="outputlist in txlist.outputList" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
+                        </div>
+                        <div class="tx_amount text-align-right">
+                            <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
+                        </div>
                     </div>
-                    <div class="tx_amount text-align-right">
-                        <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
-                    </div>
-                </div>
-<p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
-                <div v-if="txlist.inputs[4] || txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
-            </li>
-        </ul>
+                    <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
+                    <div v-if="txlist.inputs!=null && txlist.inputs[4] || txlist.outputList!= null && txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+                </li>
+            </ul>
         <div class="clear"></div>
     </div>
 
     <!--pagination start-->
-    <div class="text-align-right tx-pagination">
+    <div class="text-align-right tx-pagination" v-show="txCount > 0">
     <el-pagination
-      background
-      :prev-text="$t('page.previous')"
-      :next-text="$t('page.next')"
-      layout="total,prev, pager, next,jumper"
+        background
+        :prev-text="$t('page.previous')"
+        :next-text="$t('page.next')"
+        layout="total,prev, pager, next,jumper"
     @current-change="nulstxlist"
     :page-size=this.pageSize
     :current-page=this.currentPage
@@ -97,7 +101,7 @@
     </div>
     <!--pagination end-->
 
-  </div>
+    </div>
 </template>
 
 <script>
@@ -146,7 +150,7 @@ export default {
             return getInfactCoin(getTransactionResultAmount(txlist));
         },
         getInfactCoin(count){
-            return getInfactCoin(count);
+            return Math.abs(getInfactCoin(count));
         }
     },
     created: function () {
@@ -224,6 +228,7 @@ export default {
                     _self.transList=res.data.list;
                     _self.totalDataNumber = res.data.total;
                     _self.txCount = _self.totalDataNumber;
+                    console.log("_self.txCount:"+_self.txCount);
                 }/*else{
                     _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                 }*/

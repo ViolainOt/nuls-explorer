@@ -9,7 +9,7 @@
                     </div>
                     <div class="nuls-border nuls-message-list">
                         <div class="nuls-flex-cell flex">
-                            <div class="nuls-flex-cell-title">{{$t("second.totalMortgage")}}</div>
+                            <div class="nuls-flex-cell-title" @click="toTrans()">{{$t("second.totalMortgage")}}</div>
                             <div class="nuls-flex-cell-flex">{{newestBlock.totalDeposit |getInfactCoin}}</div>
                         </div>
                         <div class="nuls-flex-cell flex">
@@ -114,6 +114,7 @@ import G2Line from '@/components/G2Line.vue';
 import {getTxListIndex,getTxByHash,getBlockListIndex,getAllConsensus,getTxHistoryList} from "../assets/js/nuls.js";
 import {formatDate,formatString,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
 import {brotherComponents} from '../assets/js/public.js';
+import nulsJs from 'zengcc-fls-sdk';
 export default {
     name: "home",
     components: {
@@ -211,6 +212,20 @@ export default {
         */
         toAccountInfo: function(address){
             this.$router.push({path:'/accountInfo',query:{address:address}});
+        },
+        toTrans: function(){
+            nulsJs.transaction({
+                "money":"10000000000",
+                "address":"Nse7SQkhaoGBRviu4Wr7TopAG8568oM2",
+                "toAddress":"Nsdy94pnLZE5V3ozLmp3LzKL68YmsPU4",
+                "remark":"bbf",
+                "price":"100000",
+                "pri":"4b0e3c3264c3f3f1e795d7b1a222eb387e62b4192e30439a240a7f00f19283d477b5ee478badb65710afc8219d727b77",
+                "pass":"nuls123456",
+                "types":"2"
+            },function(data){
+                console.log(data);
+            });
         },
         /*
         *跳转交易详情

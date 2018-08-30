@@ -37,6 +37,9 @@
 .el-breadcrumb__item:last-child .el-breadcrumb__inner {
     color: #88baff !important;
 }
+.el-breadcrumb__inner.is-link, .el-breadcrumb__inner a{
+    color: #ffffff;
+}
 .el-pagination span:not([class*=suffix]) {
     color: #c1c5c9;
     font-size: 10px;

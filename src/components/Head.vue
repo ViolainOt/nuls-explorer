@@ -23,10 +23,10 @@
                 <i class="el-icon-arrow-down"></i>
                 <div class="more right">
                     <div>
-                        <a class="pointer" @click="linkToDown">{{$t("nav.clientDownloads")}}</a>
+                        <a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a>
                 </div>
-                <div @click="loadingWebwallet">
-                    <router-link to="">{{$t("nav.webWallet")}}</router-link>
+                <div>
+                    <a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>
                 </div>
             </div>
         </li>
@@ -93,18 +93,6 @@ export default {
                 this.$i18n.locale = lang;
                 brotherComponents.$emit('redrawChart');
                 brotherComponents.$emit('reloadClass');
-            }
-        },
-        loadingWebwallet: function(){
-            var _self = this;
-            _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.underDevelopment"),type: 'warning'});
-        },
-        linkToDown: function(){
-            //
-            if(this.$i18n.locale == "zh"){
-                window.location.href="https://nuls.io/gettestnow-zh.html";
-            }else{
-                window.location.href="https://nuls.io/gettestnow.html";
             }
         },
         search: function () {
