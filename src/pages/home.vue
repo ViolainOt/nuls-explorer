@@ -7,6 +7,7 @@
                         <div class="nuls-title-logo"><i class="nuls-img-icon nuls-img-consensus"></i></div>
                         <div class="nuls-title-text">{{$t("second.index_NULS")}}</div>
                     </div>
+
                     <div class="nuls-border nuls-message-list">
                         <div class="nuls-flex-cell flex">
                             <div class="nuls-flex-cell-title" @click="toTrans()">{{$t("second.totalMortgage")}}</div>
