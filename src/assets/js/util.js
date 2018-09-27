@@ -1,3 +1,4 @@
+import {BigNumber} from 'bignumber.js'
 /*save temp data to explorer*/
 export function saveDataToTemp(name,value){
     if (window.localStorage) {
@@ -95,6 +96,27 @@ export function formatDate(date, fmt) {
 
 function padLeftZero(str) {
     return ('00' + str).substr(str.length);
+}
+/**
+ * 10的N 次方
+ * @param arg
+ * @returns {BigNumber}
+ * @constructor
+ */
+export function Power(arg) {
+    let newPower = new BigNumber(10);
+    return newPower.pow(arg);
+}
+/**
+ * 除法
+ * @param nu
+ * @param arg
+ * @returns {BigNumber}
+ * @constructor
+ */
+export function LeftShift(nu, arg) {
+    let newDiv = new BigNumber(nu);
+    return newDiv.div(arg);
 }
 function trimLast(str){
 

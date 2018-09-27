@@ -9,7 +9,6 @@
                     <el-breadcrumb-item>{{$t("transDetail.transDetail")}}</el-breadcrumb-item>
                 </el-breadcrumb>
             </nav>
-
             <div class="nuls-title text-align-center">
                 {{$t("transDetail.transDetail")}}
             </div>
@@ -17,26 +16,136 @@
         <!-- transaction detail start -->
         <div class="nuls-home-content-top nuls-home-content-accountinfo tx_background tx_border">
             <div class="nuls-message-list">
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transType")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex text-hidden">{{$t("transDetail.transTypeDetail.i"+txdetail.type)}}</div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transHash")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex text-hidden">{{hash}}</div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transHeight")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.blockHeight}}</router-link></div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmCount")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex">{{txdetail.confirmCount}}</div>-->
+                <!--</div>-->
+
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transTime")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex text-hidden">{{txdetail.createTime | formatDate}}</div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transInput")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex">{{txdetail.inputs|getArrayValue}} NULS</div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transOutput")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex">{{txdetail.outputs|getArrayAmout}} NULS</div>-->
+                <!--</div>-->
+                <!--<div class="nuls-flex-cell flex">-->
+                    <!--<div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>-->
+                    <!--<div class="nuls-flex-cell-flex">{{txdetail.fee|getInfactCoin}} NULS</div>-->
+                <!--</div>-->
+
+
+                <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-cell-title">{{$t("transDetail.transTime")}}</div>
+                    <div class="nuls-flex-cell-flex text-hidden">{{txdetail.createTime | formatDate}}</div>
+                </div>
+                <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>
+                    <div class="nuls-flex-cell-flex" v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100 || txdetail.type===1000">
+                        <template v-if="txdetail.resultDto">
+                            <span>{{txdetail.resultDto.totalFee|getInfactCoin}}{{$t("transDetail.totalCost")}}</span>
+                            <span>=</span>
+                            <span>{{txdetail.resultDto.txSizeFee|getInfactCoin}}{{$t("transDetail.txSize")}}</span>
+                            <span>+</span>
+                            <span>{{txdetail.resultDto.actualContractFee|getInfactCoin}}{{$t("transDetail.callContract")}}</span>
+                            <span>+</span>
+                            <span>{{txdetail.resultDto.refundFee|getInfactCoin}}{{$t("transDetail.refund")}}</span>
+                        </template>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;{{$t("transDetail.unit")}}NULS</span>
+                    </div>
+                    <div class="nuls-flex-cell-flex" v-else>{{txdetail.fee|getInfactCoin}} NULS</div>
+                </div>
+                <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-  cell-title">{{$t("transDetail.transTxID")}}</div>
+                    <div class="nuls-flex-cell-flex text-hidden">{{hash}}</div>
+                </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transType")}}</div>
                     <div class="nuls-flex-cell-flex text-hidden">{{$t("transDetail.transTypeDetail.i"+txdetail.type)}}</div>
                 </div>
-                <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-title">{{$t("transDetail.transHash")}}</div>
-                    <div class="nuls-flex-cell-flex text-hidden">{{hash}}</div>
+
+                <template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.contractAddress")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.contractAddress}}</router-link></div>
+                    </div>
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.contractResults")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? $t("transDetail.results.i0") : $t("transDetail.results.i1")}}</div>
+                    </div>
+                </template>
+
+                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===100">
+                    <template v-if="txdetail.resultDto && txdetail.resultDto.tokenTransfers">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">
+                            <div v-for="item in txdetail.resultDto.tokenTransfers">
+                                <span>from: {{(txdetail.resultDto ? item.from : '' )}}</span>
+                                <span>to: {{(txdetail.resultDto ? item.to : '' )}}</span>
+                                <span>for {{txdetail.resultDto ? item.value : ''}} {{txdetail.resultDto.tokenName}}</span>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else-if="txdetail.resultDto && txdetail.resultDto.transfers">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">
+                            <div>
+                                <span>from: {{(txdetail.resultDto ? txdetail.resultDto.transfers[0].fromAddress : '' )}}</span>
+                                <span>to: {{(txdetail.resultDto ? txdetail.resultDto.transfers[0].toAddress : '' )}}</span>
+                                <span>for {{txdetail.resultDto ? txdetail.resultDto.transfers[0].txValue : ''}} NULS</span>
+                            </div>
+                            <div>TxID: {{txdetail.resultDto ? txdetail.resultDto.transfers[0].txHash : ''}}</div>
+                        </div>
+                    </template>
                 </div>
+
+                <template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.gasLimit")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? txdetail.resultDto.gasLimit:''}}</div>
+                    </div>
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.price")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? txdetail.resultDto.price :''}}</div>
+                    </div>
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.gasUsed")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? txdetail.resultDto.gasUsed : ''}}</div>
+                    </div>
+                </template>
+                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===101 || txdetail.type===102">
+                    <div class="nuls-flex-cell-title">{{$t("transDetail.method")}}</div>
+                    <div class="nuls-flex-cell-flex text-hidden ">
+                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData ? txdetail.txData.methodName : ''}}</div>
+                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData ? txdetail.txData.args : ''}}</div>
+                        <div>{{$t("transDetail.backValue")}}{{txdetail.resultDto ? txdetail.resultDto.result : ''}}</div>
+                    </div>
+                </div>
+
+
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transHeight")}}</div>
                     <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.blockHeight}}</router-link></div>
                 </div>
                 <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmCount")}}</div>
+                    <div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmations")}}</div>
                     <div class="nuls-flex-cell-flex">{{txdetail.confirmCount}}</div>
-                </div>
-
-                <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-title">{{$t("transDetail.transTime")}}</div>
-                    <div class="nuls-flex-cell-flex text-hidden">{{txdetail.createTime | formatDate}}</div>
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transInput")}}</div>
@@ -45,10 +154,6 @@
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transOutput")}}</div>
                     <div class="nuls-flex-cell-flex">{{txdetail.outputs|getArrayAmout}} NULS</div>
-                </div>
-                <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>
-                    <div class="nuls-flex-cell-flex">{{txdetail.fee|getInfactCoin}} NULS</div>
                 </div>
                 <template v-if="txdetail.remark != null">
 
@@ -105,16 +210,19 @@
     </template>
 
 <script>
-import {getTxList,getTxByHash,getTxSpentHashDetail} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,formatString} from '../assets/js/util.js';
+import {getTxList,getTxByHash,getTxSpentHashDetail,getContractsTxByHash} from "../assets/js/nuls.js";
+import {formatDate,getInfactCoin,formatString,LeftShift,Power} from '../assets/js/util.js';
 import {brotherComponents} from '../assets/js/public.js';
 export default {
     name: "transactionHash",
     data() {
         return {
             hash: '',
+            // 交易的类型
+            type: '',
             showAllInputs: 0,
             showAllOutputs: 0,
+            // txdetail:[],
             txdetail: {
                 type: 0,
                 txIndex: '',
@@ -124,6 +232,16 @@ export default {
                 remark: '',
                 fee: '',
                 size: '',
+                // resultDto:{
+                //     gasLimit:'',
+                //     price:'',
+                //     gasUsed:'',
+                //     transfers:''
+                // },
+                // txData:{
+                //     args:'',
+                //     methodName:'',
+                // },
                 outputs: [{
                     txHash: '',
                     txIndex: '',
@@ -165,12 +283,16 @@ export default {
                 amount += arraydata[i].amount;
             }
             return getInfactCoin(amount);
-        }
+        },
     },
     created: function () {
         var _self = this;
         _self.hash = this.$route.query.hash;
-        _self.nulstxdetail();
+        _self.type = this.$route.query.type;
+        //_self.nulstxdetail();
+    },
+    mounted:function(){
+        this.nulstxdetail();
     },
     methods: {
         getInfactCoin(count){
@@ -195,14 +317,41 @@ export default {
          */
         nulstxdetail: function () {
             var _self = this;
-            getTxByHash({"hash":_self.hash},function(res){
-                if (res.success) {
-                    _self.txdetail = res.data;
-                    //_self.confirmCount = res.data.confirmCount;
-                }else{
-                    _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }
-            })
+            // console.log(LeftShift(100,2))
+            if(_self.type===100 || _self.type===101 || _self.type===102 || _self.type===103 || _self.type===1000){
+                getContractsTxByHash({"hash":_self.hash},function(res){
+                    if (res.success) {
+                        _self.txdetail = res.data;
+                        if(response.data.resultDto){
+                            let powerNo = Power(response.data.resultDto.decimals);
+                            let tokenTransfers = response.data.resultDto.tokenTransfers;
+                            let transfers = response.data.resultDto.transfers;
+                            for (let i in tokenTransfers) {
+                                tokenTransfers[i].value = LeftShift( tokenTransfers[i].value,powerNo).toString();
+                            }
+                            for (let i in transfers) {
+                                if(i.toString() === '0'){
+                                    transfers[i].txValue = LeftShift( transfers[i].txValue,powerNo).toString();
+                                }
+                            }
+                        }
+                    }else{
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                    }
+                })
+            }else{
+                getTxByHash({"hash":_self.hash},function(res){
+                    if (res.success) {
+                        console.log(res)
+                        // this.$nextTick(function () {
+                            _self.txdetail = res.data;
+                        // })
+                        //_self.confirmCount = res.data.confirmCount;
+                    }else{
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                    }
+                })
+            }
         },
         hashDetail: function(hash){
             this.hash = hash;
@@ -220,4 +369,15 @@ export default {
 </script>
 
 <style>
+    .flex-start{
+        align-items: flex-start;
+    }
+    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex{
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex>div:nth-child(2){
+        padding-top:5px;
+        padding-bottom:5px;
+    }
 </style>

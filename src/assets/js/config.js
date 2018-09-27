@@ -5,7 +5,8 @@ export let nuls_server={
         {host:"http://data.nuls.io"},
         {host:"http://192.168.1.121:8764"},
         {host:"http://192.168.1.233:8765"},
-        {host:"http://39.108.121.242:8005"}
+        {host:"http://39.108.121.242:8005"},
+        {host:"http://192.168.1.118:8765"}
     ],
     requestMain: "/nuls"
 };
@@ -29,5 +30,15 @@ export let nuls_api= {
     getConsensusAgent: "/consensus/agent",
     getBlockBesthash: "/block/newest",
     getTxHistory: "/statistics/history",
-    getSearchData: "/search"
+    getSearchData: "/search",
+    getTokensList: "/tokens",
+    getTokenDetail: "/tokens",
+    getTransList: "/tokens",
+    getHoldersList: "/tokens",
+    getContractsList: "/contracts",
+    getContractsDetail: "/contracts",
+    getContractsTransactionsList: "/contracts/transactions",
+    getContractsTxByHash: "/contracts/transaction",
+    getTokenListByAddress: "/tokens/transactions",
+    getTokenBalanceListByAddress: "/tokens/wallet",
 };

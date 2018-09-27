@@ -1,7 +1,7 @@
 <template>
     <header class="head">
         <div class="nuls-head-content">
-            <div class="menu flex">
+            <div class="menu flex menu-left">
                 <div class="nuls-logo-content"></div>
                 <ul>
                 <li><router-link to="/">{{$t("nav.index")}}</router-link></li>
@@ -17,7 +17,9 @@
                         </div>
                     </div>
                 </li>
-                <li><router-link to="" :title="$t('nav.toolHit')">{{$t("nav.tool")}}</router-link></li>
+                <li><router-link to="/tokens/tokensList">{{$t("nav.tokens")}}</router-link></li>
+                <li><router-link to="/contracts/contractsList">{{$t("nav.contracts")}}</router-link></li>
+                <!--<li><router-link to="" :title="$t('nav.toolHit')">{{$t("nav.tool")}}</router-link></li>-->
                 <li>
                 <a class="nuls-dropdown">{{$t("nav.wallet")}}</a>
                 <i class="el-icon-arrow-down"></i>
@@ -32,7 +34,7 @@
         </li>
     </ul>
 </div>
-<div class="menu flex menu-border">
+<div class="menu flex menu-border menu-right">
 <div class="nuls-search-box">
     <input placeholder="Address / Txhash / Block" class="pointer" ref="search" @keyup.enter="search" value="" type="text" />
     <i class="el-icon-search pointer" @click="search"></i>

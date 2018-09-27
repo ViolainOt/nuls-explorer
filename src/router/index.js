@@ -15,6 +15,10 @@ import consensusNode from '@/pages/consensusNode'
 import cashAccount from '@/pages/cashAccount'
 import notFond from '@/pages/notFond'
 import loadSearch from '@/pages/loadSearch'
+import tokensList from '@/pages/tokens/tokensList'
+import tokenDetail from '@/pages/tokens/tokenDetail'
+import contractsList from '@/pages/contracts/contractsList'
+import contractsDetail from '@/pages/contracts/contractsDetail'
 
 
 Vue.use(Router);
@@ -41,6 +45,10 @@ export default new Router({
         {path: "/consensusNode", component: consensusNode},
         {path: "/cashAccount", component: cashAccount},
         {path: "/loadSearch", component: loadSearch},
+        {path: "/tokens/tokensList", component: tokensList},
+        {path: "/tokens/tokenDetail", component: tokenDetail},
+        {path: "/contracts/contractsList", component: contractsList},
+        {path: "/contracts/contractsDetail", component: contractsDetail},
       ]
     },
     {path: "/notFond", component: notFond},

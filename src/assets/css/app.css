@@ -68,6 +68,23 @@
     color: #c1c5c9;
     line-height: 100%;
 }
+.el-tabs .el-tabs__active-bar{
+    /*height: 1px;*/
+    background-color: #88baff;
+}
+.el-tabs__item{
+    color:#fff;
+}
+.el-tabs__item.is-active {
+    color: #88baff;
+}
+.el-tabs__item:hover{
+    color: #88baff;
+}
+.el-tabs__nav-wrap::after {
+    height: 1px;
+    background-color: #24426c;
+}
 /*end change define element ui style*/
 
 .nuls-warper{
@@ -351,7 +368,7 @@ header .nuls-head-content ul li{
     float: left;
     font-size: 1em;
     line-height: 68px;
-    width: 22%;
+    width: 18%;
     text-align: right;
     height: 68px;
     overflow: hidden;
@@ -393,7 +410,7 @@ header .nuls-head-content .nuls-search-box input{
     left: 1%;
     outline: 0;
     color: #bcc4cc;
-    width: 90%;
+    width: 70%;
     background-color: transparent;
     border:none;
     font-size: 0.875em;
@@ -888,8 +905,11 @@ footer .nuls-footer a.gitter i {
     .tx_list .tx_output_content{
         width: 502px;
     }
-    header .nuls-head-content .menu{
-        width: 512px;
+    header .nuls-head-content .menu-left {
+        width: 650px;
+    }
+    header .nuls-head-content .menu-right {
+        width: 374px;
     }
     header .nuls-head-content .more{
         width: 120%;

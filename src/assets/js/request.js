@@ -9,7 +9,7 @@ function g(){
 }
 /*load url*/
 function v(p){
-    return nuls_server.nodeList[0].host+nuls_server.requestMain+p;
+    return nuls_server.nodeList[6].host+nuls_server.requestMain+p;
 }
 /*request get param type example: ?t=1&x=2*/
 export function m(url,callback,param){
@@ -27,6 +27,18 @@ export function n(url,callback,param){
     for (var i in param) {url += "/"+param[i];}
     url += "?t="+new Date().getTime();
     axios.get(url).then(function (response){
+        callback(response.data);
+    }).catch(function (error) {
+        callback(e(false,10002,nuls_defaultType.showError?error:"request failed"));
+    });
+}
+/*request get param type example: a/1/test1?t=1&x=2*/
+export function p(url,callback,param1,param2,urlStr){
+    url = v(url);
+    for (var i in param1) {url += "/"+param1[i];}
+    url += urlStr;
+    param2.t=new Date().getTime();
+    axios.get(url,{params:param2}).then(function (response){
         callback(response.data);
     }).catch(function (error) {
         callback(e(false,10002,nuls_defaultType.showError?error:"request failed"));

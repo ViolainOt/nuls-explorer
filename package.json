@@ -20,7 +20,9 @@
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.1.0",
     "vue-router": "^3.0.1",
-      "zengcc-fls-sdk":"0.9.12"
+    "zengcc-fls-sdk": "0.9.12",
+    "bignumber": "^v1.1.0",
+    "bignumber.js": "^7.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
