@@ -670,9 +670,22 @@ footer .nuls-footer a.gitter i {
 .transactions_i9{
     border-left-color: #f6693e;
 }
+.transactions_i100{
+    border-left-color: #1db7ea;
+}
+.transactions_i101{
+    border-left-color: #1db7ea;
+}
+.transactions_i102{
+    border-left-color: #1db7ea;
+}
+.transactions_i103{
+    border-left-color: #1db7ea;
+}
 .transactions_inull{
     border-left-color: #f5c757;
 }
+
 /*.transactions_i94{
     border-left-color: #f64b3e;
 }

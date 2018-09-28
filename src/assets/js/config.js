@@ -1,7 +1,8 @@
 export let nuls_server={
     nodeList:[
-        {host:"https://apiserver.nuls.io"},
         {host:"http://192.168.1.59:8765"},
+        {host:"http://50.62.6.187:8005"},
+        {host:"https://apiserver.nuls.io"},
         {host:"http://data.nuls.io"},
         {host:"http://192.168.1.121:8764"},
         {host:"http://192.168.1.233:8765"},
