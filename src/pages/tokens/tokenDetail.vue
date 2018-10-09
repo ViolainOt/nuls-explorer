@@ -80,8 +80,8 @@
               <li v-for="item in transList">
                 <span><router-link :to="{path:'/transactionHash',query:{hash:item.createTxHash,type:item.type}}">{{item.txHash}}</router-link></span>
                 <span>{{item.name}}</span>
-                <span><span v-if="item.fromAddress">{{item.fromAddress | formatString}}</span></span>
-                <span><span v-if="item.toAddress">{{item.toAddress | formatString}}</span></span>
+                <span><span v-if="item.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:item.fromAddress}}">{{item.fromAddress | formatString}}</router-link></span></span>
+                <span><span v-if="item.toAddress"><router-link :to="{path:'/accountInfo',query:{address:item.toAddress}}">{{item.toAddress | formatString}}</router-link></span></span>
                 <span>{{item.txValue}} {{accountInfo.tokenName}}</span>
                 <span>{{item.createTime | formatDate}}</span>
                 <!--<span><router-link :to="{path:'/tokens/tokenDetail',query:{height:block.height}}">{{block.createTime | formatDate}}</router-link></span>-->
@@ -132,10 +132,7 @@
                 <span>{{index+1}}</span>
                 <span><span v-if="item.accountAddress">{{item.accountAddress | formatString}}</span></span>
                 <span>{{item.amount}}</span>
-                <span>
-                  <!--<router-link :to="{path:'/consensusNode',query:{address:block.consensusAddress,type:2}}">{{block.consensusAddress | formatString}}</router-link>-->
-                    {{item.per}}
-                </span>
+                <span>{{item.per}}</span>
               </li>
             </ul>
           </span>
@@ -168,7 +165,7 @@
 
 <script>
     import {getTokenDetail,getTransList,getHoldersList} from "../../assets/js/nuls.js";
-    import {formatDate,getInfactCoin,getTransactionResultAmount,formatString,LeftShift,Power} from '../../assets/js/util.js';
+    import {formatDate,getInfactCoin,getTransactionResultAmount,formatString,LeftShift,Power,timesDecimals} from '../../assets/js/util.js';
     import {brotherComponents} from '../../assets/js/public.js';
     export default {
         name: "tokenDetail",
@@ -196,16 +193,6 @@
             },
             arrayLength(arr){
                 return arr?arr.length:0;
-            },
-            /*
-            *计算这笔交易的输入减去输出后的余额
-            *Calculate the input of this transaction minus the balance after output
-            */
-            formatTxAmount(txlist){
-                return getInfactCoin(getTransactionResultAmount(txlist));
-            },
-            getInfactCoin(count){
-                return Math.abs(getInfactCoin(count));
             },
             formatString(str){
                 return formatString(str);
@@ -247,27 +234,12 @@
                 this.nulsTranslist(this.currentPage1);
                 this.nulsHoldersList(this.currentPage2);
             },
-            /*
-            *跳转块详情
-            * to block detail
-            */
-            toBlockDetail: function(height){
-                this.$router.push({path:'/blockDetail',query:{height:height}});
-            },
-            /*
-            *跳转交易详情
-            * to transaction detail
-            */
-            toTransactionHash: function(hash){
-                this.$router.push({path:'/transactionHash',query:{hash:hash}});
-            },
             nulsTokenDetail: function(){
                 var _self = this;
                 getTokenDetail({"contractAddress":_self.address},function(res){
                     if (res.success) {
                         _self.accountInfo = res.data;
-                        let powerNo = Power(res.data.decimals);
-                        res.data.totalSupply = LeftShift(res.data.totalSupply,powerNo).toString();
+                        res.data.totalSupply = timesDecimals(res.data.totalSupply,res.data.decimals).toString();
                         _self.totalSupply = res.data.totalSupply;
                     }
                 });
@@ -287,7 +259,7 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if(pageNumber !== 1) {
-                    history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
+                    history.pushState({}, "", "/tokenDetail?currentPage=" + pageNumber);
                 }
                 getTransList({"contractAddress":_self.address},{"pageNumber":pageNumber,"pageSize":_self.pageSize},'/transactions',function(res){
                     loading.close();
@@ -297,8 +269,8 @@
                         _self.transList = res.data.list;
                         for(let i=0;i<res.data.list.length;i++){
                             res.data.list[i].type = 1000;
-                            let powerNo = Power(res.data.list[i].decimals);
-                            res.data.list[i].txValue = LeftShift(res.data.list[i].txValue,powerNo).toString();
+                            //let powerNo = Power(res.data.list[i].decimals);
+                            res.data.list[i].txValue = timesDecimals(res.data.list[i].txValue,res.data.list[i].decimals).toString();
                         }
                         _self.totalDataNumber1 = res.data.total;
                         _self.txCount = _self.totalDataNumber1;
@@ -322,7 +294,7 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if(pageNumber !== 1) {
-                    history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
+                    history.pushState({}, "", "/tokenDetail?currentPage=" + pageNumber);
                 }
                 getHoldersList({"contractAddress":_self.address},{"pageNumber":pageNumber,"pageSize":_self.pageSize},'/holders',function(res){
                     loading.close();
@@ -333,15 +305,13 @@
                         _self.totalDataNumber2 = res.data.total;
                         _self.txCount = _self.totalDataNumber2;
                         for(let i in res.data.list){
-                            // let powerNo = Power(res.data.list[i].decimals);
-                            // res.data.list[i].amount = LeftShift(res.data.list[i].amount,powerNo).toString();
-                            // res.data.list[i].amount=Number(res.data.list[i].amount);
+                            res.data.list[i].amount = timesDecimals(res.data.list[i].amount,res.data.list[i].decimals).toString();
                             if((res.data.list[i].amount/_self.totalSupply)*100<0.0001){
+                                console.log((res.data.list[i].amount/_self.totalSupply)*100)
                                 res.data.list[i].per=0+'%'
                             }else if((res.data.list[i].amount/_self.totalSupply)*100===100){
                                 res.data.list[i].per=((res.data.list[i].amount/_self.totalSupply)*100)+'%'
-                            }
-                            else{
+                            }else{
                                 res.data.list[i].per=((res.data.list[i].amount/_self.totalSupply)*100).toFixed(4)+'%';
                             }
                         }

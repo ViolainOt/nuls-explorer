@@ -57,16 +57,15 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transFee")}}</div>
-                    <div class="nuls-flex-cell-flex" v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100 || txdetail.type===1000">
-                        <template v-if="txdetail.resultDto">
-                            <span>{{txdetail.resultDto.totalFee|getInfactCoin}}{{$t("transDetail.totalCost")}}</span>
-                            <span>=</span>
-                            <span>{{txdetail.resultDto.txSizeFee|getInfactCoin}}{{$t("transDetail.txSize")}}</span>
-                            <span>+</span>
-                            <span>{{txdetail.resultDto.actualContractFee|getInfactCoin}}{{$t("transDetail.callContract")}}</span>
-                            <span>+</span>
-                            <span>{{txdetail.resultDto.refundFee|getInfactCoin}}{{$t("transDetail.refund")}}</span>
-                        </template>
+                    <!--<div class="nuls-flex-cell-flex" v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100 || txdetail.type===1000">-->
+                    <div class="nuls-flex-cell-flex" v-if="txdetail.resultDto && txdetail.resultDto.totalFee && txdetail.resultDto.txSizeFee && txdetail.resultDto.actualContractFee && txdetail.resultDto.refundFee">
+                        <span>{{txdetail.resultDto.totalFee|getInfactCoin}}{{$t("transDetail.totalCost")}}</span>
+                        <span>=</span>
+                        <span>{{txdetail.resultDto.txSizeFee|getInfactCoin}}{{$t("transDetail.txSize")}}</span>
+                        <span>+</span>
+                        <span>{{txdetail.resultDto.actualContractFee|getInfactCoin}}{{$t("transDetail.callContract")}}</span>
+                        <span>+</span>
+                        <span>{{txdetail.resultDto.refundFee|getInfactCoin}}{{$t("transDetail.refund")}}</span>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;{{$t("transDetail.unit")}}NULS</span>
                     </div>
                     <div class="nuls-flex-cell-flex" v-else>{{txdetail.fee|getInfactCoin}} NULS</div>
@@ -80,42 +79,44 @@
                     <div class="nuls-flex-cell-flex text-hidden">{{$t("transDetail.transTypeDetail.i"+txdetail.type)}}</div>
                 </div>
 
-                <template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
-                    <div class="nuls-flex-cell flex">
+                <!--<template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">-->
+                    <div class="nuls-flex-cell flex" v-if="txdetail.contractAddress">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.contractAddress")}}</div>
                         <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.contractAddress}}</router-link></div>
                     </div>
-                    <div class="nuls-flex-cell flex">
+                    <div class="nuls-flex-cell flex" v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.contractResults")}}</div>
-                        <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? $t("transDetail.results.i0") : $t("transDetail.results.i1")}}</div>
+                        <div class="nuls-flex-cell-flex text-hidden">{{(txdetail.resultDto && txdetail.resultDto.success==='true') ? $t("transDetail.results.i0") : $t("transDetail.results.i1")}}</div>
                     </div>
-                </template>
+                <!--</template>-->
 
-                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===100">
-                    <template v-if="txdetail.resultDto && txdetail.resultDto.tokenTransfers">
+                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.resultDto && ((txdetail.resultDto.tokenTransfers.length!==0) || (txdetail.resultDto.transfers.length!==0))">
+                    <template v-if="txdetail.resultDto.tokenTransfers.length!==0">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
-                        <div class="nuls-flex-cell-flex text-hidden">
+                        <div class="nuls-flex-cell-flex-change text-hidden">
                             <div v-for="item in txdetail.resultDto.tokenTransfers">
-                                <span>from: {{(txdetail.resultDto ? item.from : '' )}}</span>
-                                <span>to: {{(txdetail.resultDto ? item.to : '' )}}</span>
-                                <span>for {{txdetail.resultDto ? item.value : ''}} {{txdetail.resultDto.tokenName}}</span>
+                                <span>from: <span @click="hashDetail(item.from)" class="baseColor pointer">{{(txdetail.resultDto ? item.from : '' )}}</span></span>
+                                <span>to: <span @click="hashDetail(item.to)" class="baseColor pointer">{{(txdetail.resultDto ? item.to : '' )}}</span></span>
+                                <span>for <span class="greenColor">{{txdetail.resultDto ? item.value : ''}}</span> {{txdetail.resultDto.tokenName}}</span>
                             </div>
                         </div>
                     </template>
-                    <template v-else-if="txdetail.resultDto && txdetail.resultDto.transfers">
+                    <template v-else-if="txdetail.resultDto.transfers.length!==0">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
-                        <div class="nuls-flex-cell-flex text-hidden">
+                        <div class="nuls-flex-cell-flex-change text-hidden" v-if="txdetail.resultDto.transfers[0]">
                             <div>
-                                <span>from: {{(txdetail.resultDto ? txdetail.resultDto.transfers[0].fromAddress : '' )}}</span>
-                                <span>to: {{(txdetail.resultDto ? txdetail.resultDto.transfers[0].toAddress : '' )}}</span>
-                                <span>for {{txdetail.resultDto ? txdetail.resultDto.transfers[0].txValue : ''}} NULS</span>
+                                <span>from: <router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:txdetail.resultDto.transfers[0].fromAddress}}">{{(txdetail.resultDto.transfers[0].fromAddress ? txdetail.resultDto.transfers[0].fromAddress : '' )}}</router-link></span>
+                                <span>to: <span @click="hashDetail(txdetail.resultDto.transfers[0].toAddress)" class="baseColor pointer">{{(txdetail.resultDto.transfers[0].toAddress ? txdetail.resultDto.transfers[0].toAddress : '' )}}</span></span>
+                                <span>for <span class="greenColor">{{txdetail.resultDto.transfers[0].txValue ? txdetail.resultDto.transfers[0].txValue : ''}}</span> NULS</span>
                             </div>
-                            <div>TxID: {{txdetail.resultDto ? txdetail.resultDto.transfers[0].txHash : ''}}</div>
+                            <div>TxID: <span @click="hashTranDetail(txdetail.resultDto.transfers[0].txHash)" class="baseColor pointer">{{txdetail.resultDto ? txdetail.resultDto.transfers[0].txHash : ''}}</span></div>
                         </div>
                     </template>
+                    <template v-else></template>
                 </div>
 
-                <template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
+                <!--<template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">-->
+                <template v-if="txdetail.resultDto">
                     <div class="nuls-flex-cell flex">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.gasLimit")}}</div>
                         <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? txdetail.resultDto.gasLimit:''}}</div>
@@ -129,12 +130,13 @@
                         <div class="nuls-flex-cell-flex text-hidden">{{txdetail.resultDto ? txdetail.resultDto.gasUsed : ''}}</div>
                     </div>
                 </template>
-                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===101 || txdetail.type===102">
+                <!--<div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===101 || txdetail.type===102">-->
+                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.txData && txdetail.resultDto && txdetail.txData.methodName && txdetail.txData.args">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.method")}}</div>
-                    <div class="nuls-flex-cell-flex text-hidden ">
-                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData ? txdetail.txData.methodName : ''}}</div>
-                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData ? txdetail.txData.args : ''}}</div>
-                        <div>{{$t("transDetail.backValue")}}{{txdetail.resultDto ? txdetail.resultDto.result : ''}}</div>
+                    <div class="nuls-flex-cell-flex-change text-hidden ">
+                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData.methodName ? txdetail.txData.methodName : ''}}</div>
+                        <div>{{$t("transDetail.parameter")}}{{txdetail.txData.args ? txdetail.txData.args : ''}}</div>
+                        <div>{{$t("transDetail.backValue")}}{{txdetail.resultDto.result ? txdetail.resultDto.result : ''}}</div>
                     </div>
                 </div>
 
@@ -145,7 +147,7 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transConfirmations")}}</div>
-                    <div class="nuls-flex-cell-flex">{{txdetail.confirmCount}}</div>
+                    <div class="nuls-flex-cell-flex">{{txdetail.confirmCount ? txdetail.confirmCount : 0}}</div>
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transInput")}}</div>
@@ -155,14 +157,14 @@
                     <div class="nuls-flex-cell-title">{{$t("transDetail.transOutput")}}</div>
                     <div class="nuls-flex-cell-flex">{{txdetail.outputs|getArrayAmout}} NULS</div>
                 </div>
-                <template v-if="txdetail.remark != null">
 
-                <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-title">{{$t("transDetail.mark")}}{{$t("other.semicolon")}}</div>
-                </div>
-                <div class="nuls-flex-cell flex">
-                    <div class="nuls-flex-cell-flex text-align-left">{{txdetail.remark}}</div>
-                </div>
+                <template v-if="txdetail.remark !== null">
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-title">{{$t("transDetail.mark")}}{{$t("other.semicolon")}}</div>
+                    </div>
+                    <div class="nuls-flex-cell flex">
+                        <div class="nuls-flex-cell-flex text-align-left">{{txdetail.remark}}</div>
+                    </div>
                 </template>
             </div>
         </div>
@@ -196,7 +198,11 @@
 
             <li v-for="outlist in txdetail.outputs">
                 <router-link :to="{path:'/accountInfo',query:{address:outlist.address}}">{{outlist.address|formatString}}</router-link>
-                <span class="float_right">（{{outlist.amount | getInfactCoin}}&nbsp;-&nbsp;<span @click="toSpentByHash(outlist.spendTxHash)" :class="outlist.spendTxHash!=null?'pointer baseColor':'enableColor'"><template v-if="outlist.address == 'Nse5FeeiYk1opxdc5RqYpEWkiUDGNuLs'">{{$t("utxoStatus.iburned")}}</template><template v-else-if="outlist.spendTxHash!=null">{{$t("utxoStatus.i3")}}</template><template v-else>{{$t("utxoStatus.i0")}}</template></span>）</span>
+                <span class="float_right">（{{outlist.amount | getInfactCoin}}&nbsp;-&nbsp;<span @click="hashDetail(outlist.spendTxHash)" :class="outlist.spendTxHash!=null?'pointer baseColor':'enableColor'">
+                    <template v-if="outlist.address == 'Nse5FeeiYk1opxdc5RqYpEWkiUDGNuLs'">{{$t("utxoStatus.iburned")}}</template>
+                    <template v-else-if="outlist.spendTxHash!=null">{{$t("utxoStatus.i3")}}</template>
+                    <template v-else>{{$t("utxoStatus.i0")}}</template></span>）
+                </span>
         </li>
     </ul>
     <div v-if="txdetail.outputs[5]" class="tx_description center">
@@ -210,9 +216,8 @@
     </template>
 
 <script>
-import {getTxList,getTxByHash,getTxSpentHashDetail,getContractsTxByHash} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,formatString,LeftShift,Power} from '../assets/js/util.js';
-import {brotherComponents} from '../assets/js/public.js';
+import {getTxList,getTxByHash,getTxSpentHashDetail,getContractsTxByHash,getSearchDataDetail} from "../assets/js/nuls.js";
+import {formatDate,getInfactCoin,formatString,timesDecimals} from '../assets/js/util.js';
 export default {
     name: "transactionHash",
     data() {
@@ -289,27 +294,14 @@ export default {
         var _self = this;
         _self.hash = this.$route.query.hash;
         _self.type = this.$route.query.type;
-        //_self.nulstxdetail();
+        _self.nulstxdetail();
     },
     mounted:function(){
-        this.nulstxdetail();
+
     },
     methods: {
         getInfactCoin(count){
             return getInfactCoin(count);
-        },
-
-        toSpentByHash: function(hash){
-            if(hash){
-                var _self = this;
-                _self.hash = hash;
-                _self.nulstxdetail();
-                /*
-                *Modify history to prevent users from refreshing pages incorrectly
-                *修改历史记录，防止用户刷新页面不正确
-                */
-                history.pushState(null,"","/transactionHash?hash="+hash);
-            }
         },
         /**
          * 根据交易hash查询交易详情
@@ -317,22 +309,37 @@ export default {
          */
         nulstxdetail: function () {
             var _self = this;
-            // console.log(LeftShift(100,2))
-            if(_self.type===100 || _self.type===101 || _self.type===102 || _self.type===103 || _self.type===1000){
+            //合約的hash,type為6   普通hash查詳情，沒有type    合約转账属于普通交易
+            if(_self.type===100 || _self.type===101 || _self.type===102 || _self.type===1000 || _self.type===6){
                 getContractsTxByHash({"hash":_self.hash},function(res){
                     if (res.success) {
                         _self.txdetail = res.data;
-                        if(response.data.resultDto){
-                            let powerNo = Power(response.data.resultDto.decimals);
-                            let tokenTransfers = response.data.resultDto.tokenTransfers;
-                            let transfers = response.data.resultDto.transfers;
-                            for (let i in tokenTransfers) {
-                                tokenTransfers[i].value = LeftShift( tokenTransfers[i].value,powerNo).toString();
+                        if(res.data.txData){
+                            if(res.data.txData.args && res.data.txData.args.lastIndexOf(',')!==-1){
+                                res.data.txData.args=res.data.txData.args.substr(0,res.data.txData.args.length-1);
                             }
-                            for (let i in transfers) {
-                                if(i.toString() === '0'){
-                                    transfers[i].txValue = LeftShift( transfers[i].txValue,powerNo).toString();
+                        }
+                        if(res.data.resultDto){
+                            //let powerNo = Power(res.data.resultDto.decimals);
+                            if(res.data.resultDto.tokenTransfers && res.data.resultDto.tokenTransfers.length!==0){
+                                _self.txdetail.resultDto.tokenTransfers=res.data.resultDto.tokenTransfers;
+                                let tokenTransfers = res.data.resultDto.tokenTransfers;
+                                for (let i in tokenTransfers) {
+                                    tokenTransfers[i].value = timesDecimals( tokenTransfers[i].value,res.data.resultDto.decimals).toString();
                                 }
+                            }else{
+                                _self.txdetail.resultDto.tokenTransfers=[];
+                            }
+                            if(res.data.resultDto.transfers && res.data.resultDto.transfers.length!==0){
+                                _self.txdetail.resultDto.transfers=res.data.resultDto.transfers;
+                                let transfers = res.data.resultDto.transfers;
+                                for (let i in transfers) {
+                                    if(i.toString() === '0'){
+                                        transfers[i].txValue = timesDecimals( transfers[i].txValue,res.data.resultDto.decimals).toString();
+                                    }
+                                }
+                            }else{
+                                _self.txdetail.resultDto.transfers=[];
                             }
                         }
                     }else{
@@ -342,20 +349,53 @@ export default {
             }else{
                 getTxByHash({"hash":_self.hash},function(res){
                     if (res.success) {
-                        console.log(res)
-                        // this.$nextTick(function () {
-                            _self.txdetail = res.data;
-                        // })
-                        //_self.confirmCount = res.data.confirmCount;
+                        _self.txdetail = res.data;
                     }else{
                         _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                     }
                 })
             }
         },
-        hashDetail: function(hash){
+        /**
+         * 点击transfers里的hash,查看交易详情
+         * Click on hash in transfers to see transaction details.
+         */
+        hashTranDetail: function(hash){
             this.hash = hash;
+            this.type = '';
             this.nulstxdetail();
+        },
+        /**
+         * input output的交易详情
+         * Input output transaction details
+         */
+        //input output的交易详情
+        hashDetail: function(hash){
+            if(hash){
+                let _self = this;
+                let loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.5)'
+                });
+                getSearchDataDetail({key:hash},function (res) {
+                    if(res.success){
+                        loading.close();
+                        //console.log(res.data)
+                        if(res.data === 0){
+                            _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                        }else{
+                            _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                        }
+
+                    }else{
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                    }
+                    loading.close();
+                });
+                history.pushState(null,"","/transactionHash?hash="+hash);
+            }
         },
         showMore: function(v){
             if(v === -1){
@@ -371,13 +411,19 @@ export default {
 <style>
     .flex-start{
         align-items: flex-start;
+        justify-content:space-between;
     }
     .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex{
         padding-top:5px;
         padding-bottom:5px;
+        flex:auto;
     }
     .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex>div:nth-child(2){
         padding-top:5px;
         padding-bottom:5px;
+    }
+    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex-change>div{
+        text-align: left;
+        white-space: initial;
     }
 </style>

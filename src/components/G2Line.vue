@@ -39,7 +39,8 @@ export default {
             this.chart = new G2.Chart({
                 id: this.id,
                 height: 245,
-                width: 525,
+                //width: 525,
+                width: 472,
                 //forceFit: true,
                 background: {
                     fill: "#17202e",

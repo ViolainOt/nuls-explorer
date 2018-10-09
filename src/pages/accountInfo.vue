@@ -54,7 +54,7 @@
                                     <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
                                     <div class="flex block_split">
                                         <div class="hash flex-auto text-hidden">
-                                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+                                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
                                         </div>
                                         <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                                     </div>
@@ -187,8 +187,8 @@
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="block in TokenBalanceList">
-                <span><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.tokenName}}</router-link></span>
-                <span>{{block.totalsupply}}</span>
+                <span><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.symbol}}</router-link></span>
+                <span>{{block.amount}}</span>
               </li>
             </ul>
           </span>
@@ -209,9 +209,9 @@
 
 <script>
     import {getAccountByAddress, getTxListByAddress,getTokenListByAddress,getTokenBalanceListByAddress} from "../assets/js/nuls.js";
-    import {formatDate, getInfactCoin, getTransactionResultAmount,formatString,LeftShift,Power} from '../assets/js/util.js';
+    import {formatDate, getInfactCoin, getTransactionResultAmount,formatString,LeftShift,Power,newBigNumber,timesDecimals} from '../assets/js/util.js';
     import {brotherComponents} from '../assets/js/public.js';
-
+    import {BigNumber} from 'bignumber.js'
     export default {
         name: "blockDetail",
         data() {
@@ -302,6 +302,7 @@
                 this.nulsTokenList(this.currentPage2);
                 this.nulsTokenBalanceListByAddress(this.currentPage3);
             },
+
             /*
             *跳转块详情
             * to block detail
@@ -309,15 +310,17 @@
             toBlockDetail: function (height) {
                 this.$router.push({path: '/blockDetail', query: {height: height}});
             },
+
             /*
             *跳转交易详情
             * to transaction detail
             */
-            toTransactionHash: function (hash) {
-                this.$router.push({path: '/transactionHash', query: {hash: hash}});
+            toTransactionHash: function (hash,type) {
+                this.$router.push({path: '/transactionHash', query: {hash: hash,type:type}});
             },
+
             nulsloadDetail: function () {
-                var _self = this;
+                let _self = this;
                 getAccountByAddress({"address": _self.address}, function (res) {
                     if (res.success) {
                         _self.accountInfo = res.data;
@@ -325,8 +328,8 @@
                 });
             },
             nulstxlist: function (pageNumber) {
-                var _self = this;
-                var loading = this.$loading({
+                let _self = this;
+                let loading = this.$loading({
                     lock: true,
                     text: 'Loading',
                     spinner: 'el-icon-loading',
@@ -384,8 +387,8 @@
                          _self.txCount2 = _self.totalDataNumber2;
                         let list = res.data.list;
                         for (let i in list) {
-                            let powerNo = Power(list[i].decimals);
-                            list[i].txValue = LeftShift(list[i].txValue,powerNo).toString();
+                            //let powerNo = Power(list[i].decimals);
+                            list[i].txValue = timesDecimals(list[i].txValue,list[i].decimals).toString();
                         }
                     }
                     /*else{
@@ -419,8 +422,7 @@
                         _self.txCount3 = _self.totalDataNumber3;
                         let list = res.data.list;
                         for (let i in list) {
-                            let powerNo = Power(list[i].decimals);
-                            list[i].totalsupply = LeftShift(list[i].totalsupply,powerNo).toString();
+                            list[i].amount = timesDecimals(list[i].amount,list[i].decimals).toString();
                         }
                     }
                     /*else{

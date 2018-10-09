@@ -155,7 +155,6 @@
         data() {
             return {
                 address: '',
-                createrAddress: '',
                 txCount: 0,
                 totalDataNumber: 0,
                 currentPage: 1,
@@ -247,10 +246,13 @@
                 getContractsDetail({"address":_self.address},function(res){
                     if (res.success) {
                         _self.accountInfo = res.data;
-                        _self.createrAddress = _self.accountInfo.creater;
                     }
                 });
             },
+            /*
+             * Loading Contracts Transactions list, paging loading
+             * 加载Contracts Transactions列表，分页加载
+             */
             nulsContractsTransactionsList: function (pageNumber) {
                 let _self = this;
                 let loading = this.$loading({
@@ -265,10 +267,9 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if(pageNumber !== 1) {
-                    history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
+                    history.pushState({}, "", "/contractsDetail?currentPage=" + pageNumber + "&address=" + _self.address);
                 }
                 getContractsTransactionsList({"contractAddress":_self.address},{"accountAddress":_self.accountInfo.creater,"pageNumber":pageNumber,"pageSize":_self.pageSize},'',function(res){
-                    console.log(_self.createrAddress)
                     loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
@@ -276,10 +277,7 @@
                         _self.transList=res.data.list;
                         _self.totalDataNumber = res.data.total;
                         _self.txCount = _self.totalDataNumber;
-                        //console.log("_self.txCount:"+_self.txCount);
-                    }/*else{
-                    _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                }*/
+                    }
                 });
             }
         }

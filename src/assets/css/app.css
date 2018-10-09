@@ -410,7 +410,7 @@ header .nuls-head-content .nuls-search-box input{
     left: 1%;
     outline: 0;
     color: #bcc4cc;
-    width: 70%;
+    width: 75%;
     background-color: transparent;
     border:none;
     font-size: 0.875em;
@@ -690,6 +690,22 @@ footer .nuls-footer a.gitter i {
 .transactions_inull{
     border-left-color: #f5c757;
 }
+.transactions_i0{
+    border-left-color:  #f5c757;
+}
+.transactions_i101{
+    border-left-color: #88baff;
+}
+.transactions_i102{
+    border-left-color: #88baff;
+}
+.transactions_i103{
+    border-left-color: #88baff;
+}
+.transactions_i1000{
+    border-left-color: #88baff;
+}
+
 /*.transactions_i94{
     border-left-color: #f64b3e;
 }
@@ -877,6 +893,13 @@ footer .nuls-footer a.gitter i {
     .nuls-home-content .nuls-home-content-top .nuls-home-content-top-right{
         width: 100%;
     }
+    /*.nuls-home-content .nuls-home-content-top .nuls-message-list{*/
+        /*width: 90%;*/
+        /*padding: 2% 5% 2% 0%;*/
+        /*color: #fff;*/
+        /*background-color: #17202e;*/
+        /*margin-top: 15px;*/
+    /*}*/
 }
 @media screen and (max-device-width: 1024px) and (min-device-width: 768px){
     .tx_list .tx_input_content{

@@ -118,8 +118,23 @@ export function LeftShift(nu, arg) {
     let newDiv = new BigNumber(nu);
     return newDiv.div(arg);
 }
-function trimLast(str){
-
+/**
+ * 除法
+ * @param nu
+ * @param arg
+ * @returns {BigNumber}
+ * @constructor
+ */
+export function Division(nu, arg) {
+    let newDiv = new BigNumber(nu);
+    return newDiv.div(arg);
+}
+/**
+ * 数字除以精度系数
+ */
+export function timesDecimals(nu,decimals) {
+    let newNu = new BigNumber(Division(nu, Power(decimals)).toString());
+    return newNu.toFormat().replace(/[,]/g, '');
 }
 
 

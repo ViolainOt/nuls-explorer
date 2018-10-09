@@ -15,7 +15,7 @@
                 <span>{{$t("tokensList.rank")}}</span>
                 <span>{{$t("tokensList.token")}}</span>
                 <span>{{$t("tokensList.symbol")}}</span>
-                <span>{{$t("tokensList.totalSupply")}}</span>
+                <span class="total-supply">{{$t("tokensList.totalSupply")}}</span>
                 <span>{{$t("tokensList.decimas")}}</span>
                 <span>{{$t("tokensList.created")}}</span>
               </li>
@@ -29,7 +29,7 @@
                 <span>{{index+1}}</span>
                 <span><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:item.contractAddress}}">{{item.tokenName}}</router-link></span>
                 <span>{{item.symbol}}</span>
-                <span>{{item.totalsupply}}</span>
+                <span class="total-supply">{{item.totalsupply}}</span>
                 <span>{{item.decimals}}</span>
                 <span>{{item.createTime | formatDate}}</span>
               </li>
@@ -59,7 +59,7 @@
 
 <script>
     import {getTokensList} from "../../assets/js/nuls.js";
-    import {formatDate,formatString,getInfactCoin,LeftShift,Power} from '../../assets/js/util.js';
+    import {formatDate,formatString,getInfactCoin,LeftShift,Power,timesDecimals} from '../../assets/js/util.js';
     export default {
         name: "tokensList",
         data () {
@@ -93,8 +93,8 @@
         },
         methods: {
             /*
-            *Loading block list, paging loading
-            *加载区块列表，分页加载
+            *Loading Token list, paging loading
+            *加载Token列表，分页加载
             */
             nulsGetTokensList(pageNumber){
                 var loading = this.$loading({
@@ -122,8 +122,8 @@
                             _self.totalDataNumber = res.data.total;
                             for(let i in res.data.list){
                                 res.data.list[i].type = 1000;
-                                let powerNo = Power(res.data.list[i].decimals);
-                                res.data.list[i].totalsupply = LeftShift(res.data.list[i].totalsupply,powerNo).toString();
+                                //let powerNo = Power(res.data.list[i].decimals);
+                                res.data.list[i].totalsupply = timesDecimals(res.data.list[i].totalsupply,res.data.list[i].decimals).toString();
                             }
                         }else{
                             _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
@@ -137,5 +137,8 @@
     }
 </script>
 
-<style>
+<style scoped>
+    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span.total-supply{
+        width:176px;
+    }
 </style>

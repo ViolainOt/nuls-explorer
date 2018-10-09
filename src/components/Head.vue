@@ -36,7 +36,7 @@
 </div>
 <div class="menu flex menu-border menu-right">
 <div class="nuls-search-box">
-    <input placeholder="Address / Txhash / Block" class="pointer" ref="search" @keyup.enter="search" value="" type="text" />
+    <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search" @keyup.enter="search" value="" type="text" />
     <i class="el-icon-search pointer" @click="search"></i>
 </div>
 <div class="nuls-language-box">
@@ -99,9 +99,9 @@ export default {
         },
         search: function () {
             /*show loading*/
-            var
+            let
                 _self = this,
-                serchVal = _self.$refs.search.value.replace(/(^\s*)|(\s*$)/g, "");;
+                serchVal = _self.$refs.search.value.replace(/(^\s*)|(\s*$)/g, "");
             if(serchVal && serchVal.length>0){
                 var loading = this.$loading({
                     lock: true,

@@ -9,7 +9,7 @@ function g(){
 }
 /*load url*/
 function v(p){
-    return nuls_server.nodeList[6].host+nuls_server.requestMain+p;
+    return nuls_server.nodeList[0].host+nuls_server.requestMain+p;
 }
 /*request get param type example: ?t=1&x=2*/
 export function m(url,callback,param){

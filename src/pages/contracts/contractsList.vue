@@ -25,12 +25,9 @@
             <ul class="nuls-ul-sub-table">
               <li v-for="item in contractsList">
                 <span><router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:item.contractAddress}}">{{item.contractAddress | formatString}}</router-link></span>
-                <span>{{item.balance}}</span>
+                <span>{{item.balance|getInfactCoin}}</span>
                 <span><router-link :to="{path:'/accountInfo',query:{address:item.creater}}">{{item.creater | formatString}}</router-link></span>
-                <span>
-                  <!--<router-link :to="{path:'/consensusNode',query:{address:block.consensusAddress,type:2}}">{{block.consensusAddress | formatString}}</router-link>-->
-                    {{item.createTime | formatDate}}
-                </span>
+                <span>{{item.createTime | formatDate}}</span>
               </li>
             </ul>
           </span>
@@ -58,7 +55,7 @@
 
 <script>
     import {getContractsList} from "../../assets/js/nuls.js";
-    import {formatDate,formatString,getInfactCoin,LeftShift,Power} from '../../assets/js/util.js';
+    import {formatDate,formatString,getInfactCoin,timesDecimals} from '../../assets/js/util.js';
     export default {
         name: "tokensList",
         data () {
@@ -98,8 +95,8 @@
         },
         methods: {
             /*
-            *Loading block list, paging loading
-            *加载区块列表，分页加载
+            *Loading Contracts list, paging loading
+            *加载Contracts列表，分页加载
             */
             nulsGetContractsList(pageNumber){
                 var loading = this.$loading({
@@ -125,10 +122,6 @@
                         if(res.data.list){
                             _self.contractsList = res.data.list;
                             _self.totalDataNumber = res.data.total;
-                            for (let i in res.data.list) {
-                                let powerNo = Power(res.data.list[i].decimals);
-                                res.data.list[i].balance = LeftShift( res.data.list[i].balance,powerNo).toString();
-                            }
                         }else{
                             _self.$notify({title: _self.$t("notice.notice"),message: _self.$t("notice.noMessage"),type: 'warning'});
                         }
@@ -141,5 +134,8 @@
     }
 </script>
 
-<style>
+<style scoped>
+    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:nth-child(1){
+        /*width:13%;*/
+    }
 </style>
