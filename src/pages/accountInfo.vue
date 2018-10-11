@@ -40,91 +40,89 @@
             </div>
         </div>
         <!--address detail end-->
-        <div class="nuls-home-content-next clear">
-            <!--<el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">-->
-                <!--<div class="token-number">[7]</div>-->
-            <!--</el-tooltip>-->
-            <el-tabs v-model="activeName">
-                <el-tab-pane :label="$t('accountInfo.transaction')" name="first">
-                    <template>
-                        <!--transactions tab start-->
-                        <div class="nuls-home-content-next clear" v-show="txCount1 > 0">
-                            <ul class="nuls-transaction-list">
-                                <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
-                                    <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
-                                    <div class="flex block_split">
-                                        <div class="hash flex-auto text-hidden">
-                                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+        <div class="detail-tab">
+            <div class="nuls-home-content-next clear">
+                <el-tabs v-model="activeName">
+                    <el-tab-pane :label="$t('accountInfo.transaction')" name="first">
+                        <template>
+                            <!--transactions tab start-->
+                            <div class="nuls-home-content-next clear" v-show="txCount1 > 0">
+                                <ul class="nuls-transaction-list">
+                                    <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
+                                        <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
+                                        <div class="flex block_split">
+                                            <div class="hash flex-auto text-hidden">
+                                                <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+                                            </div>
+                                            <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                                         </div>
-                                        <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
-                                    </div>
-                                    <div class="tx_auto_flex block_split">
-                                        <div class="block">
+                                        <div class="tx_auto_flex block_split">
+                                            <div class="block">
                                             <span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer"
                                                                                                     @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span>
-                                        </div>
-                                        <div class="input_output">
-                                            {{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
-                                        <div class="fee text-align-right">
+                                            </div>
+                                            <div class="input_output">
+                                                {{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
+                                            <div class="fee text-align-right">
                             <span>
                             <template v-if="txlist.type <= 2">
                             {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist.amount | getInfactCoin}} NULS
                             </template>
                             </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <div class="flex flex-top block_split"
-                                         v-if="txlist.inputs!=null||txlist.outputList!=null"
-                                         :class="showScroll==key?'scrollHeight':'hideHeight'">
-                                        <div class="input_div text-hidden">
-                                            <p v-if="txlist.inputs==null">&nbsp;</p>
-                                            <p v-else v-for="inputlist in txlist.inputs"
-                                               class="baseColor pointer text-hidden"
-                                               @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
+                                        <div class="clear"></div>
+                                        <div class="flex flex-top block_split"
+                                             v-if="txlist.inputs!=null||txlist.outputList!=null"
+                                             :class="showScroll==key?'scrollHeight':'hideHeight'">
+                                            <div class="input_div text-hidden">
+                                                <p v-if="txlist.inputs==null">&nbsp;</p>
+                                                <p v-else v-for="inputlist in txlist.inputs"
+                                                   class="baseColor pointer text-hidden"
+                                                   @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
+                                            </div>
+                                            <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
+                                            <div class="output_div text-align-right text-hidden">
+                                                <p v-for="outputlist in txlist.outputList"
+                                                   class="text-hidden baseColor pointer"
+                                                   @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
+                                            </div>
+                                            <div class="tx_amount text-align-right">
+                                                <p class="text-hidden" v-for="outputlist in txlist.outputList">
+                                                    {{outputlist.value|getInfactCoin}} NULS</p>
+                                            </div>
                                         </div>
-                                        <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
-                                        <div class="output_div text-align-right text-hidden">
-                                            <p v-for="outputlist in txlist.outputList"
-                                               class="text-hidden baseColor pointer"
-                                               @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
-                                        </div>
-                                        <div class="tx_amount text-align-right">
-                                            <p class="text-hidden" v-for="outputlist in txlist.outputList">
-                                                {{outputlist.value|getInfactCoin}} NULS</p>
-                                        </div>
-                                    </div>
-                                    <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span>
-                                    </p>
-                                    <div
-                                        v-if="txlist.inputs!=null && txlist.inputs[4] || txlist.outputList!= null && txlist.outputList[4]"
-                                        class="tx_more text-align-center pointer"><a @click="showmore(key)"><i
-                                        class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
-                                </li>
-                            </ul>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="text-align-right tx-pagination">
-                            <el-pagination
-                                background
-                                :prev-text="$t('page.previous')"
-                                :next-text="$t('page.next')"
-                                layout="total,prev, pager, next,jumper"
-                                @current-change="nulstxlist"
-                                :page-size=this.pageSize
-                                :current-page=this.currentPage1
-                                :total=this.totalDataNumber1>
-                            </el-pagination>
+                                        <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span>
+                                        </p>
+                                        <div
+                                            v-if="txlist.inputs!=null && txlist.inputs[4] || txlist.outputList!= null && txlist.outputList[4]"
+                                            class="tx_more text-align-center pointer"><a @click="showmore(key)"><i
+                                            class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+                                    </li>
+                                </ul>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="text-align-right tx-pagination">
+                                <el-pagination
+                                    background
+                                    :prev-text="$t('page.previous')"
+                                    :next-text="$t('page.next')"
+                                    layout="total,prev, pager, next,jumper"
+                                    @current-change="nulstxlist"
+                                    :page-size=this.pageSize
+                                    :current-page=this.currentPage1
+                                    :total=this.totalDataNumber1>
+                                </el-pagination>
 
-                        </div>
-                        <!--transactions tab start-->
-                    </template>
-                </el-tab-pane>
-                <el-tab-pane :label="$t('accountInfo.tokenTransfers')" name="second">
-                    <!--contractInfo tab start-->
-                    <div class="mobile-auto-fix" v-show="txCount2 > 0">
-                        <ul class="nuls-ul-table">
-                            <li class="head">
+                            </div>
+                            <!--transactions tab start-->
+                        </template>
+                    </el-tab-pane>
+                    <el-tab-pane :label="$t('accountInfo.tokenTransfers')" name="second">
+                        <!--contractInfo tab start-->
+                        <div class="mobile-auto-fix" v-show="txCount2 > 0">
+                            <ul class="nuls-ul-table">
+                                <li class="head">
           <span>
             <ul class="nuls-ul-sub-table">
               <li>
@@ -136,8 +134,8 @@
               </li>
             </ul>
           </span>
-                            </li>
-                            <li class="content">
+                                </li>
+                                <li class="content">
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="block in tokenList">
@@ -149,8 +147,8 @@
               </li>
             </ul>
           </span>
-                            </li>
-                            <li class="foot">
+                                </li>
+                                <li class="foot">
           <span>
             <el-pagination
                 background
@@ -163,17 +161,23 @@
                 :total=this.totalDataNumber2>
             </el-pagination>
                 </span>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
 
-                    </div>
-                    <!--contractInfo tab start-->
-                </el-tab-pane>
-                <el-tab-pane :label="$t('accountInfo.tokenBalance')" name="third">
-                    <!--contractInfo tab start-->
-                    <div class="mobile-auto-fix" v-show="txCount3 > 0">
-                        <ul class="nuls-ul-table">
-                            <li class="head">
+                        </div>
+                        <!--contractInfo tab start-->
+                    </el-tab-pane>
+                    <el-tab-pane name="third">
+                        <span slot="label">
+                            <span>{{$t('accountInfo.tokenBalance')}}</span>
+                            <el-tooltip class="item" effect="dark" :content="$t('accountInfo.tokenTips1')+txCount3+' Tokens'" placement="right-start">
+                               <span class="token-number">{{[txCount3]}}</span>
+                            </el-tooltip>
+                        </span>
+                        <!--contractInfo tab start-->
+                        <div class="mobile-auto-fix" v-show="txCount3 > 0">
+                            <ul class="nuls-ul-table">
+                                <li class="head">
                               <span>
                                 <ul class="nuls-ul-sub-table">
                                   <li>
@@ -182,8 +186,8 @@
                                   </li>
                                 </ul>
                               </span>
-                            </li>
-                            <li class="content">
+                                </li>
+                                <li class="content">
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="block in TokenBalanceList">
@@ -192,13 +196,14 @@
               </li>
             </ul>
           </span>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
 
-                    </div>
-                    <!--contractInfo tab start-->
-                </el-tab-pane>
-            </el-tabs>
+                        </div>
+                        <!--contractInfo tab start-->
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
         </div>
 
     </div>
@@ -435,13 +440,8 @@
 </script>
 
 <style>
-    .nuls-home-content-next{
-        position: relative;
-    }
     .token-number{
-        position: absolute;
-        top: 38px;
-        left: 420px;
         color:#82bd39;
+        padding-left:5px;
     }
 </style>

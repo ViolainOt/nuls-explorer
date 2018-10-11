@@ -136,6 +136,9 @@
 
 <style scoped>
     ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:nth-child(1){
-        /*width:13%;*/
+        width:13%;
+    }
+    .nuls-second-type .nuls-title {
+        margin-top: 30px;
     }
 </style>

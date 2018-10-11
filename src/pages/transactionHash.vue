@@ -95,21 +95,21 @@
                         <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
                         <div class="nuls-flex-cell-flex-change text-hidden">
                             <div v-for="item in txdetail.resultDto.tokenTransfers">
-                                <span>from: <span @click="hashDetail(item.from)" class="baseColor pointer">{{(txdetail.resultDto ? item.from : '' )}}</span></span>
-                                <span>to: <span @click="hashDetail(item.to)" class="baseColor pointer">{{(txdetail.resultDto ? item.to : '' )}}</span></span>
+                                <span>from <span @click="hashDetail(item.from)" class="baseColor pointer">{{(txdetail.resultDto ? item.from : '' )}}</span></span>
+                                <span>to <span @click="hashDetail(item.to)" class="baseColor pointer">{{(txdetail.resultDto ? item.to : '' )}}</span></span>
                                 <span>for <span class="greenColor">{{txdetail.resultDto ? item.value : ''}}</span> {{txdetail.resultDto.tokenName}}</span>
                             </div>
                         </div>
                     </template>
                     <template v-else-if="txdetail.resultDto.transfers.length!==0">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
-                        <div class="nuls-flex-cell-flex-change text-hidden" v-if="txdetail.resultDto.transfers[0]">
-                            <div>
-                                <span>from: <router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:txdetail.resultDto.transfers[0].fromAddress}}">{{(txdetail.resultDto.transfers[0].fromAddress ? txdetail.resultDto.transfers[0].fromAddress : '' )}}</router-link></span>
-                                <span>to: <span @click="hashDetail(txdetail.resultDto.transfers[0].toAddress)" class="baseColor pointer">{{(txdetail.resultDto.transfers[0].toAddress ? txdetail.resultDto.transfers[0].toAddress : '' )}}</span></span>
-                                <span>for <span class="greenColor">{{txdetail.resultDto.transfers[0].txValue ? txdetail.resultDto.transfers[0].txValue : ''}}</span> NULS</span>
+                        <div class="nuls-flex-cell-flex-change text-hidden" v-if="txdetail.resultDto.transfers">
+                            <div v-for="item in txdetail.resultDto.transfers">
+                                <span>from <router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:item.fromAddress}}">{{(item.fromAddress ? item.fromAddress : '' )}}</router-link></span>
+                                <span>to <span @click="hashDetail(item.toAddress)" class="baseColor pointer">{{(item.toAddress ? item.toAddress : '' )}}</span></span>
+                                <span>for <span class="greenColor">{{item.txValue}}</span> NULS</span>
+                                <div>TxID: <span @click="hashTranDetail(item.txHash)" class="baseColor pointer">{{txdetail.resultDto ? item.txHash : ''}}</span></div>
                             </div>
-                            <div>TxID: <span @click="hashTranDetail(txdetail.resultDto.transfers[0].txHash)" class="baseColor pointer">{{txdetail.resultDto ? txdetail.resultDto.transfers[0].txHash : ''}}</span></div>
                         </div>
                     </template>
                     <template v-else></template>
@@ -217,7 +217,7 @@
 
 <script>
 import {getTxList,getTxByHash,getTxSpentHashDetail,getContractsTxByHash,getSearchDataDetail} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,formatString,timesDecimals} from '../assets/js/util.js';
+import {formatDate,getInfactCoin,formatString,timesDecimals,LeftShiftEight} from '../assets/js/util.js';
 export default {
     name: "transactionHash",
     data() {
@@ -334,9 +334,7 @@ export default {
                                 _self.txdetail.resultDto.transfers=res.data.resultDto.transfers;
                                 let transfers = res.data.resultDto.transfers;
                                 for (let i in transfers) {
-                                    if(i.toString() === '0'){
-                                        transfers[i].txValue = timesDecimals( transfers[i].txValue,res.data.resultDto.decimals).toString();
-                                    }
+                                    transfers[i].txValue = LeftShiftEight(transfers[i].txValue).toString();
                                 }
                             }else{
                                 _self.txdetail.resultDto.transfers=[];
@@ -425,5 +423,6 @@ export default {
     .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex-change>div{
         text-align: left;
         white-space: initial;
+        word-break: break-all;
     }
 </style>

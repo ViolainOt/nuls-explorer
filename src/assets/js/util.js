@@ -136,5 +136,14 @@ export function timesDecimals(nu,decimals) {
     let newNu = new BigNumber(Division(nu, Power(decimals)).toString());
     return newNu.toFormat().replace(/[,]/g, '');
 }
-
+/**
+ * 左移八位
+ * Execute the float addition
+ * @param arg
+ * @returns {BigNumber}
+ */
+export function LeftShiftEight(arg) {
+    let left8 = new BigNumber(0.00000001);
+    return left8.times(arg);
+}
 

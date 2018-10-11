@@ -122,4 +122,9 @@ h1 {
     bottom: 0;
     left: 0;
 }
+.flex2{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
 /*base end*/

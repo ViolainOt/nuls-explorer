@@ -135,7 +135,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:nth-child(1){
     width:6%;
 }

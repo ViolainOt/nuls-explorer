@@ -358,6 +358,7 @@ header .nuls-head-content .nuls-logo-content{
     width:108px;
     height:68px;
     background: url(../img/logo.png) 0 13px no-repeat;
+    /*background: url(../img/testnet-logo.svg) 0 13px no-repeat;*/
 }
 header .nuls-head-content ul{
     height: 68px;

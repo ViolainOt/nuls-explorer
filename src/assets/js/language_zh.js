@@ -174,6 +174,8 @@ module.exports = {
         to: '接收人',
         value: '数额',
         date: '日期',
+        tokenTips1: '当前账户拥有',
+        // tokenTips2: 'Tokens',
     },
     notice: {
         noNet: '数据获取失败，请检查网络链接',

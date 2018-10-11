@@ -17,7 +17,7 @@
                 <span>{{$t("tokensList.symbol")}}</span>
                 <span class="total-supply">{{$t("tokensList.totalSupply")}}</span>
                 <span>{{$t("tokensList.decimas")}}</span>
-                <span>{{$t("tokensList.created")}}</span>
+                <!--<span>{{$t("tokensList.created")}}</span>-->
               </li>
             </ul>
           </span>
@@ -31,7 +31,7 @@
                 <span>{{item.symbol}}</span>
                 <span class="total-supply">{{item.totalsupply}}</span>
                 <span>{{item.decimals}}</span>
-                <span>{{item.createTime | formatDate}}</span>
+                <!--<span>{{item.createTime | formatDate}}</span>-->
               </li>
             </ul>
           </span>
@@ -140,5 +140,8 @@
 <style scoped>
     ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span.total-supply{
         width:176px;
+    }
+    .nuls-second-type .nuls-title {
+        margin-top: 30px;
     }
 </style>

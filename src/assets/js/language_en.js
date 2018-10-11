@@ -127,7 +127,7 @@ module.exports = {
         },
         results:{
             i0:'Success',
-            i1:'Fail',
+            i1:'failed',
         },
         transTime:'Date',
         transFee: "Transaction Fee",
@@ -166,7 +166,7 @@ module.exports = {
         freezeBalance: 'Freeze',
         transactionCount: 'Transactions',
         transaction: 'Transaction',
-        tokenTransfers: 'NRC-20 TokenTransfers',
+        tokenTransfers: 'NRC-20 Transfers',
         tokenBalance: 'Token Balance',
         balance: 'Balance',
         txID: 'TxID',
@@ -174,6 +174,8 @@ module.exports = {
         to: 'To',
         value: 'Value',
         date: 'Date',
+        tokenTips1: 'The current address own ',
+        // tokenTips2: ' Tokens',
     },
     notice: {
         noNet: 'Failed to read data, please check the network',

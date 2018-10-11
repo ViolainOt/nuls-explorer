@@ -64,10 +64,10 @@
           <span>
             <ul class="nuls-ul-sub-table">
               <li>
-                <span>{{$t("tokensDetail.txID")}}</span>
-                <span>{{$t("tokenCommom.token")}}</span>
-                <span>{{$t("tokensDetail.from")}}</span>
-                <span>{{$t("tokensDetail.to")}}</span>
+                <span class="td-s">{{$t("tokensDetail.txID")}}</span>
+                <!--<span>{{$t("tokenCommom.token")}}</span>-->
+                <span class="td-s">{{$t("tokensDetail.from")}}</span>
+                <span class="td-s">{{$t("tokensDetail.to")}}</span>
                 <span>{{$t("tokensDetail.value")}}</span>
                 <span>{{$t("tokensDetail.date")}}</span>
               </li>
@@ -78,10 +78,10 @@
           <span>
             <ul class="nuls-ul-sub-table">
               <li v-for="item in transList">
-                <span><router-link :to="{path:'/transactionHash',query:{hash:item.createTxHash,type:item.type}}">{{item.txHash}}</router-link></span>
-                <span>{{item.name}}</span>
-                <span><span v-if="item.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:item.fromAddress}}">{{item.fromAddress | formatString}}</router-link></span></span>
-                <span><span v-if="item.toAddress"><router-link :to="{path:'/accountInfo',query:{address:item.toAddress}}">{{item.toAddress | formatString}}</router-link></span></span>
+                <span class="td-s"><router-link :to="{path:'/transactionHash',query:{hash:item.createTxHash,type:item.type}}">{{item.txHash | formatString}}</router-link></span>
+                <!--<span>{{item.name}}</span>-->
+                <span class="td-s"><span v-if="item.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:item.fromAddress}}">{{item.fromAddress | formatString}}</router-link></span></span>
+                <span class="td-s"><span v-if="item.toAddress"><router-link :to="{path:'/accountInfo',query:{address:item.toAddress}}">{{item.toAddress | formatString}}</router-link></span></span>
                 <span>{{item.txValue}} {{accountInfo.tokenName}}</span>
                 <span>{{item.createTime | formatDate}}</span>
                 <!--<span><router-link :to="{path:'/tokens/tokenDetail',query:{height:block.height}}">{{block.createTime | formatDate}}</router-link></span>-->
@@ -131,7 +131,7 @@
               <li v-for="(item,index) in holdersList">
                 <span>{{index+1}}</span>
                 <span><span v-if="item.accountAddress">{{item.accountAddress | formatString}}</span></span>
-                <span>{{item.amount}}</span>
+                <span :title="item.amount">{{item.amount}}</span>
                 <span>{{item.per}}</span>
               </li>
             </ul>
@@ -325,6 +325,12 @@
     }
 </script>
 
-<style>
+<style scoped>
+    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span.td-s,ul.nuls-ul-table li.content > span>ul.nuls-ul-sub-table>li > span.td-s{
+        width:10%;
+    }
+    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span.td-m,ul.nuls-ul-table li.content > span>ul.nuls-ul-sub-table>li > span.td-m{
+        width:10%;
+    }
 </style>
 

@@ -15,18 +15,18 @@
         <div class="mobile-auto-fix">
             <ul class="nuls-ul-table">
                 <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("blockList.height")}}</span>
-                <span>{{$t("blockList.time")}}</span>
-                <span>{{$t("blockList.transactionCount")}}</span>
-                <span>{{$t("blockList.blockNodeName")}}</span>
-                <span>{{$t("blockList.size")}}(byte)</span>
-                <span>{{$t("blockList.blockReward")}}</span>
-              </li>
-            </ul>
-          </span>
+                  <span>
+                    <ul class="nuls-ul-sub-table">
+                      <li>
+                        <span>{{$t("blockList.height")}}</span>
+                        <span>{{$t("blockList.time")}}</span>
+                        <span>{{$t("blockList.transactionCount")}}</span>
+                        <span>{{$t("blockList.blockNodeName")}}</span>
+                        <span>{{$t("blockList.size")}}(byte)</span>
+                        <span>{{$t("blockList.blockReward")}}</span>
+                      </li>
+                    </ul>
+                  </span>
                 </li>
                 <li class="content">
           <span>
