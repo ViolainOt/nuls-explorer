@@ -130,7 +130,7 @@
             <ul class="nuls-ul-sub-table">
               <li v-for="(item,index) in holdersList">
                 <span>{{index+1}}</span>
-                <span><span v-if="item.accountAddress">{{item.accountAddress | formatString}}</span></span>
+                <span><span v-if="item.accountAddress"><router-link :to="{path:'/accountInfo',query:{address:item.accountAddress}}">{{item.accountAddress | formatString}}</router-link></span></span>
                 <span :title="item.amount">{{item.amount}}</span>
                 <span>{{item.per}}</span>
               </li>

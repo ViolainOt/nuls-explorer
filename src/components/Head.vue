@@ -61,54 +61,69 @@
                     </div>
                 </div>
             </div>
-            <!--适配手机端-->
-            <!--Adaptable mobile terminal-->
-            <div class="menu-mobile">
-                <div class="flex2">
-                    <div class="nuls-logo-content"></div>
-                    <div @click="showMenu"><i class="el-icon-menu"></i></div>
-                </div>
-                <el-row class="show-menu" v-show="showMenus">
-                    <el-col :span="24">
-                        <el-menu
-                            default-active="2"
-                            class="el-menu-vertical-demo"
-                            @open="handleOpen"
-                            @close="handleClose"
-                            background-color="#545c64"
-                            text-color="#fff"
-                            active-text-color="#ffd04b">
-                            <el-submenu index="2">
-                                <template slot="title">
-                                    <span>导航一</span>
-                                </template>
-                                <el-menu-item-group>
-                                    <template slot="title">分组一</template>
-                                    <el-menu-item index="2-1">选项1</el-menu-item>
-                                    <el-menu-item index="2-2">选项2</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group title="分组2">
-                                    <el-menu-item index="2-3">选项3</el-menu-item>
-                                </el-menu-item-group>
-                                <el-submenu index="2-4">
-                                    <template slot="title">选项4</template>
-                                    <el-menu-item index="2-4-1">选项1</el-menu-item>
-                                </el-submenu>
-                            </el-submenu>
-                            <el-menu-item index="3">
-                                <span slot="title">导航二</span>
-                            </el-menu-item>
-                            <el-menu-item index="4">
-                                <span slot="title">导航三</span>
-                            </el-menu-item>
-                            <el-menu-item index="5">
-                                <span slot="title">导航四</span>
-                            </el-menu-item>
-                        </el-menu>
-                    </el-col>
-                </el-row>
-            </div>
             <div class="clear"></div>
+        </div>
+        <!--适配手机端-->
+        <!--Adaptable mobile terminal-->
+        <div class="nuls-head-content-mobile">
+            <div class="flex2">
+                <div class="nuls-logo-content"></div>
+                <div @click="showMenu"><i class="el-icon-menu"></i></div>
+            </div>
+            <div class="nuls-search-box">
+                <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search"
+                       @keyup.enter="search" value="" type="text"/>
+                <i class="el-icon-search pointer" @click="search"></i>
+            </div>
+            <el-row class="show-menu" v-show="showMenus">
+                <el-col :span="24">
+                    <el-menu
+                        default-active="2"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose"
+                        background-color="#0b1422"
+                        text-color="#fff"
+                        active-text-color="#88baff">
+                        <el-menu-item index="1">
+                            <span slot="title"><router-link to="/">{{$t("nav.index")}}</router-link></span>
+                        </el-menu-item>
+                        <el-submenu index="2">
+                            <template slot="title">
+                                <span>{{$t("nav.rank")}}</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="2-1"><router-link to="/cashAccount">{{$t("nav.currencyAccount")}}</router-link></el-menu-item>
+                                <el-menu-item index="2-2"><router-link to="/pieceOfAccount">{{$t("nav.outPieceAccount")}}</router-link></el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-menu-item index="3">
+                            <span slot="title"><router-link to="/tokens/tokensList">{{$t("nav.tokens")}}</router-link></span>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <span slot="title"><router-link to="/contracts/contractsList">{{$t("nav.contracts")}}</router-link></span>
+                        </el-menu-item>
+                        <el-submenu index="5">
+                            <template slot="title">
+                                <span>{{$t("nav.wallet")}}</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="2-1"><a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a></el-menu-item>
+                                <el-menu-item index="2-2"><a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a></el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-submenu index="6">
+                            <template slot="title">
+                                <span>{{langText}}</span>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item index="2-1"><span @click="change('zh')">中文</span></el-menu-item>
+                                <el-menu-item index="2-2"><span @click="change('en')">English</span></el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                    </el-menu>
+                </el-col>
+            </el-row>
         </div>
     </header>
 </template>
@@ -199,43 +214,72 @@
                 /*clear the search box*/
                 _self.$refs.search.value = "";
             },
-            showMenu(){
-                this.showMenus=!this.showMenus;
+            showMenu() {
+                this.showMenus = !this.showMenus;
             },
         }
     }
 </script>
 
 <style scoped lang="less" type="text/less">
-    .head{
-        .nuls-head-content{
-           .menu-mobile{
-               display:none;
-           }
+    .head {
+        .nuls-head-content-mobile {
+            display: none;
         }
     }
+
     @media screen and (max-width: 768px) {
-        .head{
-            .nuls-head-content{
-                .menu-mobile{
-                    display:block;
-                    .el-icon-menu{
-                        font-size: 22px;
+        header.head {
+            .nuls-head-content {
+                display: none;
+            }
+            .nuls-head-content-mobile {
+                .nuls-logo-content{
+                    width:108px;
+                    height:68px;
+                    background: url(../assets/img/logo.png) 0 13px no-repeat;
+                    /*background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;*/
+                }
+                display: block;
+                .el-icon-menu {
+                    font-size: 22px;
+                }
+                .show-menu {
+                    position: fixed;
+                    right: 0;
+                    width:100%;
+                    z-index:100;
+                }
+                .nuls-search-box{
+                    background-color: #384252;
+                    flex: 1;
+                    position: relative;
+                    height: 26px;
+                    line-height: 26px;
+                    margin-left: 1%;
+                    margin-right: 1%;
+                    margin-bottom:10px;
+                    input{
+                        position: absolute;
+                        left: 1%;
+                        outline: 0;
+                        color: #bcc4cc;
+                        width: 75%;
+                        background-color: transparent;
+                        border:none;
+                        font-size: 0.875em;
+                        height: 26px;
                     }
-                    .show-menu{
-                        position:fixed;
-                        right:0;
-                        ul.el-menu-vertical-demo{
-                            height:auto;
-                            li.el-menu-item,li.el-submenu{
-                                float:none;
-                                width:auto;
-                            }
-                        }
+                    i{
+                        position: absolute;
+                        right: 6px;
+                        top: 2px;
+                        font-size: 1.2em;
                     }
                 }
-                .menu-left,.menu-right{
-                   display:none;
+                ul, li {
+                    height: auto;
+                    width: auto;
                 }
             }
         }
