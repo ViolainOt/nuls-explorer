@@ -61,53 +61,6 @@
                     </div>
                 </div>
             </div>
-            <!--适配手机端-->
-            <!--Adaptable mobile terminal-->
-            <div class="menu-mobile">
-                <div class="flex2">
-                    <div class="nuls-logo-content"></div>
-                    <div @click="showMenu"><i class="el-icon-menu"></i></div>
-                </div>
-                <el-row class="show-menu" v-show="showMenus">
-                    <el-col :span="24">
-                        <el-menu
-                            default-active="2"
-                            class="el-menu-vertical-demo"
-                            @open="handleOpen"
-                            @close="handleClose"
-                            background-color="#545c64"
-                            text-color="#fff"
-                            active-text-color="#ffd04b">
-                            <el-submenu index="2">
-                                <template slot="title">
-                                    <span>导航一</span>
-                                </template>
-                                <el-menu-item-group>
-                                    <template slot="title">分组一</template>
-                                    <el-menu-item index="2-1">选项1</el-menu-item>
-                                    <el-menu-item index="2-2">选项2</el-menu-item>
-                                </el-menu-item-group>
-                                <el-menu-item-group title="分组2">
-                                    <el-menu-item index="2-3">选项3</el-menu-item>
-                                </el-menu-item-group>
-                                <el-submenu index="2-4">
-                                    <template slot="title">选项4</template>
-                                    <el-menu-item index="2-4-1">选项1</el-menu-item>
-                                </el-submenu>
-                            </el-submenu>
-                            <el-menu-item index="3">
-                                <span slot="title">导航二</span>
-                            </el-menu-item>
-                            <el-menu-item index="4">
-                                <span slot="title">导航三</span>
-                            </el-menu-item>
-                            <el-menu-item index="5">
-                                <span slot="title">导航四</span>
-                            </el-menu-item>
-                        </el-menu>
-                    </el-col>
-                </el-row>
-            </div>
             <div class="clear"></div>
         </div>
     </header>
@@ -206,38 +159,6 @@
     }
 </script>
 
-<style scoped lang="less" type="text/less">
-    .head{
-        .nuls-head-content{
-           .menu-mobile{
-               display:none;
-           }
-        }
-    }
-    @media screen and (max-width: 768px) {
-        .head{
-            .nuls-head-content{
-                .menu-mobile{
-                    display:block;
-                    .el-icon-menu{
-                        font-size: 22px;
-                    }
-                    .show-menu{
-                        position:fixed;
-                        right:0;
-                        ul.el-menu-vertical-demo{
-                            height:auto;
-                            li.el-menu-item,li.el-submenu{
-                                float:none;
-                                width:auto;
-                            }
-                        }
-                    }
-                }
-                .menu-left,.menu-right{
-                   display:none;
-                }
-            }
-        }
-    }
+<style>
+
 </style>
