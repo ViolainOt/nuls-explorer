@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
 import '../assets/css/app.css'
-import '../assets/css/base.css'
+import '../assets/css/base.less'
 import Router from 'vue-router'
 import major from '@/pages/major'
 import home from '@/pages/home'

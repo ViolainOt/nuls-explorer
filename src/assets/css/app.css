@@ -576,13 +576,13 @@ footer .nuls-footer a.gitter i {
     margin-top: 15px;
 }
 .nuls-home-content .nuls-home-content-top .nuls-home-content-top-right .nuls-home-content-head-right-content .nuls-head-block-list{
-    width: 92%;
+    width: 100%;
     border-left: 2px solid #658ec7;
     background-color: #17202e;
     font-size: 0.875em;
     color: #fff;
     margin-top: 10px;
-    padding: 3% 4% 0 4%;
+    padding: 3% 4% 0;
 
 }
 .nuls-home-content .nuls-home-content-top .nuls-home-content-top-right .nuls-home-content-head-right-content .nuls-head-block-list .address{
@@ -594,7 +594,7 @@ footer .nuls-footer a.gitter i {
     float: left;
 }
 .nuls-home-content .nuls-home-content-top .nuls-message-list{
-    width: 90%;
+    width: 100%;
     padding: 2% 5% 2% 4%;
     color: #fff;
     background-color: #17202e;
@@ -630,7 +630,7 @@ footer .nuls-footer a.gitter i {
     margin-top: 16px;
 }
 .nuls-home-content .nuls-home-content-accountinfo .nuls-message-list{
-    width: 96%;
+    width: 100%;
     padding: 2%;
 }
 .nuls-home-content .nuls-home-content-next{
@@ -717,7 +717,7 @@ footer .nuls-footer a.gitter i {
     border-left-color: #1db7ea;
 }*/
 .nuls-transaction-list li{
-    width: 94%;
+    width: 100%;
     list-style: none;
     color: #fff;
     background-color: #17202e;

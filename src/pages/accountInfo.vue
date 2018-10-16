@@ -49,10 +49,12 @@
                             <div class="nuls-home-content-next clear" v-show="txCount1 > 0">
                                 <ul class="nuls-transaction-list">
                                     <li v-for="(txlist,key) in transList" :class="'transactions_i'+txlist.type">
-                                        <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
+                                        <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}
+                                        </div>
                                         <div class="flex block_split">
                                             <div class="hash flex-auto text-hidden">
-                                                <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+                                                <span class="baseColor pointer"
+                                                      @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
                                             </div>
                                             <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                                         </div>
@@ -81,7 +83,8 @@
                                                    class="baseColor pointer text-hidden"
                                                    @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
                                             </div>
-                                            <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
+                                            <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i>
+                                            </div>
                                             <div class="output_div text-align-right text-hidden">
                                                 <p v-for="outputlist in txlist.outputList"
                                                    class="text-hidden baseColor pointer"
@@ -121,84 +124,99 @@
                     <el-tab-pane :label="$t('accountInfo.tokenTransfers')" name="second">
                         <!--contractInfo tab start-->
                         <div class="mobile-auto-fix" v-show="txCount2 > 0">
-                            <ul class="nuls-ul-table">
-                                <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("accountInfo.txID")}}</span>
-                <span>{{$t("accountInfo.from")}}</span>
-                <span>{{$t("accountInfo.to")}}</span>
-                <span>{{$t("accountInfo.value")}}</span>
-                <span>{{$t("accountInfo.date")}}</span>
-              </li>
-            </ul>
-          </span>
-                                </li>
-                                <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="block in tokenList">
-                <span>{{block.txHash}}</span>
-                <span><span v-if="block.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:block.fromAddress}}">{{block.fromAddress|formatString}}</router-link></span></span>
-                <span ><span v-if="block.toAddress"><router-link :to="{path:'/accountInfo',query:{address:block.toAddress}}">{{ block.toAddress|formatString}}</router-link></span></span>
-                <span>{{block.txValue}}</span>
-                <span>{{block.createTime  | formatDate}}</span>
-              </li>
-            </ul>
-          </span>
-                                </li>
-                                <li class="foot">
-          <span>
-            <el-pagination
-                background
-                :prev-text="$t('page.previous')"
-                :next-text="$t('page.next')"
-                layout="total,prev, pager, next,jumper"
-                @current-change="nulsTokenList"
-                :page-size=this.pageSize
-                :current-page=this.currentPage2
-                :total=this.totalDataNumber2>
-            </el-pagination>
-                </span>
-                                </li>
-                            </ul>
-
+                            <table boeder="1" class="nuls-ul-table">
+                                <thead>
+                                <tr>
+                                    <th class="space-th"></th>
+                                    <th>{{$t('accountInfo.txID')}}</th>
+                                    <th>{{$t('accountInfo.from')}}</th>
+                                    <th>{{$t('accountInfo.to')}}</th>
+                                    <th>{{$t('accountInfo.value')}}</th>
+                                    <th>{{$t('accountInfo.date')}}</th>
+                                    <th class="space-th"></th>
+                                </tr>
+                                </thead>
+                                <tbody v-if="tokenList.length!==0">
+                                <tr v-for="block in tokenList">
+                                    <td class="space-td"></td>
+                                    <td :data-label="$t('accountInfo.txID')">{{block.txCount}}</td>
+                                    <td :data-label="$t('accountInfo.from')">
+                                        <span v-if="block.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:block.fromAddress}}">{{block.fromAddress|formatString}}</router-link></span>
+                                    </td>
+                                    <td :data-label="$t('accountInfo.to')">
+                                        <span v-if="block.toAddress"><router-link :to="{path:'/accountInfo',query:{address:block.toAddress}}">{{ block.toAddress|formatString}}</router-link></span>
+                                    </td>
+                                    <td :data-label="$t('accountInfo.value')">{{block.txValue}}</td>
+                                    <td :data-label="$t('accountInfo.date')" class="td-last">{{block.createTime  | formatDate}}</td>
+                                    <td class="space-td"></td>
+                                </tr>
+                                </tbody>
+                                <tbody v-else>
+                                <tr class="big-show">
+                                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                                </tr>
+                                <tr class="small-show">
+                                    <td :data-label="$t('accountInfo.txID')">{{ $t('notice.noMessage') }}</td>
+                                    <td :data-label="$t('accountInfo.from')">{{ $t('notice.noMessage') }}</td>
+                                    <td :data-label="$t('accountInfo.to')">{{ $t('notice.noMessage') }}</td>
+                                    <td :data-label="$t('accountInfo.value')">{{ $t('notice.noMessage') }}</td>
+                                    <td :data-label="$t('accountInfo.date')">{{ $t('notice.noMessage') }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="foot-pagination">
+                                <el-pagination
+                                    background
+                                    :prev-text="$t('page.previous')"
+                                    :next-text="$t('page.next')"
+                                    layout="total,prev, pager, next,jumper"
+                                    @current-change="nulsTokenList"
+                                    :page-size=this.pageSize
+                                    :current-page=this.currentPage2
+                                    :total=this.totalDataNumber2>
+                                </el-pagination>
+                            </div>
                         </div>
                         <!--contractInfo tab start-->
                     </el-tab-pane>
                     <el-tab-pane name="third">
                         <span slot="label">
                             <span>{{$t('accountInfo.tokenBalance')}}</span>
-                            <el-tooltip class="item" effect="dark" :content="$t('accountInfo.tokenTips1')+txCount3+' Tokens'" placement="right-start">
+                            <el-tooltip class="item" effect="dark"
+                                        :content="$t('accountInfo.tokenTips1')+txCount3+' Tokens'"
+                                        placement="right-start">
                                <span class="token-number">{{[txCount3]}}</span>
                             </el-tooltip>
                         </span>
                         <!--contractInfo tab start-->
                         <div class="mobile-auto-fix" v-show="txCount3 > 0">
-                            <ul class="nuls-ul-table">
-                                <li class="head">
-                              <span>
-                                <ul class="nuls-ul-sub-table">
-                                  <li>
-                                    <span>{{$t("tokenCommom.token")}}</span>
-                                    <span>{{$t("tokenCommom.balance")}}</span>
-                                  </li>
-                                </ul>
-                              </span>
-                                </li>
-                                <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="block in TokenBalanceList">
-                <span><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.symbol}}</router-link></span>
-                <span>{{block.amount}}</span>
-              </li>
-            </ul>
-          </span>
-                                </li>
-                            </ul>
-
+                            <table boeder="1" class="nuls-ul-table">
+                                <thead>
+                                <tr>
+                                    <th class="space-th"></th>
+                                    <th>{{$t('tokenCommom.token')}}</th>
+                                    <th>{{$t('tokenCommom.balance')}}</th>
+                                    <th class="space-th"></th>
+                                </tr>
+                                </thead>
+                                <tbody v-if="TokenBalanceList.length!==0">
+                                <tr v-for="block in TokenBalanceList">
+                                    <td class="space-td"></td>
+                                    <td :data-label="$t('tokenCommom.token')"><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.symbol}}</router-link></td>
+                                    <td :data-label="$t('tokenCommom.balance')" class="td-last">{{block.amount}}</td>
+                                    <td class="space-td"></td>
+                                </tr>
+                                </tbody>
+                                <tbody v-else>
+                                <tr class="big-show">
+                                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                                </tr>
+                                <tr class="small-show">
+                                    <td :data-label="$t('tokenCommom.token')">{{ $t('notice.noMessage') }}</td>
+                                    <td :data-label="$t('tokenCommom.balance')">{{ $t('notice.noMessage') }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <!--contractInfo tab start-->
                     </el-tab-pane>
@@ -213,10 +231,25 @@
 </template>
 
 <script>
-    import {getAccountByAddress, getTxListByAddress,getTokenListByAddress,getTokenBalanceListByAddress} from "../assets/js/nuls.js";
-    import {formatDate, getInfactCoin, getTransactionResultAmount,formatString,LeftShift,Power,newBigNumber,timesDecimals} from '../assets/js/util.js';
+    import {
+        getAccountByAddress,
+        getTxListByAddress,
+        getTokenListByAddress,
+        getTokenBalanceListByAddress
+    } from "../assets/js/nuls.js";
+    import {
+        formatDate,
+        getInfactCoin,
+        getTransactionResultAmount,
+        formatString,
+        LeftShift,
+        Power,
+        newBigNumber,
+        timesDecimals
+    } from '../assets/js/util.js';
     import {brotherComponents} from '../assets/js/public.js';
     import {BigNumber} from 'bignumber.js'
+
     export default {
         name: "blockDetail",
         data() {
@@ -247,8 +280,8 @@
                     status: 0,
                     size: 110
                 }],
-                tokenList:[],
-                TokenBalanceList:[],
+                tokenList: [],
+                TokenBalanceList: [],
                 activeName: 'first'
             }
         },
@@ -270,7 +303,7 @@
             getInfactCoin(count) {
                 return Math.abs(getInfactCoin(count));
             },
-            formatString(str){
+            formatString(str) {
                 return formatString(str);
             },
         },
@@ -320,8 +353,8 @@
             *跳转交易详情
             * to transaction detail
             */
-            toTransactionHash: function (hash,type) {
-                this.$router.push({path: '/transactionHash', query: {hash: hash,type:type}});
+            toTransactionHash: function (hash, type) {
+                this.$router.push({path: '/transactionHash', query: {hash: hash, type: type}});
             },
 
             nulsloadDetail: function () {
@@ -382,18 +415,21 @@
                 if (pageNumber !== 1) {
                     history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
                 }
-                getTokenListByAddress({"address":_self.address},{"pageNumber": pageNumber, "pageSize": _self.pageSize},'' ,function (res) {
+                getTokenListByAddress({"address": _self.address}, {
+                    "pageNumber": pageNumber,
+                    "pageSize": _self.pageSize
+                }, '', function (res) {
                     loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
                     if (res.success) {
-                         _self.tokenList = res.data.list;
-                         _self.totalDataNumber2 = res.data.total;
-                         _self.txCount2 = _self.totalDataNumber2;
+                        _self.tokenList = res.data.list;
+                        _self.totalDataNumber2 = res.data.total;
+                        _self.txCount2 = _self.totalDataNumber2;
                         let list = res.data.list;
                         for (let i in list) {
                             //let powerNo = Power(list[i].decimals);
-                            list[i].txValue = timesDecimals(list[i].txValue,list[i].decimals).toString();
+                            list[i].txValue = timesDecimals(list[i].txValue, list[i].decimals).toString();
                         }
                     }
                     /*else{
@@ -417,7 +453,10 @@
                 if (pageNumber !== 1) {
                     history.pushState({}, "", "/accountInfo?currentPage=" + pageNumber + "&address=" + _self.address);
                 }
-                getTokenBalanceListByAddress({"address":_self.address},{"pageNumber": pageNumber, "pageSize": _self.pageSize},'' ,function (res) {
+                getTokenBalanceListByAddress({"address": _self.address}, {
+                    "pageNumber": pageNumber,
+                    "pageSize": _self.pageSize
+                }, '', function (res) {
                     loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
@@ -427,7 +466,7 @@
                         _self.txCount3 = _self.totalDataNumber3;
                         let list = res.data.list;
                         for (let i in list) {
-                            list[i].amount = timesDecimals(list[i].amount,list[i].decimals).toString();
+                            list[i].amount = timesDecimals(list[i].amount, list[i].decimals).toString();
                         }
                     }
                     /*else{
@@ -440,8 +479,8 @@
 </script>
 
 <style>
-    .token-number{
-        color:#82bd39;
-        padding-left:5px;
+    .token-number {
+        color: #82bd39;
+        padding-left: 5px;
     }
 </style>

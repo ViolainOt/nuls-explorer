@@ -50,49 +50,54 @@
         <div style="height:40px;"></div>
         <!--consensusNode block list start-->
         <div class="mobile-auto-fix">
-
-            <ul class="nuls-ul-table">
-                <li class="head">
-        <span>
-          <ul class="nuls-ul-sub-table">
-            <li>
-              <span>{{$t("blockList.height")}}</span>
-              <span>{{$t("blockList.time")}}</span>
-              <span>{{$t("blockList.transactionCount")}}</span>
-              <span>{{$t("blockList.size")}}(byte)</span>
-              <span>{{$t("blockList.blockReward")}}</span>
-            </li>
-          </ul>
-        </span>
-                </li>
-                <li class="content">
-        <span>
-          <ul class="nuls-ul-sub-table">
-            <li v-for="block in blockList">
-              <span><router-link :to="{path:'/blockDetail',query:{height:block.height}}">{{block.height}}</router-link></span>
-              <span>{{block.createTime | formatDate}}</span>
-              <span>{{block.txCount}}</span>
-              <span>{{block.size}}</span>
-              <span>{{block.reward |getInfactCoin}} NULS</span>
-            </li>
-          </ul>
-        </span>
-                </li>
-                <li class="foot">
-        <span>
-          <el-pagination
-              background
-              :prev-text="$t('page.previous')"
-              :next-text="$t('page.next')"
-              layout="total,prev, pager, next,jumper"
-              @current-change="nulsGetBlockList"
-              :page-size=this.pageSize
-              :current-page=this.currentPage
-              :total=this.totalDataNumber>
-            </el-pagination>
-                </span>
-            </li>
-        </ul>
+            <table boeder="1" class="nuls-ul-table">
+                <thead>
+                <tr>
+                    <th class="space-th"></th>
+                    <th>{{$t('blockList.height')}}</th>
+                    <th>{{$t('blockList.time')}}</th>
+                    <th>{{$t('blockList.transactionCount')}}</th>
+                    <th>{{$t('blockList.size')}}(byte)</th>
+                    <th>{{$t('blockList.blockReward')}}</th>
+                    <th class="space-th"></th>
+                </tr>
+                </thead>
+                <tbody v-if="blockList.length!==0">
+                <tr v-for="block in blockList">
+                    <td class="space-td"></td>
+                    <td :data-label="$t('blockList.height')"><router-link :to="{path:'/blockDetail',query:{height:block.height}}">{{block.height}}</router-link></td>
+                    <td :data-label="$t('blockList.time')">{{block.createTime | formatDate}}</td>
+                    <td :data-label="$t('blockList.transactionCount')">{{block.txCount}}</td>
+                    <td :data-label="$t('blockList.size')+'(byte)'">{{block.size}}</td>
+                    <td :data-label="$t('blockList.blockReward')" class="td-last">{{block.reward|getInfactCoin}} NULS</td>
+                    <td class="space-td"></td>
+                </tr>
+                </tbody>
+                <tbody v-else>
+                <tr class="big-show">
+                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                <tr class="small-show">
+                    <td :data-label="$t('blockList.height')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('blockList.time')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('blockList.transactionCount')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('blockList.size')+'(byte)'">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('blockList.blockReward')">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="foot-pagination">
+                <el-pagination
+                    background
+                    :prev-text="$t('page.previous')"
+                    :next-text="$t('page.next')"
+                    layout="total,prev, pager, next,jumper"
+                    @current-change="nulsGetBlockList"
+                    :page-size=this.pageSize
+                    :current-page=this.currentPage
+                    :total=this.totalDataNumber>
+                </el-pagination>
+            </div>
     </div>
     <!--consensusNode block list end-->
 </div>
