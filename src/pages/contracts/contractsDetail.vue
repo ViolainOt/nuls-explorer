@@ -109,33 +109,38 @@
                 <el-tab-pane :label="$t('contractsDetail.contractInfo')" name="second">
                     <!--contractInfo tab start-->
                     <div class="mobile-auto-fix">
-                        <ul class="nuls-ul-table">
-                            <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("contractsDetail.method")}}</span>
-                <span>{{$t("contractsDetail.parameter")}}</span>
-                <span>{{$t("contractsDetail.returnType")}}</span>
-              </li>
-            </ul>
-          </span>
-                            </li>
-                            <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="item in this.accountInfo.method">
-                <span>{{item.name}}</span>
-                <span>
-                    <span v-for="(itemArgs,index) in item.args">{{index+1===item.args.length ? itemArgs.name+" _"+itemArgs.type : itemArgs.name+" _"+itemArgs.type+","}}</span>
-                </span>
-                <span>{{item.returnArg}}</span>
-              </li>
-            </ul>
-          </span>
-        </li>
-     </ul>
-
+                        <table boeder="1" class="nuls-ul-table">
+                            <thead>
+                            <tr>
+                                <th class="space-th"></th>
+                                <th>{{$t('contractsDetail.method')}}</th>
+                                <th>{{$t('contractsDetail.parameter')}}</th>
+                                <th>{{$t('contractsDetail.returnType')}}</th>
+                                <th class="space-th"></th>
+                            </tr>
+                            </thead>
+                            <tbody v-if="accountInfo.method.length!==0">
+                            <tr v-for="item in accountInfo.method">
+                                <td class="space-td"></td>
+                                <td :data-label="$t('contractsDetail.method')">{{item.name}}</td>
+                                <td :data-label="$t('contractsDetail.parameter')" class="word-wrap">
+                                    <div><span v-for="(itemArgs,index) in item.args">{{index+1===item.args.length ? itemArgs.name+" _"+itemArgs.type : itemArgs.name+" _"+itemArgs.type+","}}</span></div>
+                                </td>
+                                <td :data-label="$t('contractsDetail.returnType')" class="td-last">{{item.returnArg}}</td>
+                                <td class="space-td"></td>
+                            </tr>
+                            </tbody>
+                            <tbody v-else>
+                            <tr class="big-show">
+                                <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                            </tr>
+                            <tr class="small-show">
+                                <td :data-label="$t('contractsDetail.method')">{{ $t('notice.noMessage') }}</td>
+                                <td :data-label="$t('contractsDetail.parameter')">{{ $t('notice.noMessage') }}</td>
+                                <td :data-label="$t('contractsDetail.returnType')">{{ $t('notice.noMessage') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <!--contractInfo tab start-->
                 </el-tab-pane>
@@ -284,14 +289,15 @@
     }
 </script>
 
-<style scoped>
-    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:first-child {
-        display: table-cell;
-        width: 7%;
-    }
-    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:nth-child(2) {
-        display: table-cell;
-        width: 20%;
-    }
+<style scoped lang="less" type="text/less">
+   table{
+       tr{
+           td.word-wrap{
+               min-height: 45px;
+               height:auto;
+               line-height: 2;
+           }
+       }
+   }
 </style>
 

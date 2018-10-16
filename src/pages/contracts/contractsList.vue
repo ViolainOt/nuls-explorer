@@ -7,47 +7,53 @@
         </div>
         <!--block list start-->
         <div class="mobile-auto-fix">
-            <ul class="nuls-ul-table">
-                <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("contractsList.address")}}</span>
-                <span>{{$t("contractsList.balance")}}</span>
-                <span>{{$t("contractsList.creator")}}</span>
-                <span>{{$t("contractsList.registerd")}}</span>
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="item in contractsList">
-                <span><router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:item.contractAddress}}">{{item.contractAddress | formatString}}</router-link></span>
-                <span>{{item.balance|getInfactCoin}}</span>
-                <span><router-link :to="{path:'/accountInfo',query:{address:item.creater}}">{{item.creater | formatString}}</router-link></span>
-                <span>{{item.createTime | formatDate}}</span>
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="foot">
-          <span>
-            <el-pagination
-                background
-                :prev-text="$t('page.previous')"
-                :next-text="$t('page.next')"
-                layout="total,prev, pager, next,jumper"
-                @current-change="nulsGetContractsList"
-                :page-size=this.pageSize
-                :current-page=this.currentPage
-                :total=this.totalDataNumber>
-            </el-pagination>
-                </span>
-                </li>
-            </ul>
-
+            <table boeder="1" class="nuls-ul-table">
+                <thead>
+                <tr>
+                    <th class="space-th"></th>
+                    <th>{{$t('contractsList.address')}}</th>
+                    <th>{{$t('contractsList.balance')}}</th>
+                    <th>{{$t('contractsList.creator')}}</th>
+                    <th>{{$t('contractsList.registerd')}}</th>
+                    <th class="space-th"></th>
+                </tr>
+                </thead>
+                <tbody v-if="contractsList.length!==0">
+                <tr v-for="item in contractsList">
+                    <td class="space-td"></td>
+                    <td :data-label="$t('contractsList.address')">
+                        <router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:item.contractAddress}}">{{item.contractAddress | formatString}}</router-link>
+                    </td>
+                    <td :data-label="$t('contractsList.balance')">{{item.balance|getInfactCoin}}</td>
+                    <td :data-label="$t('contractsList.creator')"><router-link :to="{path:'/accountInfo',query:{address:item.creater}}">{{item.creater | formatString}}</router-link></td>
+                    <td :data-label="$t('contractsList.registerd')" class="td-last">{{item.createTime | formatDate}}</td>
+                    <td class="space-td"></td>
+                </tr>
+                </tbody>
+                <tbody v-else>
+                <tr class="big-show">
+                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                <tr class="small-show">
+                    <td :data-label="$t('contractsList.address')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('contractsList.balance')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('contractsList.creator')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('contractsList.registerd')">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="foot-pagination">
+                <el-pagination
+                    background
+                    :prev-text="$t('page.previous')"
+                    :next-text="$t('page.next')"
+                    layout="total,prev, pager, next,jumper"
+                    @current-change="nulsGetContractsList"
+                    :page-size=this.pageSize
+                    :current-page=this.currentPage
+                    :total=this.totalDataNumber>
+                </el-pagination>
+            </div>
         </div>
         <!--block list end-->
     </div>
@@ -134,11 +140,6 @@
     }
 </script>
 
-<style scoped>
-    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span:nth-child(1){
-        width:13%;
-    }
-    .nuls-second-type .nuls-title {
-        margin-top: 30px;
-    }
+<style>
+
 </style>

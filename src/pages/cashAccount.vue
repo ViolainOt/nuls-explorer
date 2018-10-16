@@ -13,86 +13,50 @@
         <h3 class="nuls-hit">{{$t("outPieceAccount.pieceMessage")}}</h3>
         <div class="mobile-auto-fix">
             <!--cash list start-->
-            <table boeder="1" class="nuls-ul-table" width="100%">
+            <table boeder="1" class="nuls-ul-table">
                 <thead>
                 <tr>
+                    <th class="space-th"></th>
                     <th>{{$t('currencyAccount.number')}}</th>
                     <th>{{$t('currencyAccount.address')}}</th>
                     <th>{{$t('currencyAccount.balance')}}</th>
+                    <th class="space-th"></th>
                 </tr>
                 </thead>
                 <tbody v-if="blockList.length!==0">
                 <tr v-for="(block,key) in blockList">
+                    <td class="space-td"></td>
                     <td :data-label="$t('currencyAccount.number')">{{((currentPage-1)*pageSize)+key+1}}</td>
                     <td :data-label="$t('currencyAccount.address')">
                         <router-link :to="{path:'/accountInfo',query:{address:block.address}}">{{block.address}}</router-link>
                     </td>
-                    <td :data-label="$t('currencyAccount.balance')">{{block.total | getInfactCoin}}</td>
+                    <td :data-label="$t('currencyAccount.balance')" class="td-last">{{block.total | getInfactCoin}}</td>
+                    <td class="space-td"></td>
                 </tr>
                 </tbody>
                 <tbody v-else>
                 <tr class="big-show">
-                    <td colspan="5" class="no-data">{{ $t('message.noData') }}</td>
+                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
                 </tr>
                 <tr class="small-show">
-                    <td :data-label="$t('message.serviceAddressList2')">{{ $t('message.noData') }}</td>
-                    <td :data-label="$t('message.serviceAddressList3')">{{ $t('message.noData') }}</td>
-                    <td :data-label="$t('message.serviceAddressList6')">{{ $t('message.noData') }}</td>
-                    <td :data-label="$t('message.serviceAddressList7')">{{ $t('message.noData') }}</td>
+                    <td :data-label="$t('currencyAccount.number')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('currencyAccount.address')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('currencyAccount.balance')">{{ $t('notice.noMessage') }}</td>
                 </tr>
                 </tbody>
-                <div class="foot-pagination">
-                    <el-pagination
-                        background
-                        :prev-text="$t('page.previous')"
-                        :next-text="$t('page.next')"
-                        layout="total,prev, pager, next,jumper"
-                        @current-change="nulsGetBalanceListRank"
-                        :page-size=this.pageSize
-                        :current-page=this.currentPage
-                        :total=this.totalDataNumber>
-                    </el-pagination>
-                </div>
             </table>
-            <ul class="nuls-ul-table">
-                <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("currencyAccount.number")}}</span>
-                <span>{{$t("currencyAccount.address")}}</span>
-                <span class="text-align-left text-padding-7">{{$t("currencyAccount.balance")}}</span>
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="(block,key) in blockList">
-                <span>{{((currentPage-1)*pageSize)+key+1}}</span>
-                <span><router-link
-                    :to="{path:'/accountInfo',query:{address:block.address}}">{{block.address}}</router-link></span>
-                <span class="text-align-left text-padding-5">{{block.total | getInfactCoin}}</span>
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="foot">
-          <span>
-          <el-pagination
-              background
-              :prev-text="$t('page.previous')"
-              :next-text="$t('page.next')"
-              layout="total,prev, pager, next,jumper"
-              @current-change="nulsGetBalanceListRank"
-              :page-size=this.pageSize
-              :current-page=this.currentPage
-              :total=this.totalDataNumber>
-        </el-pagination>
-                </span>
-                </li>
-            </ul>
+            <div class="foot-pagination">
+                <el-pagination
+                    background
+                    :prev-text="$t('page.previous')"
+                    :next-text="$t('page.next')"
+                    layout="total,prev, pager, next,jumper"
+                    @current-change="nulsGetBalanceListRank"
+                    :page-size=this.pageSize
+                    :current-page=this.currentPage
+                    :total=this.totalDataNumber>
+                </el-pagination>
+            </div>
             <!--cash list end-->
         </div>
     </div>
@@ -187,7 +151,7 @@
    table.nuls-ul-table{
        tr{
            th:first-child,td:first-child{
-               width:10px!important;
+               /*width:10px!important;*/
            }
        }
    }

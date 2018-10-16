@@ -7,51 +7,54 @@
         </div>
         <!--block list start-->
         <div class="mobile-auto-fix">
-            <ul class="nuls-ul-table">
-                <li class="head">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li>
-                <span>{{$t("tokensList.rank")}}</span>
-                <span>{{$t("tokensList.token")}}</span>
-                <span>{{$t("tokensList.symbol")}}</span>
-                <span class="total-supply">{{$t("tokensList.totalSupply")}}</span>
-                <span>{{$t("tokensList.decimas")}}</span>
-                <!--<span>{{$t("tokensList.created")}}</span>-->
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="content">
-          <span>
-            <ul class="nuls-ul-sub-table">
-              <li v-for="(item,index) in list">
-                <span>{{index+1}}</span>
-                <span><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:item.contractAddress}}">{{item.tokenName}}</router-link></span>
-                <span>{{item.symbol}}</span>
-                <span class="total-supply">{{item.totalsupply}}</span>
-                <span>{{item.decimals}}</span>
-                <!--<span>{{item.createTime | formatDate}}</span>-->
-              </li>
-            </ul>
-          </span>
-                </li>
-                <li class="foot">
-          <span>
-            <el-pagination
-                background
-                :prev-text="$t('page.previous')"
-                :next-text="$t('page.next')"
-                layout="total,prev, pager, next,jumper"
-                @current-change="nulsGetTokensList"
-                :page-size=this.pageSize
-                :current-page=this.currentPage
-                :total=this.totalDataNumber>
-            </el-pagination>
-                </span>
-                </li>
-            </ul>
-
+            <table boeder="1" class="nuls-ul-table">
+                <thead>
+                <tr>
+                    <th class="space-th"></th>
+                    <th>{{$t('tokensList.rank')}}</th>
+                    <th>{{$t('tokensList.token')}}</th>
+                    <th>{{$t('tokensList.symbol')}}</th>
+                    <th>{{$t('tokensList.totalSupply')}}</th>
+                    <th>{{$t('tokensList.decimas')}}</th>
+                    <th class="space-th"></th>
+                </tr>
+                </thead>
+                <tbody v-if="list.length!==0">
+                <tr v-for="(item,index) in list">
+                    <td class="space-td"></td>
+                    <td :data-label="$t('tokensList.rank')">{{((currentPage-1)*pageSize)+index+1}}</td>
+                    <td :data-label="$t('tokensList.token')"><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:item.contractAddress}}">{{item.tokenName}}</router-link></td>
+                    <td :data-label="$t('tokensList.symbol')">{{item.symbol}}</td>
+                    <td :data-label="$t('tokensList.totalSupply')">{{item.totalsupply}}</td>
+                    <td :data-label="$t('tokensList.decimas')" class="td-last">{{item.decimals}}</td>
+                    <td class="space-td"></td>
+                </tr>
+                </tbody>
+                <tbody v-else>
+                <tr class="big-show">
+                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                <tr class="small-show">
+                    <td :data-label="$t('tokensList.rank')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('tokensList.token')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('tokensList.symbol')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('tokensList.totalSupply')">{{ $t('notice.noMessage') }}</td>
+                    <td :data-label="$t('tokensList.decimas')">{{ $t('notice.noMessage') }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="foot-pagination">
+                <el-pagination
+                    background
+                    :prev-text="$t('page.previous')"
+                    :next-text="$t('page.next')"
+                    layout="total,prev, pager, next,jumper"
+                    @current-change="nulsGetTokensList"
+                    :page-size=this.pageSize
+                    :current-page=this.currentPage
+                    :total=this.totalDataNumber>
+                </el-pagination>
+            </div>
         </div>
         <!--block list end-->
     </div>
@@ -138,9 +141,6 @@
 </script>
 
 <style scoped>
-    ul.nuls-ul-table>li > span>ul.nuls-ul-sub-table>li>span.total-supply{
-        width:176px;
-    }
     .nuls-second-type .nuls-title {
         margin-top: 30px;
     }
