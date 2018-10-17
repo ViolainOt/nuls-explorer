@@ -148,6 +148,7 @@ ul.nuls-ul-table li.foot > span {
     width: 100%;
     overflow: hidden;
     position: relative;
+    -webkit-overflow-scrolling: touch;
 }
 .nuls_child_content{
     position: absolute;
@@ -156,6 +157,7 @@ ul.nuls-ul-table li.foot > span {
     left: 0;
     right: 0;
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 /*container hide the scroll end*/
 
@@ -340,7 +342,8 @@ header .nuls-head-content .menu{
 header .nuls-head-content .nuls-logo-content{
     width:108px;
     height:68px;
-    background: url(../img/logo.png) 0 13px no-repeat;
+    background: url(../img/title.svg) 0 13px no-repeat;
+    background-size: 100%;
 }
 header .nuls-head-content ul{
     height: 68px;
