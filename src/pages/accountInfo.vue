@@ -139,7 +139,7 @@
                                 <tbody v-if="tokenList.length!==0">
                                 <tr v-for="block in tokenList">
                                     <td class="space-td"></td>
-                                    <td :data-label="$t('accountInfo.txID')">{{block.txCount}}</td>
+                                    <td :data-label="$t('accountInfo.txID')">{{block.txHash}}</td>
                                     <td :data-label="$t('accountInfo.from')">
                                         <span v-if="block.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:block.fromAddress}}">{{block.fromAddress|formatString}}</router-link></span>
                                     </td>

@@ -134,7 +134,7 @@ export default {
                 blockHeight: 0,
                 fee: 0,
                 inputs: [{txHash: '', address: '', value: 0}],
-                outputList: [{txHash: '', address: '', value: 0}],
+                outputs: [{txHash: '', address: '', value: 0}],
                 status: 0,
                 size: 110
             }],

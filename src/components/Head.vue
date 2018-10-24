@@ -43,7 +43,7 @@
             <div class="menu flex menu-border menu-right">
                 <div class="nuls-search-box">
                     <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search"
-                           @keyup.enter="search" value="" type="text"/>
+                           @keyup.enter="search" type="text" v-model="searchValue"/>
                     <i class="el-icon-search pointer" @click="search"></i>
                 </div>
                 <div class="nuls-language-box">
@@ -72,7 +72,7 @@
             </div>
             <div class="nuls-search-box">
                 <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search"
-                       @keyup.enter="search" value="" type="text"/>
+                       @keyup.enter="search" type="text" v-model="searchValue"/>
                 <i class="el-icon-search pointer" @click="search"></i>
             </div>
             <el-row class="show-menu" v-show="showMenus">
@@ -80,36 +80,34 @@
                     <el-menu
                         default-active="2"
                         class="el-menu-vertical-demo"
-                        @open="handleOpen"
-                        @close="handleClose"
                         background-color="#0b1422"
                         text-color="#fff"
                         active-text-color="#88baff">
                         <el-menu-item index="1">
-                            <span slot="title"><router-link to="/">{{$t("nav.index")}}</router-link></span>
+                            <span slot="title" @click="showMenu"><router-link to="/">{{$t("nav.index")}}</router-link></span>
                         </el-menu-item>
                         <el-submenu index="2">
                             <template slot="title">
                                 <span>{{$t("nav.rank")}}</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="2-1"><router-link to="/cashAccount">{{$t("nav.currencyAccount")}}</router-link></el-menu-item>
-                                <el-menu-item index="2-2"><router-link to="/pieceOfAccount">{{$t("nav.outPieceAccount")}}</router-link></el-menu-item>
+                                <el-menu-item index="2-1" @click="showMenu"><router-link to="/cashAccount">{{$t("nav.currencyAccount")}}</router-link></el-menu-item>
+                                <el-menu-item index="2-2" @click="showMenu"><router-link to="/pieceOfAccount">{{$t("nav.outPieceAccount")}}</router-link></el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-menu-item index="3">
-                            <span slot="title"><router-link to="/tokens/tokensList">{{$t("nav.tokens")}}</router-link></span>
+                            <span slot="title" @click="showMenu"><router-link to="/tokens/tokensList">{{$t("nav.tokens")}}</router-link></span>
                         </el-menu-item>
                         <el-menu-item index="4">
-                            <span slot="title"><router-link to="/contracts/contractsList">{{$t("nav.contracts")}}</router-link></span>
+                            <span slot="title" @click="showMenu"><router-link to="/contracts/contractsList">{{$t("nav.contracts")}}</router-link></span>
                         </el-menu-item>
                         <el-submenu index="5">
                             <template slot="title">
                                 <span>{{$t("nav.wallet")}}</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="2-1"><a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a></el-menu-item>
-                                <el-menu-item index="2-2"><a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a></el-menu-item>
+                                <el-menu-item index="2-1" @click="showMenu"><a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a></el-menu-item>
+                                <el-menu-item index="2-2" @click="showMenu"><a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a></el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                         <el-submenu index="6">
@@ -117,8 +115,8 @@
                                 <span>{{langText}}</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="2-1"><span @click="change('zh')">中文</span></el-menu-item>
-                                <el-menu-item index="2-2"><span @click="change('en')">English</span></el-menu-item>
+                                <el-menu-item index="2-1" @click="showMenu"><span @click="change('zh')">中文</span></el-menu-item>
+                                <el-menu-item index="2-2" @click="showMenu"><span @click="change('en')">English</span></el-menu-item>
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>
@@ -140,6 +138,7 @@
                 langText: "中文",
                 changeType: "changeType",
                 showMenus: false,
+                searchValue: '',
             }
         },
         created: function () {
@@ -169,9 +168,9 @@
             },
             search: function () {
                 /*show loading*/
-                let
-                    _self = this,
-                    serchVal = _self.$refs.search.value.replace(/(^\s*)|(\s*$)/g, "");
+                console.log(this.searchValue);
+                let _self = this,
+                    serchVal = _self.searchValue.replace(/(^\s*)|(\s*$)/g, "");
                 if (serchVal && serchVal.length > 0) {
                     var loading = this.$loading({
                         lock: true,
@@ -241,6 +240,12 @@
                     /*background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;*/
                 }
                 display: block;
+                .el-menu-item{
+                    span,a{
+                        display:inline-block;
+                        width:100%;
+                    }
+                }
                 .el-icon-menu {
                     font-size: 22px;
                 }
