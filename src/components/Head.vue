@@ -26,7 +26,7 @@
                         <a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a>
                 </div>
                 <div>
-                    <a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>
+                    <a class="pointer" href="http://testnet.wallet.nuls.io" target="_blank">{{$t("nav.webWallet")}}</a>
                 </div>
             </div>
         </li>

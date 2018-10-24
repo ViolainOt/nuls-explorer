@@ -24,7 +24,7 @@
                     </div>
                     <div class="tx_auto_flex block_split">
                         <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
-                        <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
+                        <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
     <div class="fee text-align-right"><span>
     <template v-if="txlist.type <= 2">
     {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
@@ -32,21 +32,21 @@
 </span></div>
                     </div>
                     <div class="clear"></div>
-                    <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputList[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
+                    <div class="flex flex-top block_split" v-if="txlist.inputs[0] || txlist.outputs[0]" :class="showScroll==key?'scrollHeight':'hideHeight'">
                         <div class="input_div text-hidden">
                             <p v-if="!txlist.inputs[0]">&nbsp;</p>
                             <p v-for="inputlist in txlist.inputs" class="baseColor pointer text-hidden" @click="toAccountInfo(inputlist.address)">{{inputlist.address}}</p>
                         </div>
                         <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
                         <div class="output_div text-align-right text-hidden">
-                            <p v-for="outputlist in txlist.outputList" class="text-hidden baseColor pointer" @click="toAccountInfo(outputlist.address)">{{outputlist.address}}</p>
+                            <p v-for="outputlist in txlist.outputs" class="text-hidden baseColor pointer" @click="toAccountInfo(outputlist.address)">{{outputlist.address}}</p>
                         </div>
                         <div class="tx_amount text-align-right">
-                            <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
+                            <p class="text-hidden" v-for="outputlist in txlist.outputs">{{outputlist.amount|getInfactCoin}} NULS</p>
                         </div>
                     </div>
                     <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
-                    <div v-if="txlist.inputs[4] || txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+                    <div v-if="txlist.inputs[4] || txlist.outputs[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
                 </li>
             </ul>
             <div class="clear"></div>
@@ -85,7 +85,7 @@ export default {
                 blockHeight: 0,
                 fee: 0,
                 inputs: [{txHash: '', address: '', value: 0}],
-                outputList: [{txHash: '', address: '', value: 0}],
+                outputs: [{txHash: '', address: '', value: 0}],
                 status: 0,
                 size: 110
             }],

@@ -21,33 +21,34 @@ Vue.use(Router);
 
 
 export default new Router({
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'major',
-      component: major,
-      children: [
-        {path: "/", component: home},
-        {path: "/index", component: home},
-        {path: "/home", component: home},
-        {path: "/transactionRecord", component: transactionRecord},
-        {path: "/blockList", component: blockList},
-        {path: "/transactionHash", component: transactionHash},
-        {path: "/blockDetail", component: blockDetail},
-        /*{path: "/blockDetail:height",name:"/blockDetail", component: blockDetail},*/
-        {path: "/pieceOfAccount", component: pieceOfAccount},
-        {path: "/accountInfo", component: accountInfo},
-        {path: "/consensusNode", component: consensusNode},
-        {path: "/cashAccount", component: cashAccount},
-        {path: "/loadSearch", component: loadSearch},
-      ]
-    },
-    {path: "/notFond", component: notFond},
-    {path: "*",component: notFond }
-  ]
-  ,scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
+    mode: 'history',
+    routes: [
+        {path: "*",component: notFond },
+        {
+            path: '/',
+            name: 'major',
+            component: major,
+            children: [
+                {path: "/", component: home},
+                {path: "/index", component: home},
+                {path: "/home", component: home},
+                {path: "/transactionRecord", component: transactionRecord},
+                {path: "/blockList", component: blockList},
+                {path: "/transactionHash", component: transactionHash},
+                {path: "/blockDetail", component: blockDetail},
+                /*{path: "/blockDetail:height",name:"/blockDetail", component: blockDetail},*/
+                {path: "/pieceOfAccount", component: pieceOfAccount},
+                {path: "/accountInfo", component: accountInfo},
+                {path: "/consensusNode", component: consensusNode},
+                {path: "/cashAccount", component: cashAccount},
+                {path: "/loadSearch", component: loadSearch},
+            ]
+        },
+        {path: "/notFond", component: notFond}
 
-  }
+    ]
+    ,scrollBehavior (to, from, savedPosition) {
+        return { x: 0, y: 0 }
+
+    }
 })

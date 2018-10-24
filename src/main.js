@@ -21,7 +21,6 @@ const i18n = new VueI18n({
 Vue.use(ElementUI,{
   i18n:(key,value) =>i18n.t(key,value)
 });
-
 new Vue({
   el: '#app',
   router,
