@@ -52,11 +52,11 @@ export function getInfactCoin(count){
     //return total.split('.')[1]?total.split('.')[1].length==1? total+"0":total:total+".00";
 };
 export function getTransactionResultAmount(txlist){
-    var outputlist = txlist.outputList,
+    var outputlist = txlist.outputs,
         inputlist = txlist.inputs,
         amout = 0;
     for(var i=0,outputObj;outputObj=outputlist[i++];){
-        amout+= outputObj.value;
+        amout+= outputObj.amount;
         for(var j=0,inputObj;inputObj=inputlist[j++];){
             if(outputObj.address==inputObj.address){
                 amout -= outputObj.value;

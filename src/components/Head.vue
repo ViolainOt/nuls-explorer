@@ -72,7 +72,7 @@
             </div>
             <div class="nuls-search-box">
                 <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search"
-                       @keyup.enter="search" type="text" v-model="searchValue"/>
+                       @keyup.enter="search" type="text" v-model.trim="searchValue"/>
                 <i class="el-icon-search pointer" @click="search"></i>
             </div>
             <el-row class="show-menu" v-show="showMenus">
@@ -142,6 +142,7 @@
             }
         },
         created: function () {
+            console.log('0.1')
             var lang = getDataToTemp(this.changeType);
             if (lang === "zh" || lang === "en") {
                 this.reloadLanguage(lang);
@@ -168,7 +169,7 @@
             },
             search: function () {
                 /*show loading*/
-                console.log(this.searchValue);
+                //console.log(this.searchValue);
                 let _self = this,
                     serchVal = _self.searchValue.replace(/(^\s*)|(\s*$)/g, "");
                 if (serchVal && serchVal.length > 0) {
@@ -193,7 +194,6 @@
                                     query: {queryType: res.data, queryValue: serchVal}
                                 });
                             }
-
                         } else {
                             _self.$notify({
                                 title: _self.$t("notice.notice"),
@@ -211,7 +211,8 @@
                     });
                 }
                 /*clear the search box*/
-                _self.$refs.search.value = "";
+                // _self.$refs.search.value = "";
+                _self.searchValue = "";
             },
             showMenu() {
                 this.showMenus = !this.showMenus;
