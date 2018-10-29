@@ -34,7 +34,8 @@
                                 <a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a>
                             </div>
                             <div>
-                                <a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>
+                                <!--<a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>-->
+                                <a class="pointer" href="http://testnet.wallet.nuls.io" target="_blank">{{$t("nav.webWallet")}}</a>
                             </div>
                         </div>
                     </li>
@@ -42,7 +43,7 @@
             </div>
             <div class="menu flex menu-border menu-right">
                 <div class="nuls-search-box">
-                    <input placeholder="Address / Txhash / Block / Token" class="pointer" ref="search"
+                    <input placeholder="Address / Txhash / Block" class="pointer" ref="search"
                            @keyup.enter="search" type="text" v-model="searchValue"/>
                     <i class="el-icon-search pointer" @click="search"></i>
                 </div>
@@ -237,8 +238,8 @@
                 .nuls-logo-content{
                     width:108px;
                     height:68px;
-                    background: url(../assets/img/logo.png) 0 13px no-repeat;
-                    /*background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;*/
+                    /*background: url(../assets/img/logo.png) 0 13px no-repeat;*/
+                    background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;
                 }
                 display: block;
                 .el-menu-item{

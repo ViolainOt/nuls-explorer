@@ -1,7 +1,7 @@
 export let nuls_server={
     nodeList:[
-        {host:"http://192.168.1.130:8765"},
-        //{host:"http://192.168.1.28:8765"},
+        // {host:"http://testnet.nulscan.io/"},
+        {host:"http://192.168.1.142:8765"},
         //{host:"http://192.168.1.118:8765"},
         {host:"https://apiserver.nuls.io"},
         {host:"http://192.168.1.59:8765"},

@@ -10,7 +10,7 @@
             </nav>
             <!--nav end-->
 
-            <div class="nuls-title text-align-center">ETH</div>
+            <div class="nuls-title text-align-center">{{accountInfo.tokenName}}</div>
         </div>
         <!--address detail start-->
         <div class="nuls-home-content-top nuls-home-content-accountinfo tx_background tx_border">
@@ -63,7 +63,7 @@
                                         <div class="block">
                                             <span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span>
                                         </div>
-                                        <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputList|arrayLength}}</span></div>
+                                        <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
                                         <div class="fee text-align-right">
                             <span>
                             <template v-if="txlist.type <= 2">
@@ -73,21 +73,21 @@
                                         </div>
                                     </div>
                                     <div class="clear"></div>
-                                    <div class="flex flex-top block_split" v-if="txlist.inputs!=null||txlist.outputList!=null" :class="showScroll==key?'scrollHeight':'hideHeight'">
+                                    <div class="flex flex-top block_split" v-if="txlist.inputs!=null||txlist.outputs!=null" :class="showScroll==key?'scrollHeight':'hideHeight'">
                                         <div class="input_div text-hidden">
                                             <p v-if="txlist.inputs==null">&nbsp;</p>
                                             <p v-else v-for="inputlist in txlist.inputs" class="baseColor pointer text-hidden" @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
                                         </div>
                                         <div class="tx_logo"><i class="nuls-img-icon nuls-img-right-action"></i></div>
                                         <div class="output_div text-align-right text-hidden">
-                                            <p v-for="outputlist in txlist.outputList" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
+                                            <p v-for="outputlist in txlist.outputs" class="text-hidden baseColor pointer" @click="reloadAccount(outputlist.address)">{{outputlist.address}}</p>
                                         </div>
                                         <div class="tx_amount text-align-right">
-                                            <p class="text-hidden" v-for="outputlist in txlist.outputList">{{outputlist.value|getInfactCoin}} NULS</p>
+                                            <p class="text-hidden" v-for="outputlist in txlist.outputs">{{outputlist.amount|getInfactCoin}} NULS</p>
                                         </div>
                                     </div>
                                     <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>
-                                    <div v-if="txlist.inputs!=null && txlist.inputs[4] || txlist.outputList!= null && txlist.outputList[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
+                                    <div v-if="txlist.inputs!=null && txlist.inputs[4] || txlist.outputs!= null && txlist.outputs[4]" class="tx_more text-align-center pointer"><a @click="showmore(key)"><i class="nuls-img-icon nuls-img-three-point pointer"></i></a></div>
                                 </li>
                             </ul>
                         <div class="text-align-right tx-pagination" v-if="txCount>0">
@@ -119,8 +119,8 @@
                                 <th class="space-th"></th>
                             </tr>
                             </thead>
-                            <tbody v-if="accountInfo.method.length!==0">
-                            <tr v-for="item in accountInfo.method">
+                            <tbody v-if="method.length!==0">
+                            <tr v-for="item in method">
                                 <td class="space-td"></td>
                                 <td :data-label="$t('contractsDetail.method')">{{item.name}}</td>
                                 <td :data-label="$t('contractsDetail.parameter')" class="word-wrap">
@@ -165,7 +165,8 @@
                 currentPage: 1,
                 pageSize: 20,
                 showScroll: -1,
-                accountInfo: {},
+                accountInfo: '',
+                method: [],
                 transList: [{
                     showClass: 1,
                     hash: ' ',
@@ -175,7 +176,7 @@
                     blockHeight: 0,
                     fee: 0,
                     inputs: [{txHash: '', address: '', value: 0}],
-                    outputList: [{txHash: '', address: '', value: 0}],
+                    outputs: [{txHash: '', address: '', amount: 0}],
                     status: 0,
                     size: 110
                 }],
@@ -251,6 +252,12 @@
                 getContractsDetail({"address":_self.address},function(res){
                     if (res.success) {
                         _self.accountInfo = res.data;
+                        for(let i in res.data.method){
+                            if(res.data.method[i].name==='<init>'){
+                                res.data.method.splice(i,1);
+                            }
+                        }
+                        _self.method=res.data.method;
                     }
                 });
             },

@@ -179,6 +179,19 @@ table.nuls-ul-table {
         white-space: normal;
     }
 }
+/**拖动条效果**/
+&::-webkit-scrollbar {
+    width: 3px;
+    height: 5px;
+}
+&::-webkit-scrollbar-track {
+    background-color: #222d3f;
+    border-radius: 10px;
+}
+&::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #658ec7;
+}
 @media screen and (max-width: 768px) {
     table.nuls-ul-table {
         border: 0;
@@ -228,18 +241,22 @@ table.nuls-ul-table {
     .foot-pagination {
         text-align: right;
         .el-pagination{
-            //text-align: right;
+            text-align: center;
             .el-pagination__jump{
                 padding-top:10px;
                 display:block;
             }
-            //.el-pagination__total,.btn-prev,.el-pager,.btn-next,.el-pagination__jump{
-            //    display:block;
-            //    text-align: right;
-            //}
-            //.el-pagination__total{
-            //    width:60px;
-            //}
+            .el-pagination__total,.btn-prev,.el-pager,.btn-next,.el-pagination__jump{
+                display:block;
+                margin:0 auto 5px;
+            }
+            .el-pagination__total{
+                width:90px;
+            }
+           //.btn-next{
+           //     display:block;
+           //     float:right;
+           // }
         }
     }
 }

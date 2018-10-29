@@ -131,12 +131,21 @@
                     </div>
                 </template>
                 <!--<div class="nuls-flex-cell flex flex-start" v-if="txdetail.type===101 || txdetail.type===102">-->
-                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.txData && txdetail.resultDto && txdetail.txData.methodName && txdetail.txData.args">
+                <div class="nuls-flex-cell flex flex-start" v-if="txdetail.txData && txdetail.resultDto && txdetail.txData.methodName">
                     <div class="nuls-flex-cell-title">{{$t("transDetail.method")}}</div>
                     <div class="nuls-flex-cell-flex-change text-hidden ">
-                        <div>{{$t("transDetail.methodName")}}{{txdetail.txData.methodName ? txdetail.txData.methodName : ''}}</div>
-                        <div>{{$t("transDetail.parameter")}}{{txdetail.txData.args ? txdetail.txData.args : ''}}</div>
-                        <div>{{$t("transDetail.backValue")}}{{txdetail.resultDto.result ? txdetail.resultDto.result : ''}}</div>
+                        <div class="flex">
+                            <div class="method-text">{{txdetail.txData.methodName ? txdetail.txData.methodName : ''}}</div>
+                            <div class="method-title">{{$t("transDetail.methodName")}}</div>
+                        </div>
+                        <div class="flex">
+                            <div class="method-text">{{txdetail.txData.args ? txdetail.txData.args : ''}}</div>
+                            <div class="method-title">{{$t("transDetail.parameter")}}</div>
+                        </div>
+                        <div class="flex">
+                            <div class="method-text">{{txdetail.resultDto.result ? txdetail.resultDto.result : ''}}</div>
+                            <div class="method-title">{{$t("transDetail.backValue")}}</div>
+                        </div>
                     </div>
                 </div>
 
@@ -420,9 +429,15 @@ export default {
         padding-top:5px;
         padding-bottom:5px;
     }
-    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex-change>div{
-        text-align: left;
+    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex-change>div.flex{
+        text-align: right;
         white-space: initial;
         word-break: break-all;
+        margin-bottom:10px;
+        justify-content: flex-end;
+        align-items: flex-start;
+    }
+    .nuls-home-content .nuls-home-content-top .nuls-flex-cell.flex-start .nuls-flex-cell-flex-change>div.flex>.method-title{
+        min-width: 95px;
     }
 </style>

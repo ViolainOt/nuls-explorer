@@ -179,8 +179,8 @@ ul.nuls-ul-table li.foot > span {
 
 /*public*/
 .hideHeight{
-    max-height: 118px;
-    overflow: hidden;
+    max-height: 150px;
+    overflow: auto;
 }
 .hideHeight_trans{
     max-height: 200px;
@@ -357,8 +357,8 @@ header .nuls-head-content .menu{
 header .nuls-head-content .nuls-logo-content{
     width:108px;
     height:68px;
-    background: url(../img/logo.png) 0 13px no-repeat;
-    /*background: url(../img/testnet-logo.svg) 0 13px no-repeat;*/
+    /*background: url(../img/logo.png) 0 13px no-repeat;*/
+    background: url(../img/testnet-logo.svg) 0 13px no-repeat;
 }
 header .nuls-head-content ul{
     height: 68px;
@@ -581,7 +581,7 @@ footer .nuls-footer a.gitter i {
     background-color: #17202e;
     font-size: 0.875em;
     color: #fff;
-    margin-top: 10px;
+    margin-top: 12px;
     padding: 3% 4% 0;
 
 }
@@ -609,6 +609,7 @@ footer .nuls-footer a.gitter i {
 }
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-title{
     width: 120px;
+    min-width: 60px;
 }
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-title.wflex{
     width: 180px;
@@ -616,6 +617,7 @@ footer .nuls-footer a.gitter i {
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .nuls-flex-cell-flex{
     flex: 1;
     text-align: right;
+    padding-left:8px;
 }
 .nuls-home-content .nuls-home-content-top .nuls-flex-cell .text-align-left{
     text-align: left;
@@ -936,12 +938,13 @@ footer .nuls-footer a.gitter i {
         width: 374px;
     }
     header .nuls-head-content .more{
-        width: 120%;
+        width: 121%;
         left: 1.3em;
         border: 1px solid #2a3d72;
     }
     header .nuls-head-content .more div{
         padding: 0.2em 0.4em;
+        background:#0b1422;
     }
     header .nuls-head-content .nuls-language-box .language_list{
         border: 1px solid #2a3d72;

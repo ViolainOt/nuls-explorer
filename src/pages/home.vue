@@ -48,7 +48,7 @@
                                     <span>{{$t("second.block")}}{{$t("other.semicolon")}}</span>
                                     <span class="pointer baseColor" @click="toBlockDetail(block.height)">{{block.height}}</span>
                                 </div>
-                                <div class="flex-auto text-align-right">
+                                <div class="flex-auto text-align-right" v-if="block.createTime">
                                     {{block.createTime | formatDate}}
                                 </div>
                             </div>
@@ -73,9 +73,9 @@
                     <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
                     <div class="flex block_split">
                         <div class="hash flex-auto text-hidden">
-                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
                         </div>
-                        <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
+                        <div class="time text-align-right" v-if="txlist.createTime">{{txlist.createTime | formatDate}}</div>
                     </div>
                     <div class="tx_auto_flex block_split">
                         <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
@@ -231,9 +231,9 @@
             *跳转交易详情
             * to transaction detail
             */
-            toTransactionHash: function(hash){
+            toTransactionHash: function(hash,type){
                 //closeWebPage();
-                this.$router.push({path:'/transactionHash',query:{hash:hash}});
+                this.$router.push({path:'/transactionHash',query:{hash:hash,type:type}});
             },
             /*
             *跳转节点详情

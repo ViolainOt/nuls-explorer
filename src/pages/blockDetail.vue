@@ -35,6 +35,7 @@
     </div>
     <div class="nuls-flex-cell flex">
         <div class="nuls-flex-cell-title">{{$t("blockDetail.transactionCount")}}</div>
+       <!-- <div class="nuls-flex-cell-flex">{{blockheader.txCount}}</div>-->
         <div class="nuls-flex-cell-flex">{{blockheader.txCount}}</div>
     </div>
     <div class="nuls-flex-cell flex">
@@ -73,7 +74,7 @@
 <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
 <div class="flex block_split">
     <div class="hash flex-auto text-hidden">
-        <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+        <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
 </div>
 <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
 </div>
@@ -191,7 +192,7 @@ export default {
         _self.hash = _self.$route.query.hash;
         _self.nulsBlockDetail();
         //_self.nulstxlist();
-
+        console.log(this.blockheader.txCount)
     },
     /*
     * 监听route，处理地址栏参数变化
@@ -225,8 +226,8 @@ export default {
         *跳转交易详情
         * to transaction detail
         */
-        toTransactionHash: function(hash){
-            this.$router.push({path:'/transactionHash',query:{hash:hash}});
+        toTransactionHash: function(hash,type){
+            this.$router.push({path:'/transactionHash',query:{hash:hash,type:type}});
         },
         /*
         *show more
@@ -290,6 +291,8 @@ export default {
             if(_self.height!=undefined && _self.height>=0){
                 getBlockHeaderDetailByHeight({"height":_self.height},function(res){
                     if (res.success) {
+                        console.log("*******************");
+                        console.log(res.data);
                         _self.blockheader = res.data;
                         _self.hash = _self.blockheader.hash;
                         _self.confirmCount = res.data.confirmCount;
@@ -301,6 +304,8 @@ export default {
             }else{
                 getBlockHeaderDetailByHash({"hash":_self.hash},function(res){
                     if (res.success) {
+                        console.log("-------------------------------");
+                        console.log(res.data);
                         _self.blockheader = res.data;
                         _self.height = _self.blockheader.height;
                         _self.confirmCount = res.data.confirmCount;

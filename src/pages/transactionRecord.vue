@@ -18,7 +18,7 @@
                     <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
                     <div class="flex block_split">
                         <div class="hash flex-auto text-hidden">
-                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
+                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
                         </div>
                         <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                     </div>
@@ -150,8 +150,8 @@ export default {
         *跳转交易详情
         * to transaction detail
         */
-        toTransactionHash: function(hash){
-            this.$router.push({path:'/transactionHash',query:{hash:hash}});
+        toTransactionHash: function(hash,type){
+            this.$router.push({path:'/transactionHash',query:{hash:hash,type:type}});
         },
         /*
         *跳转节点详情
