@@ -74,7 +74,7 @@
 <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
 <div class="flex block_split">
     <div class="hash flex-auto text-hidden">
-        <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+        <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
 </div>
 <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
 </div>
@@ -127,7 +127,7 @@
     </template>
 
 <script>
-import {getTxList,getBlockHeaderDetailByHeight,getBlockHeaderDetailByHash,getBlockBesthashDetail} from "../assets/js/nuls.js";
+import {getTxList,getBlockHeaderDetailByHeight,getBlockHeaderDetailByHash,getBlockBesthashDetail,getSearchDataDetail} from "../assets/js/nuls.js";
 import {formatDate,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
 export default {
     name: "blockDetail",
@@ -223,11 +223,35 @@ export default {
             this.$router.push({path:'/accountInfo',query:{address:address}});
         },
         /*
-        *跳转交易详情
+        * 跳转交易详情   调用搜索接口
         * to transaction detail
         */
-        toTransactionHash: function(hash,type){
-            this.$router.push({path:'/transactionHash',query:{hash:hash,type:type}});
+        toTransactionHash: function(hash){
+            if(hash){
+                let _self = this;
+                let loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.5)'
+                });
+                getSearchDataDetail({key:hash},function (res) {
+                    if(res.success){
+                        loading.close();
+                        //console.log(res.data)
+                        if(res.data === 0){
+                            _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                        }else{
+                            _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                        }
+
+                    }else{
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                    }
+                    loading.close();
+                });
+                history.pushState(null,"","/transactionHash?hash="+hash);
+            }
         },
         /*
         *show more

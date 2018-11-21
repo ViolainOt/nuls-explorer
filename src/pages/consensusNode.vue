@@ -47,7 +47,7 @@
             </div>
         </div>
         <!--consensusNode detail end-->
-        <div style="height:40px;"></div>
+        <div style="height:40px;" :tt="showDetail"></div>
         <!--consensusNode block list start-->
         <div class="mobile-auto-fix">
             <table boeder="1" class="nuls-ul-table">
@@ -158,6 +158,7 @@ export default {
         this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
         this.nulsGetBlockList(this.currentPage);
         this.nulsGetConsensusDetail();
+        console.log(this.showDetail)
     },
     /*
       * 监听route，处理地址栏参数变化
@@ -176,8 +177,8 @@ export default {
          * Load block list according to the block node, page load
          */
         nulsGetBlockList(pageNumber){
-            var _self = this;
-            var loading = this.$loading({
+            let _self = this;
+            let loading = this.$loading({
                 lock: true,
                 text: 'Loading',
                 spinner: 'el-icon-loading',

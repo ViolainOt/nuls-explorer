@@ -32,7 +32,7 @@
                 </tbody>
                 <tbody v-else>
                 <tr class="big-show">
-                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                    <td colspan="7" class="no-data">{{ $t('notice.noMessage') }}</td>
                 </tr>
                 <tr class="small-show">
                     <td :data-label="$t('tokensList.rank')">{{ $t('notice.noMessage') }}</td>

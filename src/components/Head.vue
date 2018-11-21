@@ -8,7 +8,7 @@
                         <router-link to="/">{{$t("nav.index")}}</router-link>
                     </li>
                     <li>
-                        <a>{{$t("nav.rank")}}</a>
+                        <a :class="$route.meta.active === '/rank'? 'router-link-exact-active':''">{{$t("nav.rank")}}</a>
                         <i class="el-icon-arrow-down"></i>
                         <div class="more left">
                             <div>
@@ -20,10 +20,10 @@
                         </div>
                     </li>
                     <li>
-                        <router-link to="/tokens/tokensList">{{$t("nav.tokens")}}</router-link>
+                        <router-link to="/tokens/tokensList" :class="$route.meta.active === '/tokensList'? 'router-link-exact-active':''">{{$t("nav.tokens")}}</router-link>
                     </li>
                     <li>
-                        <router-link to="/contracts/contractsList">{{$t("nav.contracts")}}</router-link>
+                        <router-link to="/contracts/contractsList" :class="$route.meta.active === '/contractsList'? 'router-link-exact-active':''">{{$t("nav.contracts")}}</router-link>
                     </li>
                     <!--<li><router-link to="" :title="$t('nav.toolHit')">{{$t("nav.tool")}}</router-link></li>-->
                     <li>
@@ -34,8 +34,9 @@
                                 <a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a>
                             </div>
                             <div>
-                                <!--<a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>-->
-                                <a class="pointer" href="http://testnet.wallet.nuls.io" target="_blank">{{$t("nav.webWallet")}}</a>
+                                <a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>
+                                <!--<a class="pointer" href="http://testnet.wallet.nuls.io" target="_blank">{{$t("nav.webWallet")}}</a>-->
+                                <!--<a class="pointer" href="http://192.168.1.130:8089" target="_blank">{{$t("nav.webWallet")}}</a>-->
                             </div>
                         </div>
                     </li>
@@ -143,7 +144,7 @@
             }
         },
         created: function () {
-            console.log('0.1')
+            console.log('0.8');
             var lang = getDataToTemp(this.changeType);
             if (lang === "zh" || lang === "en") {
                 this.reloadLanguage(lang);
@@ -183,7 +184,7 @@
                     /*change the 'serchVal' is Available*/
                     getSearchDataDetail({key: serchVal}, function (res) {
                         if (res.success) {
-                            if (res.data == 0) {
+                            if (res.data === 0) {
                                 _self.$notify({
                                     title: _self.$t("notice.notice"),
                                     message: _self.$t("notice.searchFailed"),
@@ -204,7 +205,7 @@
                         }
                         loading.close();
                     });
-                } else {
+                }else{
                     _self.$notify({
                         title: _self.$t("notice.notice"),
                         message: _self.$t("notice.searchNull"),
@@ -238,8 +239,8 @@
                 .nuls-logo-content{
                     width:108px;
                     height:68px;
-                    /*background: url(../assets/img/logo.png) 0 13px no-repeat;*/
-                    background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;
+                    background: url(../assets/img/logo.png) 0 13px no-repeat;
+                    /*background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;*/
                 }
                 display: block;
                 .el-menu-item{

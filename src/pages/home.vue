@@ -73,7 +73,7 @@
                     <div class="block_split">{{$t("transDetail.transTypeDetail.i"+txlist.type)}}</div>
                     <div class="flex block_split">
                         <div class="hash flex-auto text-hidden">
-                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+                            <span class="baseColor pointer" @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
                         </div>
                         <div class="time text-align-right" v-if="txlist.createTime">{{txlist.createTime | formatDate}}</div>
                     </div>
@@ -111,7 +111,7 @@
 
 <script>
     import G2Line from '@/components/G2Line.vue';
-    import {getTxListIndex,getTxByHash,getBlockListIndex,getAllConsensus,getTxHistoryList} from "../assets/js/nuls.js";
+    import {getTxListIndex,getTxByHash,getBlockListIndex,getAllConsensus,getTxHistoryList,getSearchDataDetail} from "../assets/js/nuls.js";
     import {formatDate,formatString,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
     import {brotherComponents} from '../assets/js/public.js';
     import nulsJs from 'zengcc-fls-sdk';
@@ -231,9 +231,33 @@
             *跳转交易详情
             * to transaction detail
             */
-            toTransactionHash: function(hash,type){
+            toTransactionHash: function(hash){
                 //closeWebPage();
-                this.$router.push({path:'/transactionHash',query:{hash:hash,type:type}});
+                if(hash){
+                    let _self = this;
+                    let loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.5)'
+                    });
+                    getSearchDataDetail({key:hash},function (res) {
+                        if(res.success){
+                            loading.close();
+                            //console.log(res.data)
+                            if(res.data === 0){
+                                _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                            }else{
+                                _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                            }
+
+                        }else{
+                            _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                        }
+                        loading.close();
+                    });
+                    history.pushState(null,"","/transactionHash?hash="+hash);
+                }
             },
             /*
             *跳转节点详情
@@ -251,7 +275,7 @@
                 getTxHistoryList(function(res){
                     if(res.success) {
                         var arrayData=res.data,len=arrayData.length,myChart=[];
-                        for(var i=0;i<len;i++){
+                        for(var i=4;i<len;i++){
                             var chartData = arrayData[i].split("-");
                             myChart.push({day:new Date(parseInt(chartData[0])),value:parseInt(chartData[1])});
                         }

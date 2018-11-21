@@ -54,7 +54,7 @@
                                         <div class="flex block_split">
                                             <div class="hash flex-auto text-hidden">
                                                 <span class="baseColor pointer"
-                                                      @click="toTransactionHash(txlist.hash,txlist.type)">{{txlist.hash}}</span>
+                                                      @click="toTransactionHash(txlist.hash)">{{txlist.hash}}</span>
                                             </div>
                                             <div class="time text-align-right">{{txlist.createTime | formatDate}}</div>
                                         </div>
@@ -75,10 +75,10 @@
                                         </div>
                                         <div class="clear"></div>
                                         <div class="flex flex-top block_split"
-                                             v-if="txlist.inputs!=null||txlist.outputs!=null"
+                                             v-if="txlist.inputs!==null||txlist.outputs!==null"
                                              :class="showScroll==key?'scrollHeight':'hideHeight'">
                                             <div class="input_div text-hidden">
-                                                <p v-if="txlist.inputs==null">&nbsp;</p>
+                                                <p v-if="txlist.inputs===null">&nbsp;</p>
                                                 <p v-else v-for="inputlist in txlist.inputs"
                                                    class="baseColor pointer text-hidden"
                                                    @click="reloadAccount(inputlist.address)">{{inputlist.address}}</p>
@@ -92,7 +92,7 @@
                                             </div>
                                             <div class="tx_amount text-align-right">
                                                 <p class="text-hidden" v-for="outputlist in txlist.outputs">
-                                                    {{outputlist.value|getInfactCoin}} NULS</p>
+                                                    {{outputlist.amount|getInfactCoin}} NULS</p>
                                             </div>
                                         </div>
                                         <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span>
@@ -123,7 +123,7 @@
                     </el-tab-pane>
                     <el-tab-pane :label="$t('accountInfo.tokenTransfers')" name="second">
                         <!--contractInfo tab start-->
-                        <div class="mobile-auto-fix" v-show="txCount2 > 0">
+                        <div class="mobile-auto-fix">
                             <table boeder="1" class="nuls-ul-table">
                                 <thead>
                                 <tr>
@@ -153,7 +153,7 @@
                                 </tbody>
                                 <tbody v-else>
                                 <tr class="big-show">
-                                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                                    <td colspan="7" class="no-data">{{ $t('notice.noMessage') }}</td>
                                 </tr>
                                 <tr class="small-show">
                                     <td :data-label="$t('accountInfo.txID')">{{ $t('notice.noMessage') }}</td>
@@ -189,7 +189,7 @@
                             </el-tooltip>
                         </span>
                         <!--contractInfo tab start-->
-                        <div class="mobile-auto-fix" v-show="txCount3 > 0">
+                        <div class="mobile-auto-fix">
                             <table boeder="1" class="nuls-ul-table">
                                 <thead>
                                 <tr>
@@ -209,7 +209,7 @@
                                 </tbody>
                                 <tbody v-else>
                                 <tr class="big-show">
-                                    <td colspan="5" class="no-data">{{ $t('notice.noMessage') }}</td>
+                                    <td colspan="4" class="no-data">{{ $t('notice.noMessage') }}</td>
                                 </tr>
                                 <tr class="small-show">
                                     <td :data-label="$t('tokenCommom.token')">{{ $t('notice.noMessage') }}</td>
@@ -293,9 +293,9 @@
             arrayLength(arr) {
                 return arr ? arr.length : 0;
             },
-            /*
-            *计算这笔交易的输入减去输出后的余额
-            *Calculate the input of this transaction minus the balance after output
+            /**
+            * 计算这笔交易的输入减去输出后的余额
+            * Calculate the input of this transaction minus the balance after output
             */
             formatTxAmount(txlist) {
                 return getInfactCoin(getTransactionResultAmount(txlist));
@@ -353,8 +353,8 @@
             *跳转交易详情
             * to transaction detail
             */
-            toTransactionHash: function (hash, type) {
-                this.$router.push({path: '/transactionHash', query: {hash: hash, type: type}});
+            toTransactionHash: function (hash) {
+                this.$router.push({path: '/transactionHash', query: {hash: hash}});
             },
 
             nulsloadDetail: function () {
@@ -386,27 +386,20 @@
                     "pageSize": _self.pageSize,
                     "address": _self.address
                 }, function (res) {
-                    loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
                     if (res.success) {
+                        loading.close();
                         _self.transList = res.data.list;
                         _self.totalDataNumber1 = res.data.total;
                         _self.txCount1 = _self.totalDataNumber1;
+                    } else{
+                        loading.close();
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                     }
-                    /*else{
-                                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
-                                    }*/
                 });
             },
             nulsTokenList: function (pageNumber) {
-                var _self = this;
-                var loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.5)'
-                });
                 _self.currentPage2 = pageNumber;
                 /*
                 *Modify history to prevent users from refreshing pages incorrectly
@@ -419,7 +412,6 @@
                     "pageNumber": pageNumber,
                     "pageSize": _self.pageSize
                 }, '', function (res) {
-                    loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
                     if (res.success) {
@@ -438,13 +430,6 @@
                 });
             },
             nulsTokenBalanceListByAddress: function (pageNumber) {
-                var _self = this;
-                var loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.5)'
-                });
                 _self.currentPage3 = pageNumber;
                 /*
                 *Modify history to prevent users from refreshing pages incorrectly
@@ -457,7 +442,6 @@
                     "pageNumber": pageNumber,
                     "pageSize": _self.pageSize
                 }, '', function (res) {
-                    loading.close();
                     /*返回网页顶部  Back to top of page*/
                     document.getElementById("nuls-outter").scrollTop = 0;
                     if (res.success) {

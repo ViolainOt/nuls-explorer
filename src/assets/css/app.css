@@ -180,7 +180,7 @@ ul.nuls-ul-table li.foot > span {
 /*public*/
 .hideHeight{
     max-height: 150px;
-    overflow: auto;
+    overflow: hidden;
 }
 .hideHeight_trans{
     max-height: 200px;
@@ -339,6 +339,12 @@ header{
 header a{
     color: #fff;
 }
+header a.router-link-exact-active{
+    color:#82bd39;
+}
+header a.router-link-exact-active.whiteColor{
+    color:#fff;
+}
 header i{
     color: #fff;
 }
@@ -357,8 +363,8 @@ header .nuls-head-content .menu{
 header .nuls-head-content .nuls-logo-content{
     width:108px;
     height:68px;
-    /*background: url(../img/logo.png) 0 13px no-repeat;*/
-    background: url(../img/testnet-logo.svg) 0 13px no-repeat;
+    background: url(../img/logo.png) 0 13px no-repeat;
+    /*background: url(../img/testnet-logo.svg) 0 13px no-repeat;*/
 }
 header .nuls-head-content ul{
     height: 68px;
@@ -581,7 +587,7 @@ footer .nuls-footer a.gitter i {
     background-color: #17202e;
     font-size: 0.875em;
     color: #fff;
-    margin-top: 12px;
+    margin-top: 10px;
     padding: 3% 4% 0;
 
 }
@@ -878,9 +884,9 @@ footer .nuls-footer a.gitter i {
     .tx-pagination .el-pager{
         display: none;
     }
-    /*.nuls-home-content span.el-pagination__total{
-        display: none;
-    }*/
+    /*.nuls-home-content span.el-pagination__total{*/
+        /*display: none;*/
+    /*}*/
     .tx-pagination .el-pagination {
         overflow: hidden;
         text-align: left;

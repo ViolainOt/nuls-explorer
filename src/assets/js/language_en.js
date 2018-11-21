@@ -17,7 +17,7 @@ module.exports = {
         index_NULS: 'NULS Mainnet',
         block: 'Block',
         more: 'More',
-        history: '14 days trading history',
+        history: '10 days trading history',
         transaction: 'Transaction',
         transactions: 'Transactions',
         consensusReward: 'Consensus reward',

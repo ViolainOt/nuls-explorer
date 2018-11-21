@@ -17,7 +17,7 @@ module.exports = {
         index_NULS: 'NULS 主网信息',
         block: '区块',
         more: '更多',
-        history: '14天NULS交易历史',
+        history: '10天NULS交易历史',
         transaction: '交易',
         transactions: '笔交易',
         consensusReward: '共识奖励',

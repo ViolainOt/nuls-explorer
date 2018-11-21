@@ -40,15 +40,39 @@ export default new Router({
         {path: "/transactionHash", component: transactionHash},
         {path: "/blockDetail", component: blockDetail},
         /*{path: "/blockDetail:height",name:"/blockDetail", component: blockDetail},*/
-        {path: "/pieceOfAccount", component: pieceOfAccount},
+        {
+            path: "/pieceOfAccount",
+            component: pieceOfAccount,
+            meta: {
+                active: '/rank'
+            }
+        },
         {path: "/accountInfo", component: accountInfo},
         {path: "/consensusNode", component: consensusNode},
-        {path: "/cashAccount", component: cashAccount},
+        {
+            path: "/cashAccount",
+            component: cashAccount,
+            meta: {
+                active: '/rank'
+            }
+        },
         {path: "/loadSearch", component: loadSearch},
         {path: "/tokens/tokensList", component: tokensList},
-        {path: "/tokens/tokenDetail", component: tokenDetail},
+        {
+            path: "/tokens/tokenDetail",
+            component: tokenDetail,
+            meta: {
+                active: '/tokensList'
+            }
+        },
         {path: "/contracts/contractsList", component: contractsList},
-        {path: "/contracts/contractsDetail", component: contractsDetail},
+        {
+            path: "/contracts/contractsDetail",
+            component: contractsDetail,
+            meta: {
+                active: '/contractsList'
+            }
+        },
       ]
     },
     {path: "/notFond", component: notFond},
