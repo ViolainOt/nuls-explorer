@@ -42,7 +42,7 @@
                             <p v-for="outputlist in txlist.outputs" class="text-hidden baseColor pointer" @click="toAccountInfo(outputlist.address)">{{outputlist.address}}</p>
                         </div>
                         <div class="tx_amount text-align-right">
-                            <p class="text-hidden" v-for="outputlist in txlist.outputs">{{outputlist.value|getInfactCoin}} NULS</p>
+                            <p class="text-hidden" v-for="outputlist in txlist.outputs">{{outputlist.amount|getInfactCoin}} NULS</p>
                         </div>
                     </div>
                     <p><span>{{$t("second.fee")}}{{$t("other.semicolon")}}{{txlist.fee|getInfactCoin}} NULS</span></p>

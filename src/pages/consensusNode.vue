@@ -158,7 +158,6 @@ export default {
         this.currentPage = isNaN(this.$route.query.currentPage)?1:parseInt(this.$route.query.currentPage,10);
         this.nulsGetBlockList(this.currentPage);
         this.nulsGetConsensusDetail();
-        console.log(this.showDetail)
     },
     /*
       * 监听route，处理地址栏参数变化

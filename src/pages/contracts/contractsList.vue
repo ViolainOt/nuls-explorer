@@ -42,7 +42,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="foot-pagination">
+            <div class="foot-pagination" v-show="contractsList.length>20">
                 <el-pagination
                     background
                     :prev-text="$t('page.previous')"

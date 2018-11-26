@@ -57,10 +57,12 @@ export function getTransactionResultAmount(txlist){
         amout = 0;
     for(var i=0,outputObj;outputObj=outputlist[i++];){
         amout+= outputObj.amount;
-        for(var j=0,inputObj;inputObj=inputlist[j++];){
-            if(outputObj.address==inputObj.address){
-                amout -= outputObj.value;
-                break;
+        if(inputlist.length>0){
+            for(var j=0,inputObj;inputObj=inputlist[j++];){
+                if(outputObj.address===inputObj.address){
+                    amout -= inputObj.value;
+                    break;
+                }
             }
         }
     }
@@ -69,8 +71,8 @@ export function getTransactionResultAmount(txlist){
 var weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var monTh = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
 export function formatDateEn(date){
-    //return weekDay[date.getDay()]+" "+date.getDate()+" "+monTh[date.getMonth()]+" "+date.getFullYear();
-    return date.getDate()+" "+monTh[date.getMonth()]+" "+date.getFullYear();
+    // return weekDay[date.getDay()]+" "+date.getDate()+" "+monTh[date.getMonth()]+" "+date.getFullYear();
+    return date.getDate()+" "+monTh[date.getMonth()];
 }
 export function formatDate(date, fmt) {
     if(!fmt){

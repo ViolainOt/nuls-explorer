@@ -144,7 +144,7 @@
             }
         },
         created: function () {
-            console.log('0.8');
+            console.log('0.2');
             var lang = getDataToTemp(this.changeType);
             if (lang === "zh" || lang === "en") {
                 this.reloadLanguage(lang);

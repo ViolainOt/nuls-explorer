@@ -59,7 +59,7 @@ export default {
                 },
                 day: {
                     type: 'timeCat',
-                    range: [0, 1],
+                    range: [0.05, 1],
                     alias: _self.$t("notice.transDate"),
                     formatter: val => {
                         //console.log(_self.$i18n.locale);

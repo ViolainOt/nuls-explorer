@@ -164,7 +164,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="foot-pagination">
+                            <div class="foot-pagination" v-show="txCount2>10">
                                 <el-pagination
                                     background
                                     :prev-text="$t('page.previous')"
@@ -400,6 +400,7 @@
                 });
             },
             nulsTokenList: function (pageNumber) {
+                let _self = this;
                 _self.currentPage2 = pageNumber;
                 /*
                 *Modify history to prevent users from refreshing pages incorrectly
@@ -430,6 +431,7 @@
                 });
             },
             nulsTokenBalanceListByAddress: function (pageNumber) {
+                let _self = this;
                 _self.currentPage3 = pageNumber;
                 /*
                 *Modify history to prevent users from refreshing pages incorrectly

@@ -192,7 +192,6 @@ export default {
         _self.hash = _self.$route.query.hash;
         _self.nulsBlockDetail();
         //_self.nulstxlist();
-        console.log(this.blockheader.txCount)
     },
     /*
     * 监听route，处理地址栏参数变化
@@ -315,8 +314,7 @@ export default {
             if(_self.height!=undefined && _self.height>=0){
                 getBlockHeaderDetailByHeight({"height":_self.height},function(res){
                     if (res.success) {
-                        console.log("*******************");
-                        console.log(res.data);
+                        //console.log(res.data);
                         _self.blockheader = res.data;
                         _self.hash = _self.blockheader.hash;
                         _self.confirmCount = res.data.confirmCount;
@@ -328,8 +326,7 @@ export default {
             }else{
                 getBlockHeaderDetailByHash({"hash":_self.hash},function(res){
                     if (res.success) {
-                        console.log("-------------------------------");
-                        console.log(res.data);
+                        //console.log(res.data);
                         _self.blockheader = res.data;
                         _self.height = _self.blockheader.height;
                         _self.confirmCount = res.data.confirmCount;
