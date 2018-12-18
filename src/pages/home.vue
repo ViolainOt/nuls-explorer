@@ -81,7 +81,7 @@
                         <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}<a class="pointer" @click="toBlockDetail(txlist.blockHeight)">{{txlist.blockHeight}}</a></span></div>
                         <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
                         <div class="fee text-align-right"><span>
-    <template v-if="txlist.type <= 2">
+    <template v-if="txlist.type <= 2 || txlist.type >= 100">
     {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
     </template>
 </span></div>
@@ -112,7 +112,7 @@
 <script>
     import G2Line from '@/components/G2Line.vue';
     import {getTxListIndex,getTxByHash,getBlockListIndex,getAllConsensus,getTxHistoryList,getSearchDataDetail} from "../assets/js/nuls.js";
-    import {formatDate,formatString,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
+    import {formatDate,formatString,getInfactCoin,getTransactionResultAmount,LeftShiftEight} from '../assets/js/util.js';
     import {brotherComponents} from '../assets/js/public.js';
     import nulsJs from 'zengcc-fls-sdk';
     export default {
@@ -159,7 +159,7 @@
             *Calculate the input of this transaction minus the balance after output
             */
             formatTxAmount(txlist){
-                return getInfactCoin(getTransactionResultAmount(txlist));
+                return LeftShiftEight(getTransactionResultAmount(txlist)).toString();
             },
             getInfactCoin(count){
                 return getInfactCoin(count);

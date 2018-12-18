@@ -1,10 +1,12 @@
+//运行环境（true:正式环境，false:测试环境）
+export const RUN_DEV = false;
 export let nuls_server={
     nodeList:[
         //{host:"http://127.0.0.1:8765"},
         // {host:"http://50.62.6.187:8005"},
-        //{host:"http://testnet.apiserver.nuls.io"},
+        {host:"http://testnet.apiserver.nuls.io"},
         // {host:"http://192.168.1.142:8765"},
-        {host:"https://apiserver.nuls.io"},
+        // {host:"https://apiserver.nuls.io"},
         {host:"http://192.168.1.59:8765"},
         {host:"http://data.nuls.io"},
         {host:"http://192.168.1.121:8764"},

@@ -57,10 +57,10 @@ export function getTransactionResultAmount(txlist){
         amout = 0;
     for(var i=0,outputObj;outputObj=outputlist[i++];){
         amout+= outputObj.amount;
-        if(inputlist.length>0){
+        if(inputlist && inputlist.length>0){
             for(var j=0,inputObj;inputObj=inputlist[j++];){
                 if(outputObj.address===inputObj.address){
-                    amout -= inputObj.value;
+                    amout -= outputObj.amount;
                     break;
                 }
             }
@@ -149,4 +149,53 @@ export function LeftShiftEight(arg) {
     let left8 = new BigNumber(0.00000001);
     return left8.times(arg);
 }
-
+/**
+ * html解码
+ * @param str
+ * @returns {s}
+ */
+export function htmlDecodeByRegExp(str) {
+    let s = "";
+    if (str.length === 0) return "";
+    s = str.replace(/&amp;/g, "&");
+    s = s.replace(/&lt;/g, "<");
+    s = s.replace(/&gt;/g, ">");
+    s = s.replace(/&nbsp;/g, " ");
+    s = s.replace(/&apos;/g, "\'");
+    s = s.replace(/&quot;/g, "\"");
+    return s;
+}
+export function search(queryType,queryValue,_self){
+    // let queryType = this.$route.query.queryType,
+    //     queryValue = this.$route.query.queryValue,
+    //     let _self = this;
+    switch(queryType){
+        /*transactionHash*/
+        case 1:
+            _self.$router.push({path:'/transactionHash',query:{hash:queryValue}});
+            break;
+        /*accountInfo*/
+        case 2:
+            _self.$router.push({path:'/accountInfo',query:{address:queryValue}});
+            break;
+        /*blockDetail*/
+        case 3:
+            _self.$router.push({path:'/blockDetail',query:{hash:queryValue}});
+            break;
+        /*blockDetail*/
+        case 4:
+            _self.$router.push({path:'/blockDetail',query:{height:queryValue}});
+            break;
+        /*contractsDetail*/
+        case 5:
+            _self.$router.push({path:'/contracts/contractsDetail',query:{contractAddress:queryValue}});
+            break;
+        /*transactionHash 合約的hash,type為6   普通hash查詳情，沒有type*/
+        case 6:
+            _self.$router.push({path:'/transactionHash',query:{hash:queryValue,type:6}});
+            break;
+        default:
+            _self.$router.push({path:'/'});
+            break;
+    }
+}

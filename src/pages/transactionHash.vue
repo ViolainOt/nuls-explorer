@@ -82,7 +82,7 @@
                 <!--<template v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">-->
                     <div class="nuls-flex-cell flex" v-if="txdetail.contractAddress">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.contractAddress")}}</div>
-                        <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/blockDetail',query:{height:txdetail.blockHeight}}">{{txdetail.contractAddress}}</router-link></div>
+                        <div class="nuls-flex-cell-flex text-hidden"><router-link :to="{path:'/contracts/contractsDetail',query:{contractAddress:txdetail.contractAddress}}">{{txdetail.contractAddress}}</router-link></div>
                     </div>
                     <div class="nuls-flex-cell flex" v-if="txdetail.type===101 || txdetail.type===102 || txdetail.type===100">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.contractResults")}}</div>
@@ -95,7 +95,7 @@
                         <div class="nuls-flex-cell-title">{{$t("transDetail.transfer")}}</div>
                         <div class="nuls-flex-cell-flex-change text-hidden">
                             <div v-for="item in txdetail.resultDto.tokenTransfers">
-                                <span>from <span @click="hashDetail(item.from)" class="baseColor pointer">{{(txdetail.resultDto ? item.from : '' )}}</span></span>
+                                <span v-show="item.from">from <span @click="hashDetail(item.from)" class="baseColor pointer">{{(txdetail.resultDto ? item.from : '' )}}</span></span>
                                 <span>to <span @click="hashDetail(item.to)" class="baseColor pointer">{{(txdetail.resultDto ? item.to : '' )}}</span></span>
                                 <span>for <span class="greenColor">{{txdetail.resultDto ? item.value : ''}}</span> {{txdetail.resultDto.tokenName}}</span>
                             </div>
@@ -170,10 +170,11 @@
                 <template v-if="txdetail.remark !== null">
                     <div class="nuls-flex-cell flex">
                         <div class="nuls-flex-cell-title">{{$t("transDetail.mark")}}{{$t("other.semicolon")}}</div>
+                        <div class="nuls-flex-cell-flex word-break">{{txdetail.remark | htmlDecodeByRegExp}}</div>
                     </div>
-                    <div class="nuls-flex-cell flex">
-                        <div class="nuls-flex-cell-flex text-align-left">{{txdetail.remark}}</div>
-                    </div>
+                    <!--<div class="nuls-flex-cell flex">-->
+                        <!--<div class="nuls-flex-cell-flex text-align-left">{{txdetail.remark}}</div>-->
+                    <!--</div>-->
                 </template>
             </div>
         </div>
@@ -226,7 +227,7 @@
 
 <script>
 import {getTxList,getTxByHash,getTxSpentHashDetail,getContractsTxByHash,getSearchDataDetail} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,formatString,timesDecimals,LeftShiftEight} from '../assets/js/util.js';
+import {formatDate,getInfactCoin,formatString,timesDecimals,LeftShiftEight,htmlDecodeByRegExp,search} from '../assets/js/util.js';
 export default {
     name: "transactionHash",
     data() {
@@ -298,12 +299,17 @@ export default {
             }
             return getInfactCoin(amount);
         },
+        htmlDecodeByRegExp(str){
+            return htmlDecodeByRegExp(str);
+        },
     },
     created: function () {
         var _self = this;
         _self.hash = this.$route.query.hash;
         _self.type = this.$route.query.type;
         _self.nulstxdetail();
+        console.log(_self.type)
+        console.log(typeof _self.type)
     },
     mounted:function(){
 
@@ -317,11 +323,18 @@ export default {
          * Query transaction details based on transaction hash
          */
         nulstxdetail: function () {
-            var _self = this;
+            let _self = this;
+            let loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.5)'
+            });
             //合約的hash,type為6   普通hash查詳情，沒有type    合約转账属于普通交易
-            if(_self.type===100 || _self.type===101 || _self.type===102 || _self.type===1000 || _self.type===6){
+            if(_self.type==100 || _self.type==101 || _self.type==102 || _self.type==1000 || _self.type==6){
                 getContractsTxByHash({"hash":_self.hash},function(res){
                     if (res.success) {
+                        loading.close();
                         _self.txdetail = res.data;
                         if(res.data.txData){
                             if(res.data.txData.args && res.data.txData.args.lastIndexOf(',')!==-1){
@@ -350,14 +363,35 @@ export default {
                             }
                         }
                     }else{
+                        loading.close();
                         _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                     }
                 })
+            }else if(!_self.type){
+                //从钱包跳转过来的没有type,调用搜索的接口
+                getSearchDataDetail({key:_self.hash},function (res) {
+                    if(res.success){
+                        loading.close();
+                        //console.log(res.data)
+                        if(res.data === 0){
+                            _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                        }else{
+                            _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:_self.hash}});
+                        }
+
+                    }else{
+                        loading.close();
+                        _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                    }
+                });
             }else{
+                //type存在，且不是合约相关的交易
                 getTxByHash({"hash":_self.hash},function(res){
                     if (res.success) {
+                        loading.close();
                         _self.txdetail = res.data;
                     }else{
+                        loading.close();
                         _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                     }
                 })
@@ -393,7 +427,9 @@ export default {
                         if(res.data === 0){
                             _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                         }else{
-                            _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                            console.log('cc');
+                            search(res.data,hash,_self);
+                            //_self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
                         }
 
                     }else{
@@ -401,7 +437,7 @@ export default {
                     }
                     loading.close();
                 });
-                history.pushState(null,"","/transactionHash?hash="+hash);
+                //history.pushState(null,"","/transactionHash?hash="+hash);
             }
         },
         showMore: function(v){

@@ -216,7 +216,7 @@
         },
         filters: {
             formatDate(time) {
-                var date = new Date(time);
+                let date = new Date(time);
                 return formatDate(date);
             },
             arrayLength(arr) {
@@ -228,6 +228,7 @@
         },
         created: function () {
             this.address = this.$route.query.contractAddress;
+            this.currentPage1 = this.$route.query.currentPage ? this.$route.query.currentPage : 1;
             this.nulsTokenDetail();
             this.nulsTranslist(this.currentPage1);
             this.nulsHoldersList(this.currentPage2);
@@ -239,8 +240,8 @@
         watch: {
             '$route'(to, from) {
                 var _self = this;
-                _self.currentPage = isNaN(to.query.currentPage) ? 1 : parseInt(to.query.currentPage, 10);
-                _self.nulsTranslist(_self.currentPage);
+                _self.currentPage = isNaN(to.query.currentPage1) ? 1 : parseInt(to.query.currentPage1, 10);
+                _self.nulsTranslist(_self.currentPage1);
             }
         },
         methods: {
@@ -287,7 +288,7 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if (pageNumber !== 1) {
-                    history.pushState({}, "", "/tokenDetail?currentPage=" + pageNumber);
+                    history.pushState({}, "", "/tokens/tokenDetail?contractAddress="+this.address+"&currentPage=" + pageNumber);
                 }
                 getTransList({"contractAddress": _self.address}, {
                     "pageNumber": pageNumber,
@@ -326,7 +327,7 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if (pageNumber !== 1) {
-                    history.pushState({}, "", "/tokenDetail?currentPage=" + pageNumber);
+                    history.pushState({}, "", "tokens/tokenDetail?currentPage=" + pageNumber);
                 }
                 getHoldersList({"contractAddress": _self.address}, {
                     "pageNumber": pageNumber,

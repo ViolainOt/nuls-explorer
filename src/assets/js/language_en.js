@@ -3,8 +3,8 @@ module.exports = {
     nav: {
         index: 'Home',
         rank: 'Rank',
-        currencyAccount: 'Currency',
-        outPieceAccount: 'Producer',
+        currencyAccount: 'Holders',
+        outPieceAccount: 'Producers',
         tool: 'Tool',
         toolHit: 'Wait',
         wallet: 'Wallet',

@@ -10,7 +10,7 @@
             </nav>
             <!--nav end-->
 
-            <div class="nuls-title text-align-center">{{accountInfo.tokenName}}</div>
+            <div class="nuls-title text-align-center"><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:accountInfo.contractAddress}}">{{accountInfo.tokenName}}</router-link></div>
         </div>
         <!--address detail start-->
         <div class="nuls-home-content-top nuls-home-content-accountinfo tx_background tx_border">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("contractsDetail.balance")}}</div>
-                    <div class="nuls-flex-cell-flex">{{accountInfo.balance}} NULS</div>
+                    <div class="nuls-flex-cell-flex">{{accountInfo.balance|getInfactCoin}} NULS</div>
                 </div>
                 <div class="nuls-flex-cell flex">
                     <div class="nuls-flex-cell-title">{{$t("contractsDetail.creator")}}</div>
@@ -66,8 +66,8 @@
                                         <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
                                         <div class="fee text-align-right">
                             <span>
-                            <template v-if="txlist.type <= 2">
-                            {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist.amount | getInfactCoin}} NULS
+                            <template v-if="txlist.type <= 2 || txlist.type >= 100">
+                            {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
                             </template>
                             </span>
                                         </div>
@@ -153,7 +153,7 @@
 
 <script>
     import {getContractsDetail,getContractsTransactionsList} from "../../assets/js/nuls.js";
-    import {formatDate,getInfactCoin,getTransactionResultAmount} from '../../assets/js/util.js';
+    import {formatDate,getInfactCoin,getTransactionResultAmount,LeftShiftEight} from '../../assets/js/util.js';
     import {brotherComponents} from '../../assets/js/public.js';
     export default {
         name: "tokenDetail",
@@ -198,7 +198,7 @@
             *Calculate the input of this transaction minus the balance after output
             */
             formatTxAmount(txlist){
-                return getInfactCoin(getTransactionResultAmount(txlist));
+                return LeftShiftEight(getTransactionResultAmount(txlist)).toString();
             },
             getInfactCoin(count){
                 return Math.abs(getInfactCoin(count));
@@ -206,6 +206,7 @@
         },
         created: function () {
             this.address = this.$route.query.contractAddress;
+            this.currentPage = this.$route.query.currentPage ? this.$route.query.currentPage : 1;
             this.nulsContractsDetail();
             this.nulsContractsTransactionsList(this.currentPage);
         },
@@ -279,7 +280,7 @@
                 *修改历史记录，防止用户刷新页面不正确
                 */
                 if(pageNumber !== 1) {
-                    history.pushState({}, "", "/contractsDetail?currentPage=" + pageNumber + "&address=" + _self.address);
+                    history.pushState({}, "", "contracts/contractsDetail?currentPage=" + pageNumber + "&address=" + _self.address);
                 }
                 getContractsTransactionsList({"contractAddress":_self.address},{"accountAddress":_self.accountInfo.creater,"pageNumber":pageNumber,"pageSize":_self.pageSize},'',function(res){
                     loading.close();

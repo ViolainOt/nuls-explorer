@@ -67,8 +67,8 @@
                                                 {{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs==null?0:txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
                                             <div class="fee text-align-right">
                             <span>
-                            <template v-if="txlist.type <= 2">
-                            {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist.amount | getInfactCoin}} NULS
+                            <template v-if="txlist.type <= 2  || txlist.type >= 100">
+                            {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
                             </template>
                             </span>
                                             </div>
@@ -139,14 +139,14 @@
                                 <tbody v-if="tokenList.length!==0">
                                 <tr v-for="block in tokenList">
                                     <td class="space-td"></td>
-                                    <td :data-label="$t('accountInfo.txID')">{{block.txHash}}</td>
+                                    <td :data-label="$t('accountInfo.txID')"><span class="baseColor pointer" @click="toTransactionHash(block.createTxHash)">{{block.createTxHash|formatString}}</span></td>
                                     <td :data-label="$t('accountInfo.from')">
-                                        <span v-if="block.fromAddress"><router-link :to="{path:'/accountInfo',query:{address:block.fromAddress}}">{{block.fromAddress|formatString}}</router-link></span>
+                                        <span v-if="block.fromAddress" @click="reloadAccount(block.fromAddress)" class="baseColor pointer">{{block.fromAddress|formatString}}</span>
                                     </td>
                                     <td :data-label="$t('accountInfo.to')">
-                                        <span v-if="block.toAddress"><router-link :to="{path:'/accountInfo',query:{address:block.toAddress}}">{{ block.toAddress|formatString}}</router-link></span>
+                                        <span v-if="block.toAddress" @click="reloadAccount(block.toAddress)" class="baseColor pointer">{{ block.toAddress|formatString}}</span>
                                     </td>
-                                    <td :data-label="$t('accountInfo.value')">{{block.txValue}}</td>
+                                    <td :data-label="$t('accountInfo.value')">{{block.txValue}}  {{block.symbol}}</td>
                                     <td :data-label="$t('accountInfo.date')" class="td-last">{{block.createTime  | formatDate}}</td>
                                     <td class="space-td"></td>
                                 </tr>
@@ -202,8 +202,8 @@
                                 <tbody v-if="TokenBalanceList.length!==0">
                                 <tr v-for="block in TokenBalanceList">
                                     <td class="space-td"></td>
-                                    <td :data-label="$t('tokenCommom.token')"><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.symbol}}</router-link></td>
-                                    <td :data-label="$t('tokenCommom.balance')" class="td-last">{{block.amount}}</td>
+                                    <td :data-label="$t('tokenCommom.token')"><router-link :to="{path:'/tokens/tokenDetail',query:{contractAddress:block.contractAddress}}">{{block.tokenName}}</router-link></td>
+                                    <td :data-label="$t('tokenCommom.balance')" class="td-last">{{block.amount}}  {{block.symbol}}</td>
                                     <td class="space-td"></td>
                                 </tr>
                                 </tbody>
@@ -235,7 +235,8 @@
         getAccountByAddress,
         getTxListByAddress,
         getTokenListByAddress,
-        getTokenBalanceListByAddress
+        getTokenBalanceListByAddress,
+        getSearchDataDetail
     } from "../assets/js/nuls.js";
     import {
         formatDate,
@@ -245,7 +246,9 @@
         LeftShift,
         Power,
         newBigNumber,
-        timesDecimals
+        timesDecimals,
+        LeftShiftEight,
+        search
     } from '../assets/js/util.js';
     import {brotherComponents} from '../assets/js/public.js';
     import {BigNumber} from 'bignumber.js'
@@ -298,7 +301,7 @@
             * Calculate the input of this transaction minus the balance after output
             */
             formatTxAmount(txlist) {
-                return getInfactCoin(getTransactionResultAmount(txlist));
+                return LeftShiftEight(getTransactionResultAmount(txlist)).toString();
             },
             getInfactCoin(count) {
                 return Math.abs(getInfactCoin(count));
@@ -354,7 +357,33 @@
             * to transaction detail
             */
             toTransactionHash: function (hash) {
-                this.$router.push({path: '/transactionHash', query: {hash: hash}});
+                // this.$router.push({path: '/transactionHash', query: {hash: hash}});
+                if(hash){
+                    let _self = this;
+                    let loading = this.$loading({
+                        lock: true,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.5)'
+                    });
+                    getSearchDataDetail({key:hash},function (res) {
+                        if(res.success){
+                            loading.close();
+                            //console.log(res.data)
+                            if(res.data === 0){
+                                _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                            }else{
+                                search(res.data,hash,_self);
+                                //_self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                            }
+
+                        }else{
+                            _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
+                        }
+                        loading.close();
+                    });
+                    //history.pushState(null,"","/transactionHash?hash="+hash);
+                }
             },
 
             nulsloadDetail: function () {

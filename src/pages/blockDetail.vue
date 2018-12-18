@@ -82,7 +82,7 @@
 <div class="block"><span>{{$t("second.block")}}{{$t("other.semicolon")}}{{txlist.blockHeight}}</span></div>
 <div class="input_output">{{$t("second.enter")}}/{{$t("second.outPut")}}{{$t("other.semicolon")}}&nbsp;{{txlist.inputs|arrayLength}}/{{txlist.outputs|arrayLength}}</span></div>
 <div class="fee text-align-right"><span>
-    <template v-if="txlist.type <= 2">
+    <template v-if="txlist.type <= 2 || txlist.type >= 100">
     {{$t("second.amount")}}{{$t("other.semicolon")}}{{txlist | formatTxAmount}} NULS
     </template>
 </span></div>
@@ -128,7 +128,7 @@
 
 <script>
 import {getTxList,getBlockHeaderDetailByHeight,getBlockHeaderDetailByHash,getBlockBesthashDetail,getSearchDataDetail} from "../assets/js/nuls.js";
-import {formatDate,getInfactCoin,getTransactionResultAmount} from '../assets/js/util.js';
+import {formatDate,getInfactCoin,getTransactionResultAmount,LeftShiftEight,search} from '../assets/js/util.js';
 export default {
     name: "blockDetail",
     data() {
@@ -180,7 +180,7 @@ export default {
         *Calculate the input of this transaction minus the balance after output
         */
         formatTxAmount(txlist){
-            return getInfactCoin(getTransactionResultAmount(txlist));
+            return LeftShiftEight(getTransactionResultAmount(txlist)).toString();
         },
         getInfactCoin(count) {
             return getInfactCoin(count);
@@ -241,7 +241,8 @@ export default {
                         if(res.data === 0){
                             _self.$alert(_self.$t("notice.noNet"), _self.$t("notice.notice"), {confirmButtonText: _self.$t("notice.determine")});
                         }else{
-                            _self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
+                            search(res.data,hash,_self);
+                            //_self.$router.push({path:'/loadSearch',query:{queryType:res.data,queryValue:hash}});
                         }
 
                     }else{
@@ -249,7 +250,7 @@ export default {
                     }
                     loading.close();
                 });
-                history.pushState(null,"","/transactionHash?hash="+hash);
+                // history.pushState(null,"","/transactionHash?hash="+hash);
             }
         },
         /*

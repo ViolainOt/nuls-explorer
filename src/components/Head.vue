@@ -2,7 +2,8 @@
     <header class="head">
         <div class="nuls-head-content">
             <div class="menu flex menu-left">
-                <div class="nuls-logo-content"></div>
+                <div class="nuls-logo-content logo" v-show="running"></div>
+                <div class="nuls-logo-content logo-testnet" v-show="!running"></div>
                 <ul>
                     <li>
                         <router-link to="/">{{$t("nav.index")}}</router-link>
@@ -34,9 +35,7 @@
                                 <a class="pointer" href="https://nuls.io/wallet" target="_blank">{{$t("nav.clientDownloads")}}</a>
                             </div>
                             <div>
-                                <a class="pointer" href="https://wallet.nuls.io/" target="_blank">{{$t("nav.webWallet")}}</a>
-                                <!--<a class="pointer" href="http://testnet.wallet.nuls.io" target="_blank">{{$t("nav.webWallet")}}</a>-->
-                                <!--<a class="pointer" href="http://192.168.1.130:8089" target="_blank">{{$t("nav.webWallet")}}</a>-->
+                                <a class="pointer" :href="webWalletUrl" target="_blank">{{$t("nav.webWallet")}}</a>
                             </div>
                         </div>
                     </li>
@@ -69,7 +68,8 @@
         <!--Adaptable mobile terminal-->
         <div class="nuls-head-content-mobile">
             <div class="flex2">
-                <div class="nuls-logo-content"></div>
+                <div class="nuls-logo-content logo" v-show="running"></div>
+                <div class="nuls-logo-content logo-testnet" v-show="!running"></div>
                 <div @click="showMenu"><i class="el-icon-menu"></i></div>
             </div>
             <div class="nuls-search-box">
@@ -132,6 +132,7 @@
     import {getSearchDataDetail} from "../assets/js/nuls.js";
     import {saveDataToTemp, getDataToTemp} from "../assets/js/util.js";
     import {brotherComponents} from '../assets/js/public.js';
+    import {RUN_DEV} from '../assets/js/config.js';
 
     export default {
         name: "Head",
@@ -141,10 +142,12 @@
                 changeType: "changeType",
                 showMenus: false,
                 searchValue: '',
+                running:RUN_DEV,
+                webWalletUrl:RUN_DEV ? 'https://wallet.nuls.io/' : 'http://testnet.wallet.nuls.io',
             }
         },
         created: function () {
-            console.log('0.2');
+            console.log('0.4');
             var lang = getDataToTemp(this.changeType);
             if (lang === "zh" || lang === "en") {
                 this.reloadLanguage(lang);
@@ -239,8 +242,12 @@
                 .nuls-logo-content{
                     width:108px;
                     height:68px;
+                }
+                .logo{
                     background: url(../assets/img/logo.png) 0 13px no-repeat;
-                    /*background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;*/
+                }
+                .logo-testnet{
+                    background: url(../assets/img/testnet-logo.svg) 0 13px no-repeat;
                 }
                 display: block;
                 .el-menu-item{

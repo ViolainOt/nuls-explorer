@@ -22,7 +22,7 @@ export default {
     switch(queryType){
       /*transactionHash*/
       case 1:
-        _self.$router.push({path:'/transactionHash',query:{hash:queryValue}});
+        _self.$router.push({path:'/transactionHash',query:{hash:queryValue,type:1}});
         break;
       /*accountInfo*/
       case 2:
